@@ -17,3 +17,11 @@
 .form-outline .form-control {
     border: 1px solid #bdbdbd
 }
+
+.register {
+    padding-top: 5px
+}
+
+.form-check {
+    gap: 10px
+}
