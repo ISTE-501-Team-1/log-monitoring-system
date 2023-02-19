@@ -37,3 +37,8 @@ body {
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+
+.active {
+  background-color: orange !important;
+  border-color: orange !important;
+}
