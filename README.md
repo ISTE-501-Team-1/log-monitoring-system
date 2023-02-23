@@ -15,10 +15,10 @@ Create an application that will allow administrators, professors, and help desk 
 | Ryan Vay | Backend Developer |
 | Matej Malesevic | Backend Developer |
 
-## Completed Work 
+### Completed Work 
 - TBD
 
-## In Progress Work 
+### In Progress Work 
 - TBD
 
 ### Not Started Work
