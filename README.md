@@ -7,13 +7,13 @@ Create an application that will allow administrators, professors, and help desk 
 # Team Members
 | Member | Role |
 | ----------------------------------------------------- | :---------------------------------------------------------------- |
-| Sean Decker                                     | Technical Manager                                                |
-| Olive Andries                                                     | Project Manager                                                  |
-| Nicholas Capadano                                                     | Frontend Developer                                             |
-| Peter Schwarzkopf                                                     | Frontend Developer               |
-| Ben Shapiro                                                     | Backend Developer                                                 |
-| Ryan Vay                                                     | Backend Developer                                              |
-| Matej Malesevic                                                     | Backend Developer                                   |
+| Sean Decker | Technical Manager |
+| Olive Andries | Project Manager |
+| Nick Capadano | Frontend Developer |
+| Peter Schwarzkopf | Frontend Developer |
+| Ben Shapiro | Backend Developer |
+| Ryan Vay | Backend Developer |
+| Matej Malesevic | Backend Developer |
 
 # Completed Work 
 - TBD
@@ -28,6 +28,6 @@ Create an application that will allow administrators, professors, and help desk 
 - [Index](https://seniordevteam1.in/)
 
 ## Technologies Used
-> MySQL - Database
-> PHP - Backend
-> [Material Design Bootstrap](https://mdbootstrap.com/) - Frontend UI Kit
+- MySQL - Database
+- PHP - Backend
+- [Material Design Bootstrap](https://mdbootstrap.com/) - Frontend UI Kit
