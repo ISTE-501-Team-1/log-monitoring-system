@@ -1,10 +1,10 @@
-## ISTE-501 Team 1 | Log Management System
+# ISTE-501 Team 1 | Log Management System
 ## [Production Link](https://seniordevteam1.in/)
 
-## Project Mission:
+# Project Mission:
 Create an application that will allow administrators, professors, and help desk staff to help students who have trouble logging into their RIT server accounts, and to monitor their interactions with the server.
 
-# Team Members
+## Team Members
 | Member | Role |
 | ----------------------------------------------------- | :---------------------------------------------------------------- |
 | Sean Decker | Technical Manager |
@@ -15,13 +15,13 @@ Create an application that will allow administrators, professors, and help desk 
 | Ryan Vay | Backend Developer |
 | Matej Malesevic | Backend Developer |
 
-# Completed Work 
+## Completed Work 
 - TBD
 
-# In Progress Work 
+## In Progress Work 
 - TBD
 
-# Not Started Work
+### Not Started Work
 - TBD
 
 ## Important Site Links
