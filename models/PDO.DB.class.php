@@ -144,7 +144,7 @@ class DB {
                 foreach ($studentObject as $student) {
 
                     $fileStudentUsername = $student->getStudentUsername();
-                    $student->setFileStudentID($fileStudentUsername);
+                    $file->setFileStudentID($fileStudentUsername);
 
                 } // Ends student foreach
 
@@ -183,7 +183,7 @@ class DB {
                 foreach ($studentObject as $student) {
 
                     $logStudentUsername = $student->getStudentUsername();
-                    $student->setLogStudentID($logStudentUsername);
+                    $log->setLogStudentID($logStudentUsername);
 
                 } // Ends student foreach
 
@@ -325,7 +325,7 @@ class DB {
                 foreach ($schoolObject as $school) {
 
                     $userSchoolName = $school->getSchoolName();
-                    $school->setUserSchoolID($userSchoolName);
+                    $user->setUserSchoolID($userSchoolName);
 
                 } // Ends school foreach
 
@@ -340,5 +340,90 @@ class DB {
         return $outputTable;
 
     } // Ends getAllUserObjectsAsTable
+
+    // Returns 404 error if no record is found 
+    // Returns 500 error if more than 1 record is found
+    // Returns array with all user information if a record is found
+    public function getUserByID($userID) {
+
+        $data = $this->getAllObjects("SELECT * FROM user WHERE userId = '$userID'", "User");
+
+        if (count($data) > 0) {
+
+            $outputUser[] = $data[0]->getUserID();
+            $outputUser[] = $data[0]->getUserFirstName();
+            $outputUser[] = $data[0]->getUserLastName();
+            $outputUser[] = $data[0]->getUserEmail();
+            $outputUser[] = $data[0]->getUserUsername();
+            $outputUser[] = $data[0]->getUserPassword();
+            $outputUser[] = $data[0]->getUserClassification();
+            $outputUser[] = $data[0]->getUserSchoolID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputUser = "ERROR500";
+
+        } else {
+
+            $outputUser = "ERROR404";
+
+        }// Ends if
+
+        return $outputUser;
+
+    } // Ends getUserByID
+
+    // NOTE: This is the primary function for verifying login details. 
+    // Returns 404 error if no record is found 
+    // Returns 500 error if more than 1 record is found
+    // Returns array with ID and classification if a record is found
+    public function getUserInfoByLogin($inputUsername, $inputPassword) {
+
+        $data = $this->getAllObjects("SELECT * FROM user WHERE userUsername = '$inputUsername' AND userPassword = '$inputPassword'", "User");
+
+        if (count($data) > 0) {
+
+            $outputUser[] = $data[0]->getUserID();
+            $outputUser[] = $data[0]->getUserClassification();
+    
+        } elseif (count($data) > 1) {
+
+            $outputUser = "ERROR500";
+
+        } else {
+
+            $outputUser = "ERROR404";
+
+        }// Ends if
+
+        return $outputUser;
+
+    } // Ends getUserInfoByLogin
+
+    // NOTE: Secondary login verification function used to check if username exists
+    // Returns 404 error if no record is found 
+    // Returns 500 error if more than 1 record is found
+    // Returns user's password if a record is found
+    public function getUserInfoByUsername($inputUsername) {
+
+        $data = $this->getAllObjects("SELECT * FROM user WHERE userUsername = '$inputUsername'", "User");
+
+        if (count($data) > 0) {
+
+            $outputUser = $data[0]->getUserPassword();
+    
+        } elseif (count($data) > 1) {
+
+            $outputUser = "ERROR500";
+
+        } else {
+
+            $outputUser = "ERROR404";
+
+        }// Ends if
+
+        return $outputUser;
+
+    } // Ends getUserInfoByUsername
 
 } // Ends DB class
