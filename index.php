@@ -28,6 +28,138 @@ echo('
                 <div class="container pt-4">
 ');
 
+// Below will display a table with class data from database
+echo ('
+                    <!--Section: Class Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>Class</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllClassObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: Class Table-->
+');
+
+// Below will display a table with classEntry data from database
+echo ('
+                    <!--Section: ClassEntry Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>ClassEntry</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllClassEntryObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: ClassEntry Table-->
+');
+
+// Below will display a table with file data from database
+echo ('
+                    <!--Section: File Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>File</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllFileObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: File Table-->
+');
+
+// Below will display a table with log data from database
+echo ('
+                    <!--Section: Log Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>Log</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllLogObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: Log Table-->
+');
+
+// Below will display a table with loginAttempt data from database
+echo ('
+                    <!--Section: LoginAttempt Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>LoginAttempt</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllLoginAttemptObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: LoginAttempt Table-->
+');
+
+// Below will display a table with school data from database
+echo ('
+                    <!--Section: School Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>School</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllSchoolObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: School Table-->
+');
+
 // Below will display a table with Student data from database
 echo ('
                     <!--Section: Student Table-->
@@ -48,6 +180,28 @@ echo ('
                         </div>
                     </section>
                     <!--Section: Student Table-->
+');
+
+// Below will display a table with user data from database
+echo ('
+                    <!--Section: User Table-->
+                    <section class="mb-4">
+                        <div class="card">
+                            <div class="card-header text-center py-3">
+                                <h5 class="mb-0 text-center">
+                                <strong>User</strong>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover text-nowrap">
+                                        '.$db->getAllUserObjectsAsTable().'
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!--Section: User Table-->
 ');
 
 // Below will echo out closing tags for html and includes MDB scripts
