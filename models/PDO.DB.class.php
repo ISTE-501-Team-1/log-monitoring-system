@@ -350,14 +350,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputUser = $data[0]->getUserID();
-            $outputUser = $data[0]->getUserFirstName();
-            $outputUser = $data[0]->getUserLastName();
-            $outputUser = $data[0]->getUserEmail();
-            $outputUser = $data[0]->getUserUsername();
-            $outputUser = $data[0]->getUserPassword();
-            $outputUser = $data[0]->getUserClassification();
-            $outputUser = $data[0]->getUserSchoolID();
+            $outputUser[] = $data[0]->getUserID();
+            $outputUser[] = $data[0]->getUserFirstName();
+            $outputUser[] = $data[0]->getUserLastName();
+            $outputUser[] = $data[0]->getUserEmail();
+            $outputUser[] = $data[0]->getUserUsername();
+            $outputUser[] = $data[0]->getUserPassword();
+            $outputUser[] = $data[0]->getUserClassification();
+            $outputUser[] = $data[0]->getUserSchoolID();
     
         } elseif (count($data) > 1) {
 
@@ -403,7 +403,7 @@ class DB {
     // NOTE: Secondary login verification function used to check if username exists
     // Returns 404 error if no record is found 
     // Returns 500 error if more than 1 record is found
-    // Returns array with user's password if a record is found
+    // Returns user's password if a record is found
     public function getUserInfoByUsername($inputUsername) {
 
         $data = $this->getAllObjects("SELECT * FROM user WHERE userUsername = '$inputUsername'", "User");
