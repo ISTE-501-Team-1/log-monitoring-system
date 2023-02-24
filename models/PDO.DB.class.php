@@ -144,7 +144,7 @@ class DB {
                 foreach ($studentObject as $student) {
 
                     $fileStudentUsername = $student->getStudentUsername();
-                    $student->setFileStudentID($fileStudentUsername);
+                    $file->setFileStudentID($fileStudentUsername);
 
                 } // Ends student foreach
 
@@ -183,7 +183,7 @@ class DB {
                 foreach ($studentObject as $student) {
 
                     $logStudentUsername = $student->getStudentUsername();
-                    $student->setLogStudentID($logStudentUsername);
+                    $log->setLogStudentID($logStudentUsername);
 
                 } // Ends student foreach
 
@@ -325,7 +325,7 @@ class DB {
                 foreach ($schoolObject as $school) {
 
                     $userSchoolName = $school->getSchoolName();
-                    $school->setUserSchoolID($userSchoolName);
+                    $user->setUserSchoolID($userSchoolName);
 
                 } // Ends school foreach
 
