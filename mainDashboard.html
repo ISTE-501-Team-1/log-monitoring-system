@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="css/mdb.min.css" />
     <!-- Custom styles -->
     <link rel="stylesheet" href="css/style.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
 </head>
 <body>
     <!--Main Navigation-->
@@ -156,6 +159,29 @@
 <!--Main layout-->
 <main style="margin-top: 58px">
   <div class="container pt-4">
+
+
+
+    <!--Section: Student Table-->
+    <section class="mb-4">
+      <div class="card">
+        <div class="card-header text-center py-3">
+          <h5 class="mb-0 text-center">
+            <strong>Recently Viewed Users</strong>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="studentTable" class="table table-hover text-nowrap" >
+<!--              '.$db->getAllStudentObjectsAsTable().'-->
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--Section: Student Table-->
+
+
 
     <!--Section: Sales Performance KPIs-->
     <section class="mb-4">
@@ -607,6 +633,7 @@
     <script type="text/javascript" src="js/mdb.min.js"></script>
     <!-- Custom scripts -->
 <!--    <script type="text/javascript" src="js/script.js"></script>-->
+    <script type="text/javascript" src="js/dashboardSampleData.js"></script>
 </body>
 </html>
 
