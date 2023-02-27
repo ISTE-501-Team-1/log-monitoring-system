@@ -1,13 +1,12 @@
 <?php
     require_once("./checkauth.php");
+    require_once("./PDO.DB.class.php");
 
     // see if they're already logged in
     if(checkauth::isAuthenticated()) {
         // redirect to admin page if they're already logged in
         header("Location: seniordevteam1.in/admin.html");
     }
-
-    session_start();
 
     // preliminary checks: if they don't have either of the url variables, just add them in as empty
     if(!isset($_GET['username'])) {
@@ -20,7 +19,19 @@
     
     //check if they have the correct username/password
     //admin.php if they get it right
-    if ($_GET['username'] == 'admin' && $_GET['password'] == 'password') {
+
+    //check entered creds against what's in the DB
+    $db = new DB;
+    $users = $db -> genericFetch("user");
+    $valid = false
+
+    //any of the users in the DB have the username and password provided, the creds are valid
+    foreach ($users as $user) {
+        if ($_POST['username'] == $user['username'] && $_POST['password'] == $user['password']);
+        $valid = true;
+    }
+
+    if ($valid) {
 
         // set up cookie
         $value = date("F j, Y g:i a");

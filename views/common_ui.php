@@ -1,0 +1,174 @@
+<?php
+
+function view_common_includes() {
+    require_once "dashboard_ui.php";
+    require_once "login_ui.php";
+}
+
+function view_common_header() {
+
+    session_name('loginSession');
+    session_start();
+
+    if (!isset($_SESSION['loggedIn'])) {
+        header("Location: user-login.php");
+        exit;
+    } elseif ($_SESSION['loggedIn']) {
+
+        echo('
+            <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+                    <title>Log Management System</title>
+                    <!-- Font Awesome -->
+                    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+                    <!-- Google Fonts Roboto -->
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+                    <!-- MDB -->
+                    <link rel="stylesheet" href="../css/mdb.min.css" />
+                    <!-- Custom styles -->
+                    <link rel="stylesheet" href="../css/style.css" />
+                </head>
+                <body>
+                    <!--Main layout-->
+                    <main style="margin-top: 58px">
+                        <div class="container pt-4">
+        ');
+
+    }// Ends if
+
+} // Ends view_common_header
+
+function view_common_footer() {
+
+    echo('
+                    </div>
+                </main>
+                <!--Main layout-->
+                <!-- MDB -->
+                <script type="text/javascript" src="js/mdb.min.js"></script>
+                <!-- Custom scripts -->
+            
+            </body>
+      
+        </html>
+    ');
+
+} // Ends view_common_footer
+
+function view_common_navigation() {
+
+    echo('
+        <!--Main Navigation-->
+        <header>
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+
+                <div class="position-sticky">
+
+                    <div class="list-group list-group-flush mt-4">
+
+                        <a href="mainDashboard.html" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
+                            <i class="far fa-chart-bar fa-fw me-3"></i>
+                            <span>Main dashboard</span>
+                        </a>
+
+                        <a href="logs.html" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="far fa-file-alt fa-fw me-3"></i>
+                            <span>Search Logs</span>
+                        </a>
+
+                        <a href="users.html" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-users fa-fw me-3"></i>
+                            <span>Search Users</span>
+                        </a>
+
+                        <a href="alerts.html" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-exclamation-circle fa-fw me-3"></i>
+                            <span>Alerts</span>
+                            <span class="badge badge-danger rounded-pill ms-3">3</span>
+                        </a>
+
+                        <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple">
+                            <i class="fas fa-cogs fa-fw me-3"></i>
+                            <span>Settings</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </nav>
+            <!-- Sidebar -->
+            
+            <!-- Navbar -->
+            <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+
+                <!-- Container wrapper -->
+                <div class="container-fluid">
+            
+                    <div class="d-flex flex-row">
+
+                        <!-- Toggle button -->
+                        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                
+                        <!-- Brand -->
+                        <a class="navbar-brand" href="#">
+                            <img src="../img/Logo_LMS.svg" height="35" alt="MDB Logo" loading="lazy" />
+                        </a>
+
+                    </div>
+            
+                    <div class="d-flex flex-row gap-3 navbar-title">
+                
+                        <h2>Dashboard</h2>
+                
+                        <!-- Search form -->
+                        <form class="d-none d-md-flex input-group w-auto my-auto">
+                            <input autocomplete="off" type="search" class="form-control rounded" placeholder="Search" style="min-width: 225px" />
+                            <span class="input-group-text border-0">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </form>
+
+                    </div>
+            
+                    <!-- Right links -->
+                    <ul class="navbar-nav ms-auto d-flex flex-row flex-grow-1 justify-content-end">
+
+                        <!-- Notification dropdown -->
+                        <!-- TBD? -->
+                
+                        <!-- Avatar -->
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn btn-primary btn-floating btn-lg">
+                                    <p class="avatar">JD</p>
+                                </button>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">My profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+
+                        </li>
+                    </ul>
+                </div>
+                <!-- Container wrapper -->
+            </nav>
+            <!-- Navbar -->
+        </header>
+        <!--Main Navigation-->
+    ');
+
+} // Ends view_common_navigation
+
+?>
