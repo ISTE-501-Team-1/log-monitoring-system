@@ -162,24 +162,57 @@
 
 
 
-    <!--Section: Student Table-->
+    <!--Section: Recently Viewed Student Table-->
     <section class="mb-4">
       <div class="card">
-        <div class="card-header text-center py-3">
-          <h5 class="mb-0 text-center">
-            <strong>Recently Viewed Users</strong>
-          </h5>
+        <div class="card-header table-header text-center py-3">
+
+          <div class ="table-header-title">
+            <i class="fas fa-users fa-fw me-3"></i>
+            <h5 class="mb-0 text-center">
+              <strong>Recently Viewed Users</strong>
+            </h5>
+          </div>
+            <button type="button" class="btn btn-floating" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
+              <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            <table id="studentTable" class="table table-hover text-nowrap" >
+            <table id="studentDashboardTable" class="table table-hover text-nowrap" >
 <!--              '.$db->getAllStudentObjectsAsTable().'-->
             </table>
           </div>
         </div>
       </div>
     </section>
-    <!--Section: Student Table-->
+    <!--Section: Recently Viewed Student Table-->
+
+    <!--Section: Recently Viewed Logs Table-->
+    <section class="mb-4">
+      <div class="card">
+        <div class="card-header table-header text-center py-3">
+
+          <div class ="table-header-title">
+            <i class="far fa-file-alt fa-fw me-3"></i>
+            <h5 class="mb-0 text-center">
+              <strong>Recently Viewed Logs</strong>
+            </h5>
+          </div>
+          <button type="button" class="btn btn-floating" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="logDashboardTable" class="table table-hover text-nowrap" >
+              <!--              '.$db->getAllLogObjectsAsTable().'-->
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--Section: Recently Viewed Logs Table-->
 
 
 
