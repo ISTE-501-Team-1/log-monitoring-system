@@ -1,54 +1,64 @@
 <?php
     require_once("./checkauth.php");
-    require_once("./PDO.DB.class.php");
+    require_once("../../models/PDO.DB.class.php");
+    $db = new DB();
 
-    // see if they're already logged in
+    // Call function to see if user has already logged in, and redirects to dashboard if true
     if(checkauth::isAuthenticated()) {
-        // redirect to admin page if they're already logged in
-        header("Location: seniordevteam1.in/admin.html");
+        header("Location: https://seniordevteam1.in/frontend_test/mainDashboard.html");
+        exit;
     }
 
-    // preliminary checks: if they don't have either of the url variables, just add them in as empty
-    if(!isset($_GET['username'])) {
-        $_GET['username'] = '';
-    }
-    
-    if(!isset($_GET['password'])) {
-        $_GET['password'] = '';
+    // TODO: replace with error checking 
+    // Preliminary checks: if they don't have either of the url variables, just add them in as empty
+    if(!isset($_POST['userUsername'])) {
+        $_POST['username'] = '';
     }
     
-    //check if they have the correct username/password
-    //admin.php if they get it right
-
-    //check entered creds against what's in the DB
-    $db = new DB;
-    $users = $db -> genericFetch("user");
-    $valid = false
-
-    //any of the users in the DB have the username and password provided, the creds are valid
-    foreach ($users as $user) {
-        if ($_POST['username'] == $user['username'] && $_POST['password'] == $user['password']);
-        $valid = true;
+    if(!isset($_POST['userPassword'])) {
+        $_POST['password'] = '';
     }
 
-    if ($valid) {
+    // Calls function to get a record for a user by username and password
+    // If a valid record exists, and array is returned. If not, then a string is returned
+    $loggedInUser = $db->getUserInfoByLogin($_POST['userUsername'], $_POST['userPassword']);
 
-        // set up cookie
+    if ( is_array($loggedInUser) ) {
+
+        // Set timezone
+        date_default_timezone_set('EST');
+
+        // Create session
+        session_name('loginSession');
+        session_start();
+
+        // Set cookie params
         $value = date("F j, Y g:i a");
-        $expire = time() * 3600 * 24 * 3;
+        $expire = time() + (60*180); // Expires in 3 hours
         $path = "/";
         $domain = "seniordevteam1.in";
         $secure = false;
-        $httponly = true;
+        //$httponly = true;
 
-        setcookie("loggedIn", $value, $expire, $path, $domain, $secure, $httponly);
+        // Set session variable
+        $_SESSION['loggedIn'] = true;
 
-        // redirect to admin page
-        header("Location: seniordevteam1.in/admin.html");
+        // Set cookies to hold ID and classification of user returned in array from login function
+        setcookie("loggedInBool", true, $expire, $path, $domain, $secure);
+        setcookie("loggedInUserID", $loggedInUser[0], $expire, $path, $domain, $secure);
+        setcookie("loggedInUserClassification", $loggedInUser[1], $expire, $path, $domain, $secure);
+        //setcookie("loggedIn", $value, $expire, $path, $domain, $secure, $httponly);
+
+        // Redirect to dashboard
+        header("Location: https://seniordevteam1.in/frontend_test/mainDashboard.html");
         exit;
+
     } else {
+
         // They didn't log in correctly, boot them back to the log in screen!
-        header("Location: seniordevteam1.in/login.html");
-    }
+        header("Location: https://seniordevteam1.in");
+        exit;
+
+    } // Ends login if
 
 ?>

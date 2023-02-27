@@ -3,44 +3,79 @@
 function view_login_main() { 
     
     echo('
-        <section class="vh-100" style="background-color: #F98029;">
 
-            <div class="container py-5 h-100">
+    <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <meta http-equiv="x-ua-compatible" />
+            <title>Log Management System</title>
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+            <!-- Google Fonts Roboto -->
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+            <!-- MDB -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" />
+            <!-- Custom styles -->
+            <link rel="stylesheet" href="../css/realLogin.css" />
+        </head>
 
-                <div class="row d-flex justify-content-center align-items-center h-100">
+        <header>
+            <nav class="navbar navbar-light bg-light">
+                <div class="container">
+                    <a class="navbar-brand" href="#">
+                        <img src="../img/Logo_LMS.svg" height="35" alt="LMS Logo" loading="lazy" />
+                    </a>
+                </div>
+            </nav>
+        </header>
+        <body>
 
-                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <section class="vh-100" style="background-color: #F98029;">
 
-                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                <div class="container py-5 h-100">
 
-                            <div class="card-body p-5 text-center">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
 
-                                <h3 class="mb-5">Sign in</h3>
+                        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
 
-                                <!-- Username -->
-                                <div class="form-outline mb-4">
-                                    <input type="name" id="typeTextX-2" class="form-control form-control-lg" />
-                                    <label class="form-label" for="typeTextX-2">Username</label>
-                                </div>
+                            <div class="card shadow-2-strong" style="border-radius: 1rem;">
 
-                                <!-- Password -->
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="typePasswordX-2" class="form-control form-control-lg" />
-                                    <label class="form-label" for="typePasswordX-2">Password</label>
-                                </div>
+                                <div class="card-body p-5 text-center">
 
-                                <!-- Checkbox -->
-                                <div class="form-check d-flex justify-content-start mb-4">
-                                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                                    <label class="form-check-label" for="form1Example3"> Remember password </label>
-                                </div>
+                                    <h3 class="mb-5">Sign in</h3>
 
-                                <!-- Login Button -->
-                                <a class="btn btn-primary btn-lg btn-block" type="submit" href="./admin.html">Login</a>
+                                    <form action="../src/php/login.php" method="post">
 
-                                <!-- Request Access Link -->
-                                <div class="text-start register">
-                                    <p>Don\'t have an account? <a href="#!">Request Access</a></p>
+                                        <!-- Username -->
+                                        <div class="form-outline mb-4">
+                                            <input type="name" id="typeTextX-2" name="userUsername" class="form-control form-control-lg" />
+                                            <label class="form-label" for="typeTextX-2">Username</label>
+                                        </div>
+
+                                        <!-- Password -->
+                                        <div class="form-outline mb-4">
+                                            <input type="password" id="typePasswordX-2" name="userPassword" class="form-control form-control-lg" />
+                                            <label class="form-label" for="typePasswordX-2">Password</label>
+                                        </div>
+
+                                        <!-- Checkbox -->
+                                        <div class="form-check d-flex justify-content-start mb-4">
+                                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
+                                            <label class="form-check-label" for="form1Example3"> Remember password </label>
+                                        </div>
+
+                                        <!-- Login Button -->
+                                        <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+
+                                        <!-- Request Access Link -->
+                                        <div class="text-start register">
+                                            <p>Don\'t have an account? <a href="#!">Request Access</a></p>
+                                        </div>
+
+                                    </form>
+
                                 </div>
 
                             </div>
@@ -51,9 +86,13 @@ function view_login_main() {
 
                 </div>
 
-            </div>
+            </section>
 
-        </section>
+            <!-- MDB Script -->
+            <script type="text/javascript" src="../js/mdb.min.js"></script>
+
+        </body>
+    </html>
     ');
 
 } // Ends view_login_main
