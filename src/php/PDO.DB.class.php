@@ -99,6 +99,112 @@
             }
         }
 
+        // fetch all by class: read php objects into memory with attributes from the database!
+        // example class, to create user objects class would be "User" <-casing the same as how it's written in DB.Controller
+        // method returns table contents as an array of class objects, of the class specified in the second argument
+        // make sure to have up top "require_once("controllers/DB.Controller.class.php")" along with this file
+        function bulkFetchByClass($table, $class) {
+            try {
+                $data = [];
+                
+                // make sure table exists
+                if (DB::tableIsValid($table)) {
+
+                    // prepare statement
+                    $stmt = $this -> dbh -> prepare("SELECT * FROM $table");
+
+                    // execute
+                    $stmt -> execute();
+
+                    // fetch result
+                    $data = $stmt -> fetchAll(PDO::FETCH_CLASS, $class);
+
+                } else {
+
+                    //table doesn't exist
+                    throw new Exception("Couldn't find table");
+
+                }
+
+                return $data;
+
+            } catch(Exception $e) {
+                echo $e -> getMessage();
+                return [];
+                die();
+            }
+        }
+
+        // fetch row by class: read 1 php object into memory with attributes from the database, get the object by its id
+        // method returns one row as a class object, of the class specified in the second argument
+        function rowFetchByClass($table, $id, $class) {
+            try {
+                $data = [];
+                
+                // make sure table exists
+                if (DB::tableIsValid($table)) {
+
+                    // prepare statement
+                    $stmt = $this -> dbh -> prepare("SELECT * FROM $table WHERE ${table}Id = :id");
+
+                    // execute
+                    $stmt -> execute([':id' => $id]);
+
+                    // fetch result
+                    $data = $stmt -> fetch(PDO::FETCH_CLASS, $class);
+
+                } else {
+
+                    //table doesn't exist
+                    throw new Exception("Couldn't find table");
+
+                }
+
+                return $data;
+
+            } catch(Exception $e) {
+                echo $e -> getMessage();
+                return [];
+                die();
+            }
+        }
+
+        // ****WIP**** STILL FIXING SQL INJECTION VULNERABILITY IN THIS METHOD
+        // conditional fetch by class: read php objects into memory from the database, that meet your condition
+        // method returns table contents as an array of class objects, of the class specified in the second argument
+        // example condition, fetch all failed login attempts after a datetime: "loginAttemptTimeEntered >= $datetime" AND loginAttemptSuccess = 0";
+        function conditionalFetchByClass($table, $class, $condition) {
+            try {
+                $data = [];
+                
+                // make sure table exists
+                if (DB::tableIsValid($table)) {
+
+                    // prepare statement, including the condition
+                    $stmt = $this -> dbh -> prepare("SELECT * FROM $table WHERE $condition");
+
+                    // execute
+                    $stmt -> execute();
+
+                    // fetch result
+                    $data = $stmt -> fetchAll(PDO::FETCH_CLASS, $class);
+
+                } else {
+
+                    //table doesn't exist
+                    throw new Exception("Couldn't find table");
+
+                }
+
+                return $data;
+
+            } catch(Exception $e) {
+                echo $e -> getMessage();
+                return [];
+                die();
+            }
+        }
+
         //-------------------------------- UPDATE -----------------------------------
 
         // update rows in db
