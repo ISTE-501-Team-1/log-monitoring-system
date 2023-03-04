@@ -16,16 +16,16 @@ function view_login_main() {
             <!-- Google Fonts Roboto -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
             <!-- MDB -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css" />
+            <link rel="stylesheet" href="https://seniordevteam1.in/src/css/mdb.min.css" />
             <!-- Custom styles -->
-            <link rel="stylesheet" href="../css/realLogin.css" />
+            <link rel="stylesheet" href="https://seniordevteam1.in/src/css/realLogin.css" />
         </head>
 
         <header>
             <nav class="navbar navbar-light bg-light">
                 <div class="container">
                     <a class="navbar-brand" href="#">
-                        <img src="../img/Logo_LMS.svg" height="35" alt="LMS Logo" loading="lazy" />
+                        <img src="https://seniordevteam1.in/src/img/Logo_LMS.svg" height="35" alt="LMS Logo" loading="lazy" />
                     </a>
                 </div>
             </nav>
@@ -46,7 +46,7 @@ function view_login_main() {
 
                                     <h3 class="mb-5">Sign in</h3>
 
-                                    <form action="../src/php/login.php" method="post">
+                                    <form action="../controllers/login_controller.php" method="post">
 
                                         <!-- Username -->
                                         <div class="form-outline mb-4">
@@ -89,7 +89,7 @@ function view_login_main() {
             </section>
 
             <!-- MDB Script -->
-            <script type="text/javascript" src="../js/mdb.min.js"></script>
+            <script type="text/javascript" src="https://seniordevteam1.in/src/js/mdb.min.js"></script>
 
         </body>
     </html>

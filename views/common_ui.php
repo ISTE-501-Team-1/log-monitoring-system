@@ -11,7 +11,7 @@ function view_common_header() {
     session_start();
 
     if (!isset($_SESSION['loggedIn'])) {
-        header("Location: user-login.php");
+        header("Location: https://seniordevteam1.in");
         exit;
     } elseif ($_SESSION['loggedIn']) {
 
@@ -28,9 +28,9 @@ function view_common_header() {
                     <!-- Google Fonts Roboto -->
                     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
                     <!-- MDB -->
-                    <link rel="stylesheet" href="../css/mdb.min.css" />
+                    <link rel="stylesheet" href="https://seniordevteam1.in/src/css/mdb.min.css" />
                     <!-- Custom styles -->
-                    <link rel="stylesheet" href="../css/style.css" />
+                    <link rel="stylesheet" href="https://seniordevteam1.in/src/css/style.css" />
                 </head>
                 <body>
                     <!--Main layout-->
@@ -49,7 +49,7 @@ function view_common_footer() {
                 </main>
                 <!--Main layout-->
                 <!-- MDB -->
-                <script type="text/javascript" src="js/mdb.min.js"></script>
+                <script type="text/javascript" src="https://seniordevteam1.in/src/js/mdb.min.js"></script>
                 <!-- Custom scripts -->
             
             </body>
