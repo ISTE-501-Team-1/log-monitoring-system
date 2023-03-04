@@ -1,6 +1,6 @@
 <?php
-    require_once("./checkauth.php");
-    require_once("../../models/PDO.DB.class.php");
+    require_once("authentication_controller.php");
+    require_once("../models/PDO.DB.class.php");
     $db = new DB();
 
     // Call function to see if user has already logged in, and redirects to dashboard if true

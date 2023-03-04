@@ -32,7 +32,7 @@ class DB {
 
         try {
 
-            require_once "./controllers/DB.Controller.class.php";
+            require_once "../controllers/DB.Controller.class.php";
 
             $stmt = $this->dbh->prepare($stmtInput);
             $stmt->execute();

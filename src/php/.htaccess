@@ -1,5 +1,0 @@
-SetEnv DB u107823177_Team1_SQL_DB
-SetEnv DB_SERVER localhost
-SetEnv DB_PASSWORD 71H7KqGKH6
-SetEnv DB_USER u107823177_Team1_SQL_User
-# may need to change this at some point
