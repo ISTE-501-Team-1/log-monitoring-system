@@ -212,7 +212,7 @@
             try {
 
                 // make sure table and columns exist
-                if (DB::columnsAreValid($columns)) {
+                if (DB::columnsAreValid($table, $columns)) {
 
                     // build query string
                     $queryBeginning = "UPDATE $table SET ";
