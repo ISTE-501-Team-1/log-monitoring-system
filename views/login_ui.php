@@ -46,7 +46,7 @@ function view_login_main() {
 
                                     <h3 class="mb-5">Sign in</h3>
 
-                                    <form action="../controllers/login_controller.php" method="post">
+                                    <form action="../controllers/login_controller.php?login" method="post">
 
                                         <!-- Username -->
                                         <div class="form-outline mb-4">

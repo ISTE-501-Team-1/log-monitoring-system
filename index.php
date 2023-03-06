@@ -4,11 +4,8 @@ require_once "models/PDO.DB.class.php";
 require_once "views/common_ui.php";
 view_common_includes();
 
-$db = new DB();
-//echo (!isset($_SESSION['loggedIn']));
-//echo (!$_SESSION['loggedIn']);
-//echo (!isset($_SESSION['loggedIn']) || !$_SESSION['loggedIn']);
 if (!isset($_SESSION['loggedIn'])) {
+    
     view_login_main();
 
 } elseif ($_SESSION['loggedIn']) {
