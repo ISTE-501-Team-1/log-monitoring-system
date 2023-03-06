@@ -7,7 +7,7 @@ class DB {
 /********************************GENERAL FUNCTIONS*************************************/
     function __construct() {
 
-        require_once 'pdo-config.php';
+        require '../models/pdo-config.php';
 
         try {
 

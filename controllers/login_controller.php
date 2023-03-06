@@ -27,11 +27,11 @@ if (isset($_GET["login"])) {
 
     } else {
 
-        // TODO: The order of these function may change depending on how the frontend team wants to do error messages
+        view_common_includes();
 
+        // TODO: The order of these function may change depending on how the frontend team wants to do error messages
         // Calls function to display error message
         show_error_element($errorArray);
-
         // Displays login page again
         view_login_main();
     

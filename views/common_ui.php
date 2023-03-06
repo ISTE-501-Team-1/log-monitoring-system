@@ -1,14 +1,12 @@
 <?php
 
 function view_common_includes() {
+    session_start();
     require_once "dashboard_ui.php";
     require_once "login_ui.php";
 }
 
 function view_common_header() {
-
-    session_name('loginSession');
-    session_start();
 
     if (!isset($_SESSION['loggedIn'])) {
         header("Location: https://seniordevteam1.in");
