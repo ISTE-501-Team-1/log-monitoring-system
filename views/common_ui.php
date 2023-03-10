@@ -2,6 +2,7 @@
 
 function view_common_includes() {
     session_start();
+    require_once "../models/PDO.DB.class.php";
     require_once "dashboard_ui.php";
     require_once "login_ui.php";
 }
