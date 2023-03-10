@@ -27,8 +27,6 @@ if (isset($_GET["login"])) {
 
     } else {
 
-        view_common_includes();
-
         // TODO: The order of these function may change depending on how the frontend team wants to do error messages
         // Calls function to display error message
         show_error_element($errorArray);

@@ -11,12 +11,13 @@ if (!isset($_SESSION['loggedIn'])) {
 } elseif ($_SESSION['loggedIn']) {
 
     // Redirect to dashboard
-    header("Location: https://seniordevteam1.in/frontend_test/mainDashboard.html");
-    exit;
-    //view_common_header();
-    //view_common_navigation();
-    //view_login_main();
-    //view_common_footer();
-}
+    //header("Location: https://seniordevteam1.in/frontend_test/mainDashboard.html");
+    //exit;
+    view_common_header();
+    view_common_navigation();
+    view_dashboard_main();
+    view_common_footer();
+    
+} // Ends if
 
 ?>
