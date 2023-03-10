@@ -109,3 +109,9 @@ body {
   margin: 0;
   font-size: 16px;
 }
+
+
+  .table-responsive{
+    overflow-y: scroll;
+    display: block;
+  }
