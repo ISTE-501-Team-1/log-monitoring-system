@@ -126,7 +126,7 @@ class DB {
         $data = $this->getAllObjects("SELECT * FROM file", "File");
 
         if (count($data) > 0) {
-
+            
             $outputTable = "<tr>
                             <th>File ID</th>
                             <th>File Name</th>
@@ -199,6 +199,47 @@ class DB {
 
     } // Ends getAllLogObjectsAsTable
 
+    // get all logs after a datetime
+    public function getAllLogObjectsAfterDatetime($datetime) {
+
+        $data = array();
+
+        try {
+
+            require_once "../controllers/DB.Controller.class.php";
+            $stmt = $this->dbh->prepare("SELECT * FROM log WHERE logTimeCreated >= :timeCreated");
+            $stmt->execute(array(":timeCreated" => $dateTime));
+            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
+
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return array();
+        } // Ends try catch
+
+        $outputTable = "<tr>
+                        <th>Log ID</th>
+                        <th>Log Time Created</th>
+                        <th>Log Time Edited</th>
+                        <th>Login Attempt ID</th>
+                        <th>Student ID</th>
+        </tr>\n";
+            
+        if (count($data) > 0) {
+            
+            foreach ($data as $log) {
+
+                $outputTable .= $log->getTableData();
+
+            } // Ends log foreach
+    
+        } else {
+            $outputTable = "<h2>No logs exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllLogObjectsAsTable
+
 /********************************LOGINATTEMPT FUNCTIONS*************************************/
     
     public function getAllLoginAttemptObjectsAsTable() {
@@ -229,6 +270,92 @@ class DB {
         return $outputTable;
 
     } // Ends getAllLoginAttemptObjectsAsTable
+
+    // get all login attempts, successful or failed, from a single student
+    public function getAllLoginAttemptObjectsFromStudent($studentID, $failed) {
+        $data = array();
+
+        try {
+
+            require_once "../controllers/DB.Controller.class.php";
+
+            $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE studentID = :id");
+            if ($failed) {
+                $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE studentID = :id AND loginAttemptSuccess = 0");
+            }
+            $stmt->execute(array(":id" => $studentID));
+            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
+
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return array();
+        } // Ends try catch
+
+        $outputTable = "<tr>
+                        <th>Login Attempt ID</th>
+                        <th>Login Attempt Username</th>
+                        <th>Login Attempt Password</th>
+                        <th>Login Attempt Time Entered</th>
+                        <th>Login Attempt Success</th>
+                        <th>Student ID</th>
+        </tr>\n";
+
+        if(count($data) > 0) {
+            foreach ($data as $loginAttempt) {
+
+                $outputTable .= $loginAttempt->getTableData();
+
+            } // Ends loginAttempt foreach
+        } else {
+            $outputTable = "<h2>No login attempt records exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllLoginAttemptObjectsFromStudent
+
+    // get all login attempts, successful or failed, after a datetime
+    public function getAllLoginAttemptObjectsAfterDatetime($datetime, $failed) {
+        $data = array();
+
+        try {
+
+            require_once "../controllers/DB.Controller.class.php";
+            $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE loginAttemptTimeEntered >= :timeEntered");
+            if ($failed) {
+                $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE loginAttemptTimeEntered >= :timeEntered AND loginAttemptSuccess = 0");
+            }
+            $stmt->execute(array(":timeEntered" => $dateTime));
+            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
+
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return array();
+        } // Ends try catch
+
+        $outputTable = "<tr>
+                        <th>Login Attempt ID</th>
+                        <th>Login Attempt Username</th>
+                        <th>Login Attempt Password</th>
+                        <th>Login Attempt Time Entered</th>
+                        <th>Login Attempt Success</th>
+                        <th>Student ID</th>
+        </tr>\n";
+
+        if(count($data) > 0) {
+            foreach ($data as $loginAttempt) {
+
+                $outputTable .= $loginAttempt->getTableData();
+
+            } // Ends loginAttempt foreach
+        } else {
+            $outputTable = "<h2>No login attempt records exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllLoginAttemptObjectsAfterDateTime
+    
 
 /********************************SCHOOL FUNCTIONS*************************************/
     
@@ -297,6 +424,45 @@ class DB {
         return $outputTable;
 
     } // Ends getAllStudentObjectsAsTable
+
+    // get all students from a specific school
+    public function getAllStudentObjectsFromSchool($datetime) {
+        $data = array();
+
+        try {
+
+            require_once "../controllers/DB.Controller.class.php";
+            $stmt = $this->dbh->prepare("SELECT * FROM student WHERE schoolID = :school");
+            $stmt->execute(array(":timeEntered" => $dateTime));
+            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
+
+        } catch(PDOException $pe) {
+            echo $pe->getMessage();
+            return array();
+        } // Ends try catch
+
+        $outputTable = "<tr>
+                            <th>Student ID</th>
+                            <th>Student First Name</th>
+                            <th>Student Middle Initial</th>
+                            <th>Student Last Name</th>
+                            <th>Student Username</th>
+                            <th>Student School</th>
+            </tr>\n";
+
+        if(count($data) > 0) {
+            foreach ($data as $loginAttempt) {
+
+                $outputTable .= $loginAttempt->getTableData();
+
+            } // Ends loginAttempt foreach
+        } else {
+            $outputTable = "<h2>No login attempt records exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllStudentsFromSchool
 
 /********************************USER FUNCTIONS*************************************/
     
