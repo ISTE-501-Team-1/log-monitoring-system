@@ -4,11 +4,11 @@ require_once "../models/PDO.DB.class.php";
 require_once "../views/common_ui.php";
 view_common_includes();
 view_common_header();
-view_common_navigation();
+view_common_navigation("Dashboard", false);
 view_dashboard_main();
 view_common_footer();
 
-
+// TODO: Add links for "Server Activity", "Logins", and "Failed Logins" cards, and similarly for the "View More" button on the "Recently Viewed..." tables
 function view_dashboard_main() { 
     
     $db = new DB();
@@ -46,8 +46,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.//$db->getCountLogsCreatedToday().
-                                    '</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLogsCreatedToday().'</h2>
                                 </div>
                             </div>
                         </div>
@@ -69,8 +68,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.//$db->getCountSuccessfulLoginsToday().
-                                    '</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("success").'</h2>
                                 </div>
                             </div>
                         </div>
@@ -92,8 +90,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.//$db->getCountFailedLoginsToday().
-                                    '</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("failure").'</h2>
                                 </div>
                             </div>
                         </div>
@@ -121,8 +118,8 @@ function view_dashboard_main() {
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="studentDashboardTable" class="table table-hover text-nowrap" >
-                            './/$db->getAllStudentObjectsAsTable()).
+                            <table id="studentDashboardTable" class="table table-hover text-nowrap" >'
+                                .$db->getAllActivityRecentStudents($currentUser[0], 5).
                             '</table>
                         </div>
                     </div>
@@ -149,8 +146,8 @@ function view_dashboard_main() {
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="logDashboardTable" class="table table-hover text-nowrap" >
-                                './/$db->getAllLogObjectsAsTable()
+                            <table id="logDashboardTable" class="table table-hover text-nowrap" >'
+                                .$db->getAllActivityRecentLogs($currentUser[0], 5).
                             '</table>
                         </div>
                     </div>
