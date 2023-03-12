@@ -1,10 +1,9 @@
 <?php
 
-function view_common_includes() {
+function view_common_includes($pathToRoot) {
     session_start();
-    require_once "../models/PDO.DB.class.php";
-    require_once "dashboard_ui.php";
-    require_once "login_ui.php";
+    require_once $pathToRoot . "models/PDO.DB.class.php";
+    require_once $pathToRoot . "views/login_ui.php";
 }
 
 function view_common_header() {

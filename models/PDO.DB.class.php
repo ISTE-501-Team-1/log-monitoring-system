@@ -81,6 +81,7 @@ class DB {
 
     } // Ends getAllActivityObjectsAsTable
 
+    // Returns a table of recently viewed students. userID is the ID of the user you are trying to get the table for, and limitNum is the number limit of row you want to get, or can be set to 0 to get all records.
     public function getAllActivityRecentStudents($userID, $limitNum) {
 
         if ($limitNum == 0) {
@@ -124,7 +125,7 @@ class DB {
             } // Ends activity foreach
     
         } else {
-            $outputTable = "<h2>No recent student activities exist.</h2>";
+            $outputTable = "<h2>You have not previously viewed any students...</h2>";
         }// Ends if
 
         return $outputTable;
@@ -174,16 +175,68 @@ class DB {
             } // Ends activity foreach
     
         } else {
-            $outputTable = "<h2>No recent log activities exist.</h2>";
+            $outputTable = "<h2>You have not previously viewed any logs...</h2>";
         }// Ends if
 
         return $outputTable;
 
     } // Ends getAllActivityRecentLogs
 
-    // TODO: Function to insert record with a student ID
+    // Inserts a record with the current user ID and the ID of the student the user was viewing
+    public function insertActivityViewedStudent($userID, $studentID) {
 
-    // TODO: Function to insert record with a log ID
+        require_once("DB.Controller.class.php");
+
+        $Activity = new Activity;
+        $Activity->setActivityUserID($userID);
+        $Activity->setActivityStudentID($studentID);
+
+        try {
+
+            $stmt = $this->dbh->prepare("
+                INSERT INTO activity (activityUserId, activityStudentId)
+                VALUES (:activityUserId, :activityStudentId)
+            ");
+
+            $stmt->execute(array(
+                "activityUserId"=>$Activity->getActivityUserID(),
+                "activityStudentId"=>$Activity->getActivityStudentID()
+            ));
+
+        } catch (PDOException $pe) {
+            echo $pe->getMessage();
+            return -1;
+        } // Ends try catch
+
+    } // Ends insertActivityViewedStudent function
+
+    // Inserts a record with the current user ID and the ID of the log the user was viewing
+    public function insertActivityViewedLog($userID, $logID) {
+
+        require_once("DB.Controller.class.php");
+
+        $Activity = new Activity;
+        $Activity->setActivityUserID($userID);
+        $Activity->setActivityLogID($logID);
+
+        try {
+
+            $stmt = $this->dbh->prepare("
+                INSERT INTO activity (activityUserId, activityLogId)
+                VALUES (:activityUserId, :activityLogId)
+            ");
+
+            $stmt->execute(array(
+                "activityUserId"=>$Activity->getActivityUserID(),
+                "activityLogId"=>$Activity->getActivityLogID()
+            ));
+
+        } catch (PDOException $pe) {
+            echo $pe->getMessage();
+            return -1;
+        } // Ends try catch
+
+    } // Ends insertActivityViewedLog function
 
 /********************************CLASS FUNCTIONS*************************************/
     // NOTE: Since "class" is a reserved word, the PHP class to interact with the database table "class" is called "ClassTable"
@@ -375,9 +428,26 @@ class DB {
     } // Ends getAllLogObjectsAsTable
 
     // Returns the number of logs that were created today
-    public function getCountLogsCreatedToday() {
+    public function getCountLogsCreatedToday($userID, $userType) {
 
-        $data = $this->getAllObjects("SELECT * FROM log WHERE DATE(logTimeCreated) = CURDATE()", "Log");
+        if ($userType == "Admin") { // Gets all logs that were created today
+
+            $data = $this->getAllObjects("SELECT * FROM log WHERE DATE(logTimeCreated) = CURDATE()", "Log");
+
+        } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+            WHERE DATE(log.logTimeCreated) = CURDATE()", "Log");
+
+        } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            WHERE DATE(log.logTimeCreated) = CURDATE()", "Log");
+
+        } // Ends if
+
         return count($data);
 
     } // Ends getCountLogsCreatedToday
@@ -499,18 +569,74 @@ class DB {
     } // Ends getAllLoginAttemptObjectsAfterDateTime
     
     // Returns the number of login attempts from today
-    public function getCountLoginAttemptsToday($successType) {
+    public function getCountLoginAttemptsToday($successType, $userType, $userID) {
 
         switch ($successType) {
 
             case "all":
-                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE()", "LoginAttempt");
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE()", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE()", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE()", "LoginAttempt");
+        
+                } // Ends if
+                
                 break;
+
             case "failure":
-                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0", "LoginAttempt");
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0", "LoginAttempt");
+        
+                } // Ends if
+
                 break;
+
             case "success":
-                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1", "LoginAttempt");
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1", "LoginAttempt");
+        
+                } // Ends if
+
                 break;
 
         } // Ends successType switch
