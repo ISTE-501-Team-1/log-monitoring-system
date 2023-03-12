@@ -32,9 +32,6 @@ function view_common_header() {
                     <link rel="stylesheet" href="https://seniordevteam1.in/src/css/style.css" />
                 </head>
                 <body>
-                    <!--Main layout-->
-                    <main style="margin-top: 58px">
-                        <div class="container pt-4">
         ');
 
     }// Ends if
@@ -58,7 +55,7 @@ function view_common_footer() {
 
 } // Ends view_common_footer
 
-function view_common_navigation() {
+function view_common_navigation($pageName, $showSearchBar) {
 
     echo('
         <!--Main Navigation-->
@@ -117,24 +114,33 @@ function view_common_navigation() {
                         </button>
                 
                         <!-- Brand -->
-                        <a class="navbar-brand" href="#">
-                            <img src="../img/Logo_LMS.svg" height="35" alt="MDB Logo" loading="lazy" />
+                        <a class="navbar-brand" href="https://seniordevteam1.in">
+                            <img src="https://seniordevteam1.in/src/img/Logo_LMS.svg" height="35" alt="MDB Logo" loading="lazy" />
                         </a>
 
                     </div>
             
                     <div class="d-flex flex-row gap-3 navbar-title">
-                
-                        <h2>Dashboard</h2>
-                
-                        <!-- Search form -->
-                        <form class="d-none d-md-flex input-group w-auto my-auto">
-                            <input autocomplete="off" type="search" class="form-control rounded" placeholder="Search" style="min-width: 225px" />
-                            <span class="input-group-text border-0">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </form>
 
+                    <h2>'.$pageName.'</h2>
+    '); // Ends echo
+    
+    // Checks boolean to see if the search bar should be displayed
+    if ($showSearchBar) {
+
+        echo ('     
+                    <!-- Search form -->
+                    <form class="d-none d-md-flex input-group w-auto my-auto">
+                        <input autocomplete="off" type="search" class="form-control rounded" placeholder="Search" style="min-width: 225px" />
+                        <span class="input-group-text border-0">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </form>
+        '); // Ends echo
+
+    } // Ends if
+
+    echo ('     
                     </div>
             
                     <!-- Right links -->
@@ -155,7 +161,7 @@ function view_common_navigation() {
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="#">My profile</a></li>
                                 <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                                <li><a class="dropdown-item" href="https://seniordevteam1.in/controllers/login_controller.php?logout">Logout</a></li>
                             </ul>
 
                         </li>
@@ -166,8 +172,6 @@ function view_common_navigation() {
             <!-- Navbar -->
         </header>
         <!--Main Navigation-->
-    ');
+    '); // Ends echo
 
 } // Ends view_common_navigation
-
-?>

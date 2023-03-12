@@ -1,5 +1,42 @@
 <?php
 
+class Activity {
+
+    private $activityId;
+    private $activityUserId;
+    private $activityLogId;
+    private $activityStudentId;
+    private $activityDatetime;
+
+    // This function will be changed depending on the frontend team's styling
+    public function getTableData() {
+
+        return "<tr>
+            <td>{$this->activityId}</td>
+            <td>{$this->activityUserId}</td>
+            <td>{$this->activityLogId}</td>
+            <td>{$this->activityStudentId}</td>
+            <td>{$this->activityDatetime}</td>
+        </tr>\n";
+
+    } // Ends getTableData function
+
+    // Getters
+    public function getActivityID() { return $this->activityId; }
+    public function getActivityUserID() { return $this->activityUserId; }
+    public function getActivityLogID() { return $this->activityLogId; }
+    public function getActivityStudentID() { return $this->activityStudentId; }
+    public function getActivityDatetime() { return $this->activityDatetime; }
+
+    // Setters
+    public function setActivityID($activityId) { $this->activityId = $activityId; }
+    public function setActivityUserID($activityUserId) { $this->activityUserId = $activityUserId; }
+    public function setActivityLogID($activityLogId) { $this->activityLogId = $activityLogId; }
+    public function setActivityStudentID($activityStudentId) { $this->activityStudentId = $activityStudentId; }
+    public function setActivityDatetime($activityDatetime) { $this->activityDatetime = $activityDatetime; }
+
+} // Ends Activity class
+
 class ClassTable {
 
     private $classId;

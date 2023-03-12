@@ -51,6 +51,140 @@ class DB {
 
     } // Ends getAllObjects
 
+/********************************ACTIVITY FUNCTIONS*************************************/
+
+    public function getAllActivityObjectsAsTable() {
+
+        $data = $this->getAllObjects("SELECT * FROM activity", "Activity");
+
+        if (count($data) > 0) {
+            
+            $outputTable = "<tr>
+                            <th>Activity ID</th>
+                            <th>Activity User ID</th>
+                            <th>Activyty Log ID</th>
+                            <th>Activity Student ID</th>
+                            <th>Activity Datetime</th>
+            </tr>\n";
+
+            foreach ($data as $activity) {
+
+                $outputTable .= $activity->getTableData();
+
+            } // Ends activity foreach
+
+        } else {
+            $outputTable = "<h2>No activities exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllActivityObjectsAsTable
+
+    public function getAllActivityRecentStudents($userID, $limitNum) {
+
+        if ($limitNum == 0) {
+            $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL ORDER BY activityDatetime DESC", "Activity");
+        } else {
+            $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL ORDER BY activityDatetime DESC LIMIT $limitNum", "Activity");
+        } // Ends limit if
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Student ID</th>
+                            <th>Student First Name</th>
+                            <th>Student Middle Initial</th>
+                            <th>Student Last Name</th>
+                            <th>Student Username</th>
+                            <th>Student School</th>
+            </tr>\n";
+    
+            foreach ($data as $activity) {
+
+                $activityStudentID = $activity->getActivityStudentID();
+                $activityStudentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $activityStudentID", "Student");
+
+                foreach ($activityStudentObject as $student) {
+
+                    $studentSchoolID = $student->getStudentSchoolID();
+                    $schoolObject = $this->getAllObjects("SELECT * FROM school WHERE schoolId = $studentSchoolID", "School");
+                
+                    foreach ($schoolObject as $school) {
+
+                        $studentSchoolName = $school->getSchoolName();
+                        $student->setStudentSchoolID($studentSchoolName);
+
+                    } // Ends school foreach
+
+                    $outputTable .= $student->getTableData();
+
+                } // Ends student foreach
+            
+            } // Ends activity foreach
+    
+        } else {
+            $outputTable = "<h2>No recent student activities exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllActivityRecentStudents
+
+    // Returns a table of recently viewed logs. userID is the ID of the user you are trying to get the table for, and limitNum is the number limit of row you want to get, or can be set to 0 to get all records.
+    public function getAllActivityRecentLogs($userID, $limitNum) {
+
+        if ($limitNum == 0) {
+            $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityStudentId IS NULL ORDER BY activityDatetime DESC", "Activity");
+        } else {
+            $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityStudentId IS NULL ORDER BY activityDatetime DESC LIMIT $limitNum", "Activity");
+        } // Ends limit if
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Log ID</th>
+                            <th>Log Time Created</th>
+                            <th>Log Time Edited</th>
+                            <th>Login Attempt ID</th>
+                            <th>Student Username</th>
+            </tr>\n";
+    
+            foreach ($data as $activity) {
+
+                $activityLogID = $activity->getActivityLogID();
+                $activityLogObject = $this->getAllObjects("SELECT * FROM log WHERE logId = $activityLogID", "Log");
+
+                foreach ($activityLogObject as $log) {
+
+                    $logStudentID = $log->getLogStudentID();
+                    $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $logStudentID", "Student");
+                
+                    foreach ($studentObject as $student) {
+
+                        $logStudentUsername = $student->getStudentUsername();
+                        $log->setLogStudentID($logStudentUsername);
+
+                    } // Ends student foreach
+
+                    $outputTable .= $log->getTableData();
+
+                } // Ends log foreach
+            
+            } // Ends activity foreach
+    
+        } else {
+            $outputTable = "<h2>No recent log activities exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getAllActivityRecentLogs
+
+    // TODO: Function to insert record with a student ID
+
+    // TODO: Function to insert record with a log ID
+
 /********************************CLASS FUNCTIONS*************************************/
     // NOTE: Since "class" is a reserved word, the PHP class to interact with the database table "class" is called "ClassTable"
 
@@ -240,6 +374,14 @@ class DB {
 
     } // Ends getAllLogObjectsAsTable
 
+    // Returns the number of logs that were created today
+    public function getCountLogsCreatedToday() {
+
+        $data = $this->getAllObjects("SELECT * FROM log WHERE DATE(logTimeCreated) = CURDATE()", "Log");
+        return count($data);
+
+    } // Ends getCountLogsCreatedToday
+
 /********************************LOGINATTEMPT FUNCTIONS*************************************/
     
     public function getAllLoginAttemptObjectsAsTable() {
@@ -356,6 +498,26 @@ class DB {
 
     } // Ends getAllLoginAttemptObjectsAfterDateTime
     
+    // Returns the number of login attempts from today
+    public function getCountLoginAttemptsToday($successType) {
+
+        switch ($successType) {
+
+            case "all":
+                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE()", "LoginAttempt");
+                break;
+            case "failure":
+                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0", "LoginAttempt");
+                break;
+            case "success":
+                $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1", "LoginAttempt");
+                break;
+
+        } // Ends successType switch
+
+        return count($data);
+
+    } // Ends getCountLoginAttemptsToday
 
 /********************************SCHOOL FUNCTIONS*************************************/
     
