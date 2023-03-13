@@ -1,8 +1,8 @@
 <?php
 
-require_once "../models/PDO.DB.class.php";
-require_once "../views/common_ui.php";
-view_common_includes();
+//require_once "../models/PDO.DB.class.php";
+//require_once "../views/common_ui.php";
+view_common_includes("../");
 view_common_header();
 view_common_navigation("Dashboard", false);
 view_dashboard_main();
@@ -46,7 +46,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLogsCreatedToday().'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLogsCreatedToday($currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("success").'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("success", $currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("failure").'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("failure", $currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
                         </div>

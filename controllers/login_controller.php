@@ -2,9 +2,8 @@
 
 require_once("validation_controller.php");
 require_once("authentication_controller.php");
-require_once("../models/PDO.DB.class.php");
-require_once "../views/common_ui.php";
-view_common_includes();
+require_once ("../views/common_ui.php");
+view_common_includes("../");
 $db = new DB();
 
 if (isset($_GET["login"])) {
@@ -22,7 +21,7 @@ if (isset($_GET["login"])) {
 
         // Redirects to dashboard view
         echo "Session Created";
-        header("Location: https://seniordevteam1.in/frontend_test/mainDashboard.html");
+        header("Location: https://seniordevteam1.in/views/dashboard_ui.php");
         exit;
 
     } else {
