@@ -11,7 +11,7 @@ function view_common_header() {
     if (!isset($_SESSION['loggedIn'])) {
         header("Location: https://seniordevteam1.in");
         exit;
-    } elseif ($_SESSION['loggedIn']) {
+    } elseif ($_SESSION['loggedIn'] && $_COOKIE['loggedInBool']) {
 
         echo('
             <!DOCTYPE html>
