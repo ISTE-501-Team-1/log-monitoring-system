@@ -448,9 +448,97 @@ class DB {
 
         } // Ends if
 
-        return count($data);
+        if (is_array($data)) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
 
     } // Ends getCountLogsCreatedToday
+
+    public function getLogObjectsByRoleAsTable($userID, $userType) {
+
+        if ($userType == "Admin") { // Gets all logs that were created today
+
+            $data = $this->getAllObjects("SELECT * FROM log", "Log");
+
+        } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
+            "Log");
+
+        } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID", 
+            "Log");
+
+        } // Ends if
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Log ID</th>
+                            <th>Log Time Created</th>
+                            <th>Log Time Edited</th>
+                            <th>Login Attempt ID</th>
+                            <th>Student Username</th>
+            </tr>\n";
+    
+            foreach ($data as $log) {
+
+                $logStudentID = $log->getLogStudentID();
+                $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $logStudentID", "Student");
+             
+                foreach ($studentObject as $student) {
+
+                    $logStudentUsername = $student->getStudentUsername();
+                    $log->setLogStudentID($logStudentUsername);
+
+                } // Ends student foreach
+
+                $outputTable .= $log->getTableLinkingRow();
+
+            } // Ends log foreach
+    
+        } else {
+            $outputTable = "<h2>No logs exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getLogObjectsByRoleAsTable
+
+    public function getLogByID($logID) {
+
+        $data = $this->getAllObjects("SELECT * FROM log WHERE logId = '$logID'", "Log");
+
+        if (count($data) > 0) {
+
+            $outputLog[] = $data[0]->getLogID();
+            $outputLog[] = $data[0]->getLogTimeCreated();
+            $outputLog[] = $data[0]->getLogTimeEdited();
+            $outputLog[] = $data[0]->getLogLoginAttemptID();
+            $outputLog[] = $data[0]->getLogStudentID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputLog = "ERROR500";
+
+        } else {
+
+            $outputLog = "ERROR404";
+
+        }// Ends if
+
+        return $outputLog;
+
+    } // Ends getLogByID
 
 /********************************LOGINATTEMPT FUNCTIONS*************************************/
     
@@ -569,7 +657,7 @@ class DB {
     } // Ends getAllLoginAttemptObjectsAfterDateTime
     
     // Returns the number of login attempts from today
-    public function getCountLoginAttemptsToday($successType, $userType, $userID) {
+    public function getCountLoginAttemptsToday($successType, $userID, $userType) {
 
         switch ($successType) {
 
@@ -641,7 +729,11 @@ class DB {
 
         } // Ends successType switch
 
-        return count($data);
+        if (is_array($data)) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
 
     } // Ends getCountLoginAttemptsToday
 
@@ -751,6 +843,123 @@ class DB {
         return $outputTable;
 
     } // Ends getAllStudentsFromSchool
+
+    // Gets all students for the passed in user
+    public function getStudentObjectsByRoleAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        if ($userType == "Admin") {
+
+            $data = $this->getAllObjects("SELECT * FROM student LIMIT $offset, $recordsPerPage", "Student");
+
+        } else if ($userType == "Professor") { // Gets all students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+            LIMIT $offset, $recordsPerPage", "Student");
+
+        } else if ($userType == "Support") { // Gets all students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT student.* FROM student
+            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID 
+            LIMIT $offset, $recordsPerPage", "Student");
+
+        } // Ends if
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Student ID</th>
+                            <th>Student First Name</th>
+                            <th>Student Middle Initial</th>
+                            <th>Student Last Name</th>
+                            <th>Student Username</th>
+                            <th>Student School</th>
+            </tr>\n";
+    
+            foreach ($data as $student) {
+
+                $studentSchoolID = $student->getStudentSchoolID();
+                $schoolObject = $this->getAllObjects("SELECT * FROM school WHERE schoolId = $studentSchoolID", "School");
+             
+                foreach ($schoolObject as $school) {
+
+                    $studentSchoolName = $school->getSchoolName();
+                    $student->setStudentSchoolID($studentSchoolName);
+
+                } // Ends school foreach
+
+                $outputTable .= $student->getTableLinkingRow();
+
+            } // Ends student foreach
+    
+        } else {
+            $outputTable = "<h2>No students exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getStudentObjectsByRoleAsTable
+
+    public function getStudentObjectsByRoleCount($userID, $userType) {
+
+        if ($userType == "Admin") {
+
+            $data = $this->getAllObjects("SELECT * FROM student", "Student");
+
+        } else if ($userType == "Professor") { // Gets all students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
+            "Student");
+
+        } else if ($userType == "Support") { // Gets all students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT student.* FROM student
+            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID", 
+            "Student");
+
+        } // Ends if
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getStudentObjectsByRoleCount
+
+    public function getStudentByID($studentID) {
+
+        $data = $this->getAllObjects("SELECT * FROM student WHERE studentId = '$studentID'", "Student");
+
+        if (count($data) > 0) {
+
+            $outputStudent[] = $data[0]->getStudentID();
+            $outputStudent[] = $data[0]->getStudentFirstName();
+            $outputStudent[] = $data[0]->getStudentMiddleInitial();
+            $outputStudent[] = $data[0]->getStudentLastName();
+            $outputStudent[] = $data[0]->getStudentUsername();
+            $outputStudent[] = $data[0]->getStudentSchoolID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputStudent = "ERROR500";
+
+        } else {
+
+            $outputStudent = "ERROR404";
+
+        }// Ends if
+
+        return $outputStudent;
+
+    } // Ends getStudentByID
 
 /********************************USER FUNCTIONS*************************************/
     

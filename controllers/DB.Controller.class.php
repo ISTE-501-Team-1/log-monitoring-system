@@ -157,6 +157,24 @@ class Log {
 
     } // Ends getTableData function
 
+    public function getTableLinkingRow() {
+
+        $returnString =
+        "<tr onclick=\"window.location='https://seniordevteam1.in/views/log_details_ui.php?id={$this->logId}'\">
+            <td>{$this->logId}</td>
+            <td>{$this->logTimeCreated}</td>
+            <td>{$this->logTimeEdited}</td>
+            <td>{$this->loginAttemptId}</td>
+            <td>{$this->studentId}</td>
+        ";
+
+        $returnString .= "
+        </tr>\n";
+
+        return $returnString;
+
+    } // Ends getTableLinkingRow function
+
     // Getters
     public function getLogID() { return $this->logId; }
     public function getLogTimeCreated() { return $this->logTimeCreated; }
@@ -242,6 +260,25 @@ class Student {
         return $returnString;
 
     } // Ends getTableData function
+
+    public function getTableLinkingRow() {
+
+        $returnString =
+        "<tr onclick=\"window.location='https://seniordevteam1.in/views/student_details_ui.php?id={$this->studentId}'\">
+            <td>{$this->studentId}</td>
+            <td>{$this->studentFirstName}</td>
+            <td>{$this->studentMiddleInitial}</td>
+            <td>{$this->studentLastName}</td>
+            <td>{$this->studentUsername}</td>
+            <td>{$this->schoolId}</td>
+        ";
+
+        $returnString .= "
+        </tr>\n";
+
+        return $returnString;
+
+    } // Ends getTableLinkingRow function
 
     // Getters
     public function getStudentID() { return $this->studentId; }

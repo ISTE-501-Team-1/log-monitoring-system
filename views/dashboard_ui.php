@@ -1,7 +1,6 @@
 <?php
 
-//require_once "../models/PDO.DB.class.php";
-//require_once "../views/common_ui.php";
+require_once "../views/common_ui.php";
 view_common_includes("../");
 view_common_header();
 view_common_navigation("Dashboard", false);
