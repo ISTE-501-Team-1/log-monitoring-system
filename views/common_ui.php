@@ -4,11 +4,11 @@ function view_common_includes($pathToRoot) {
     session_start();
     require_once $pathToRoot . "models/PDO.DB.class.php";
     require_once $pathToRoot . "views/login_ui.php";
-}
+} // Ends view_common_includes
 
 function view_common_header() {
 
-    if (!isset($_SESSION['loggedIn'])) {
+    if (!isset($_SESSION['loggedIn']) OR !isset($_COOKIE['loggedInBool'])) {
         header("Location: https://seniordevteam1.in");
         exit;
     } elseif ($_SESSION['loggedIn'] && $_COOKIE['loggedInBool']) {
@@ -54,7 +54,23 @@ function view_common_footer() {
 
 } // Ends view_common_footer
 
-function view_common_navigation($pageName, $showSearchBar) {
+function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
+
+    $activeDash = $activeLogs = $activeStudents = $activeAlerts = $activeSettings = "\"";
+    switch ($activeIndex) {
+
+        case 0:
+            $activeDash = " active\" aria-current=\"true\"";
+        case 1:
+            $activeLogs = " active\" aria-current=\"true\"";
+        case 2:
+            $activeStudents = " active\" aria-current=\"true\"";
+        case 3:
+            $activeAlerts = " active\" aria-current=\"true\"";
+        case 4:
+            $activeSettings = " active\" aria-current=\"true\"";
+
+    } // Ends switch
 
     echo('
         <!--Main Navigation-->
@@ -66,28 +82,28 @@ function view_common_navigation($pageName, $showSearchBar) {
 
                     <div class="list-group list-group-flush mt-4">
 
-                        <a href="mainDashboard.html" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
+                        <a href="https://seniordevteam1.in/views/dashboard_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeDash.'>
                             <i class="far fa-chart-bar fa-fw me-3"></i>
-                            <span>Main dashboard</span>
+                            <span>Dashboard</span>
                         </a>
 
-                        <a href="logs.html" class="list-group-item list-group-item-action py-2 ripple">
+                        <a href="https://seniordevteam1.in/views/log_list_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeLogs.'>
                             <i class="far fa-file-alt fa-fw me-3"></i>
                             <span>Search Logs</span>
                         </a>
 
-                        <a href="users.html" class="list-group-item list-group-item-action py-2 ripple">
+                        <a href="https://seniordevteam1.in/views/student_list_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeStudents.'>
                             <i class="fas fa-users fa-fw me-3"></i>
-                            <span>Search Users</span>
+                            <span>Search Students</span>
                         </a>
 
-                        <a href="alerts.html" class="list-group-item list-group-item-action py-2 ripple">
+                        <a href="https://seniordevteam1.in/views/alerts_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeAlerts.'>
                             <i class="fas fa-exclamation-circle fa-fw me-3"></i>
                             <span>Alerts</span>
                             <span class="badge badge-danger rounded-pill ms-3">3</span>
                         </a>
 
-                        <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple">
+                        <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple'.$activeSettings.'>
                             <i class="fas fa-cogs fa-fw me-3"></i>
                             <span>Settings</span>
                         </a>
@@ -174,3 +190,18 @@ function view_common_navigation($pageName, $showSearchBar) {
     '); // Ends echo
 
 } // Ends view_common_navigation
+
+function get_common_pagination($numPages, $currentPage) {
+
+    $links = '';
+    
+    for ($i = 1; $i <= $numPages; $i++) {
+
+        $isActive = ($i == $currentPage) ? 'active' : '';
+        $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+
+    } // Ends for
+
+    return $links;
+
+} // Ends get_common_pagination
