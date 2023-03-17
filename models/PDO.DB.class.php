@@ -307,7 +307,7 @@ class DB {
 
     } // Ends getActivityStudentObjectsCount
 
-    // Inserts a record with the current user ID and the ID of the student the user was viewing
+    // Inserts a record with the current user ID and the ID of the student the user was viewing. Updates the record if the user has previously viewd the student
     public function insertActivityViewedStudent($userID, $studentID) {
 
         require_once("DB.Controller.class.php");
@@ -316,17 +316,36 @@ class DB {
         $Activity->setActivityUserID($userID);
         $Activity->setActivityStudentID($studentID);
 
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityStudentId = $studentID", "Activity");
+
         try {
 
-            $stmt = $this->dbh->prepare("
-                INSERT INTO activity (activityUserId, activityStudentId)
-                VALUES (:activityUserId, :activityStudentId)
-            ");
+            if (count($data) > 0) {
 
-            $stmt->execute(array(
-                "activityUserId"=>$Activity->getActivityUserID(),
-                "activityStudentId"=>$Activity->getActivityStudentID()
-            ));
+                $stmt = $this->dbh->prepare("
+                    UPDATE activity
+                    SET activityUserId = :activityUserId, activityStudentId = :activityStudentId
+                    WHERE activityUserId = :activityUserId AND activityStudentId = :activityStudentId
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityStudentId"=>$Activity->getActivityStudentID()
+                ));
+
+            } else {
+
+                $stmt = $this->dbh->prepare("
+                    INSERT INTO activity (activityUserId, activityStudentId)
+                    VALUES (:activityUserId, :activityStudentId)
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityStudentId"=>$Activity->getActivityStudentID()
+                ));
+
+            } // Ends if
 
         } catch (PDOException $pe) {
             echo $pe->getMessage();
@@ -344,17 +363,36 @@ class DB {
         $Activity->setActivityUserID($userID);
         $Activity->setActivityLogID($logID);
 
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId = $logID", "Activity");
+
         try {
 
-            $stmt = $this->dbh->prepare("
-                INSERT INTO activity (activityUserId, activityLogId)
-                VALUES (:activityUserId, :activityLogId)
-            ");
+            if (count($data) > 0) {
 
-            $stmt->execute(array(
-                "activityUserId"=>$Activity->getActivityUserID(),
-                "activityLogId"=>$Activity->getActivityLogID()
-            ));
+                $stmt = $this->dbh->prepare("
+                    UPDATE activity
+                    SET activityUserId = :activityUserId, activityLogId = :activityLogId
+                    WHERE activityUserId = :activityUserId AND activityLogId = :activityLogId
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityLogId"=>$Activity->getActivityLogID()
+                ));
+
+            } else {
+
+                $stmt = $this->dbh->prepare("
+                    INSERT INTO activity (activityUserId, activityLogId)
+                    VALUES (:activityUserId, :activityLogId)
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityLogId"=>$Activity->getActivityLogID()
+                ));
+
+            } // Ends if
 
         } catch (PDOException $pe) {
             echo $pe->getMessage();
