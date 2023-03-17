@@ -3,11 +3,10 @@
 require_once "../views/common_ui.php";
 view_common_includes("../");
 view_common_header();
-view_common_navigation("Dashboard", false);
+view_common_navigation("Dashboard", false, 0);
 view_dashboard_main();
 view_common_footer();
 
-// TODO: Add links for "Server Activity", "Logins", and "Failed Logins" cards, and similarly for the "View More" button on the "Recently Viewed..." tables
 function view_dashboard_main() { 
     
     $db = new DB();
@@ -45,9 +44,10 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLogsCreatedToday($currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getLogsCreatedTodayCount($currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
+                            <a href="https://seniordevteam1.in/views/log_list_ui.php?today" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -67,9 +67,10 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("success", $currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getLoginAttemptsTodayCount("success", $currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
+                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?today=success" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -89,9 +90,10 @@ function view_dashboard_main() {
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getCountLoginAttemptsToday("failure", $currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$db->getLoginAttemptsTodayCount("failure", $currentUser[0], $currentUser[6]).'</h2>
                                 </div>
                             </div>
+                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?today=failure" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -110,15 +112,15 @@ function view_dashboard_main() {
                                 <strong>Recently Viewed Students</strong>
                             </h5>
                         </div>
-                        <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
+                        <a href="https://seniordevteam1.in/views/student_list_ui.php?recent" type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
                             <i class="fas fa-chevron-right fa-lg"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="studentDashboardTable" class="table table-hover text-nowrap" >'
-                                .$db->getAllActivityRecentStudents($currentUser[0], 5).
+                                .$db->getActivityRecentStudents($currentUser[0], 5).
                             '</table>
                         </div>
                     </div>
@@ -138,15 +140,15 @@ function view_dashboard_main() {
                                 <strong>Recently Viewed Logs</strong>
                             </h5>
                         </div>
-                        <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
+                        <a href="https://seniordevteam1.in/views/log_list_ui.php?recent" type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="View More">
                             <i class="fas fa-chevron-right fa-lg"></i>
-                        </button>
+                        </a>
                     </div>
 
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="logDashboardTable" class="table table-hover text-nowrap" >'
-                                .$db->getAllActivityRecentLogs($currentUser[0], 5).
+                                .$db->getActivityRecentLogs($currentUser[0], 5).
                             '</table>
                         </div>
                     </div>

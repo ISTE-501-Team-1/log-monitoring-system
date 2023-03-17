@@ -160,7 +160,7 @@ class Log {
     public function getTableLinkingRow() {
 
         $returnString =
-        "<tr onclick=\"window.location='https://seniordevteam1.in/views/log_details_ui.php?id={$this->logId}'\">
+        "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=log&id={$this->logId}'\">
             <td>{$this->logId}</td>
             <td>{$this->logTimeCreated}</td>
             <td>{$this->logTimeEdited}</td>
@@ -264,7 +264,7 @@ class Student {
     public function getTableLinkingRow() {
 
         $returnString =
-        "<tr onclick=\"window.location='https://seniordevteam1.in/views/student_details_ui.php?id={$this->studentId}'\">
+        "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=student&id={$this->studentId}'\">
             <td>{$this->studentId}</td>
             <td>{$this->studentFirstName}</td>
             <td>{$this->studentMiddleInitial}</td>
