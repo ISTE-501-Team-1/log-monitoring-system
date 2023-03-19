@@ -57,18 +57,24 @@ function view_common_footer() {
 function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
     $activeDash = $activeLogs = $activeStudents = $activeAlerts = $activeSettings = "\"";
+
     switch ($activeIndex) {
 
         case 0:
             $activeDash = " active\" aria-current=\"true\"";
+            break;
         case 1:
             $activeLogs = " active\" aria-current=\"true\"";
+            break;
         case 2:
             $activeStudents = " active\" aria-current=\"true\"";
+            break;
         case 3:
             $activeAlerts = " active\" aria-current=\"true\"";
+            break;
         case 4:
             $activeSettings = " active\" aria-current=\"true\"";
+            break;
 
     } // Ends switch
 
@@ -198,7 +204,11 @@ function get_common_pagination($numPages, $currentPage) {
     for ($i = 1; $i <= $numPages; $i++) {
 
         $isActive = ($i == $currentPage) ? 'active' : '';
-        $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+        if (count($_GET) == 0) {
+            $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+        } else if (count($_GET) > 0) {
+            $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="&page='.$i.'">'.$i.'</a></li>';
+        } // Ends if
 
     } // Ends for
 
