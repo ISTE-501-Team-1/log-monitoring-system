@@ -82,7 +82,7 @@ class DB {
     } // Ends getAllActivityObjectsAsTable
 
     // Returns a table of recently viewed students. userID is the ID of the user you are trying to get the table for, and limitNum is the number limit of row you want to get, or can be set to 0 to get all records.
-    public function getAllActivityRecentStudents($userID, $limitNum) {
+    public function getActivityRecentStudents($userID, $limitNum) {
 
         if ($limitNum == 0) {
             $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL ORDER BY activityDatetime DESC", "Activity");
@@ -118,7 +118,7 @@ class DB {
 
                     } // Ends school foreach
 
-                    $outputTable .= $student->getTableData();
+                    $outputTable .= $student->getTableLinkingRow();
 
                 } // Ends student foreach
             
@@ -133,7 +133,7 @@ class DB {
     } // Ends getAllActivityRecentStudents
 
     // Returns a table of recently viewed logs. userID is the ID of the user you are trying to get the table for, and limitNum is the number limit of row you want to get, or can be set to 0 to get all records.
-    public function getAllActivityRecentLogs($userID, $limitNum) {
+    public function getActivityRecentLogs($userID, $limitNum) {
 
         if ($limitNum == 0) {
             $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityStudentId IS NULL ORDER BY activityDatetime DESC", "Activity");
@@ -168,7 +168,7 @@ class DB {
 
                     } // Ends student foreach
 
-                    $outputTable .= $log->getTableData();
+                    $outputTable .= $log->getTableLinkingRow();
 
                 } // Ends log foreach
             
@@ -182,7 +182,132 @@ class DB {
 
     } // Ends getAllActivityRecentLogs
 
-    // Inserts a record with the current user ID and the ID of the student the user was viewing
+    // Returns the logs appropriate for the specific user. Used for pagination
+    public function getActivityLogObjectsAsTable($userID, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID 
+        AND activityStudentId IS NULL ORDER BY activityDatetime DESC 
+        LIMIT $offset, $recordsPerPage", "Activity");
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Log ID</th>
+                            <th>Log Time Created</th>
+                            <th>Log Time Edited</th>
+                            <th>Login Attempt ID</th>
+                            <th>Student Username</th>
+            </tr>\n";
+    
+            foreach ($data as $activity) {
+
+                $activityLogID = $activity->getActivityLogID();
+                $activityLogObject = $this->getAllObjects("SELECT * FROM log WHERE logId = $activityLogID", "Log");
+
+                foreach ($activityLogObject as $log) {
+
+                    $logStudentID = $log->getLogStudentID();
+                    $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $logStudentID", "Student");
+                
+                    foreach ($studentObject as $student) {
+
+                        $logStudentUsername = $student->getStudentUsername();
+                        $log->setLogStudentID($logStudentUsername);
+
+                    } // Ends student foreach
+
+                    $outputTable .= $log->getTableLinkingRow();
+
+                } // Ends log foreach
+            
+            } // Ends activity foreach
+    
+        } else {
+            $outputTable = "<h3>You have not previously viewed any logs...</h3>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getActivityLogObjectsAsTable
+
+    public function getActivityLogObjectsCount($userID) {
+
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID 
+        AND activityStudentId IS NULL", "Activity");
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getActivityLogObjectsCount
+
+    // Returns the students appropriate for the specific user. Used for pagination
+    public function getActivityStudentObjectsAsTable($userID, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL 
+        ORDER BY activityDatetime DESC LIMIT $offset, $recordsPerPage", "Activity"); 
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Student ID</th>
+                            <th>Student First Name</th>
+                            <th>Student Middle Initial</th>
+                            <th>Student Last Name</th>
+                            <th>Student Username</th>
+                            <th>Student School</th>
+            </tr>\n";
+
+            foreach ($data as $activity) {
+
+                $activityStudentID = $activity->getActivityStudentID();
+                $activityStudentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $activityStudentID", "Student");
+
+                foreach ($activityStudentObject as $student) {
+
+                    $studentSchoolID = $student->getStudentSchoolID();
+                    $schoolObject = $this->getAllObjects("SELECT * FROM school WHERE schoolId = $studentSchoolID", "School");
+                
+                    foreach ($schoolObject as $school) {
+
+                        $studentSchoolName = $school->getSchoolName();
+                        $student->setStudentSchoolID($studentSchoolName);
+
+                    } // Ends school foreach
+
+                    $outputTable .= $student->getTableLinkingRow();
+
+                } // Ends student foreach
+            
+            } // Ends activity foreach
+
+        } else {
+            $outputTable = "<h2>You have not previously viewed any students...</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getActivityStudentObjectsAsTable
+
+    public function getActivityStudentObjectsCount($userID) {
+
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL", "Activity");
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getActivityStudentObjectsCount
+
+    // Inserts a record with the current user ID and the ID of the student the user was viewing. Updates the record if the user has previously viewd the student
     public function insertActivityViewedStudent($userID, $studentID) {
 
         require_once("DB.Controller.class.php");
@@ -191,17 +316,36 @@ class DB {
         $Activity->setActivityUserID($userID);
         $Activity->setActivityStudentID($studentID);
 
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityStudentId = $studentID", "Activity");
+
         try {
 
-            $stmt = $this->dbh->prepare("
-                INSERT INTO activity (activityUserId, activityStudentId)
-                VALUES (:activityUserId, :activityStudentId)
-            ");
+            if (count($data) > 0) {
 
-            $stmt->execute(array(
-                "activityUserId"=>$Activity->getActivityUserID(),
-                "activityStudentId"=>$Activity->getActivityStudentID()
-            ));
+                $stmt = $this->dbh->prepare("
+                    UPDATE activity
+                    SET activityUserId = :activityUserId, activityStudentId = :activityStudentId
+                    WHERE activityUserId = :activityUserId AND activityStudentId = :activityStudentId
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityStudentId"=>$Activity->getActivityStudentID()
+                ));
+
+            } else {
+
+                $stmt = $this->dbh->prepare("
+                    INSERT INTO activity (activityUserId, activityStudentId)
+                    VALUES (:activityUserId, :activityStudentId)
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityStudentId"=>$Activity->getActivityStudentID()
+                ));
+
+            } // Ends if
 
         } catch (PDOException $pe) {
             echo $pe->getMessage();
@@ -219,17 +363,36 @@ class DB {
         $Activity->setActivityUserID($userID);
         $Activity->setActivityLogID($logID);
 
+        $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId = $logID", "Activity");
+
         try {
 
-            $stmt = $this->dbh->prepare("
-                INSERT INTO activity (activityUserId, activityLogId)
-                VALUES (:activityUserId, :activityLogId)
-            ");
+            if (count($data) > 0) {
 
-            $stmt->execute(array(
-                "activityUserId"=>$Activity->getActivityUserID(),
-                "activityLogId"=>$Activity->getActivityLogID()
-            ));
+                $stmt = $this->dbh->prepare("
+                    UPDATE activity
+                    SET activityUserId = :activityUserId, activityLogId = :activityLogId
+                    WHERE activityUserId = :activityUserId AND activityLogId = :activityLogId
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityLogId"=>$Activity->getActivityLogID()
+                ));
+
+            } else {
+
+                $stmt = $this->dbh->prepare("
+                    INSERT INTO activity (activityUserId, activityLogId)
+                    VALUES (:activityUserId, :activityLogId)
+                ");
+
+                $stmt->execute(array(
+                    "activityUserId"=>$Activity->getActivityUserID(),
+                    "activityLogId"=>$Activity->getActivityLogID()
+                ));
+
+            } // Ends if
 
         } catch (PDOException $pe) {
             echo $pe->getMessage();
@@ -428,7 +591,7 @@ class DB {
     } // Ends getAllLogObjectsAsTable
 
     // Returns the number of logs that were created today
-    public function getCountLogsCreatedToday($userID, $userType) {
+    public function getLogsCreatedTodayCount($userID, $userType) {
 
         if ($userType == "Admin") { // Gets all logs that were created today
 
@@ -456,18 +619,79 @@ class DB {
 
     } // Ends getCountLogsCreatedToday
 
-    public function getLogObjectsByRoleAsTable($userID, $userType) {
+    // Returns all log objects that were created today
+    public function getLogsCreatedTodayAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
 
         if ($userType == "Admin") { // Gets all logs that were created today
 
-            $data = $this->getAllObjects("SELECT * FROM log", "Log");
+            $data = $this->getAllObjects("SELECT * FROM log WHERE DATE(logTimeCreated) = CURDATE() LIMIT $offset, $recordsPerPage", "Log");
+
+        } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+            WHERE DATE(log.logTimeCreated) = CURDATE() LIMIT $offset, $recordsPerPage", "Log");
+
+        } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            WHERE DATE(log.logTimeCreated) = CURDATE() LIMIT $offset, $recordsPerPage", "Log");
+
+        } // Ends if
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Log ID</th>
+                            <th>Log Time Created</th>
+                            <th>Log Time Edited</th>
+                            <th>Login Attempt ID</th>
+                            <th>Student Username</th>
+            </tr>\n";
+    
+            foreach ($data as $log) {
+
+                $logStudentID = $log->getLogStudentID();
+                $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $logStudentID", "Student");
+             
+                foreach ($studentObject as $student) {
+
+                    $logStudentUsername = $student->getStudentUsername();
+                    $log->setLogStudentID($logStudentUsername);
+
+                } // Ends student foreach
+
+                $outputTable .= $log->getTableLinkingRow();
+
+            } // Ends log foreach
+    
+        } else {
+            $outputTable = "<h2>No logs exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getLogsCreatedTodayAsTable
+
+    // Returns the logs appropriate for the specific user. Used for pagination
+    public function getLogObjectsByRoleAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        if ($userType == "Admin") {
+
+            $data = $this->getAllObjects("SELECT * FROM log LIMIT $offset, $recordsPerPage", "Log");
 
         } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
 
             $data = $this->getAllObjects("SELECT log.* FROM log
             INNER JOIN student ON log.studentId = student.studentId 
             INNER JOIN classEntry ON student.studentId = classEntry.studentId 
-            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+            LIMIT $offset, $recordsPerPage", 
             "Log");
 
         } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
@@ -475,7 +699,8 @@ class DB {
             $data = $this->getAllObjects("SELECT log.* FROM log
             INNER JOIN student ON log.studentId = student.studentId 
             INNER JOIN school ON student.schoolId = school.schoolId 
-            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID", 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            LIMIT $offset, $recordsPerPage", 
             "Log");
 
         } // Ends if
@@ -514,6 +739,40 @@ class DB {
 
     } // Ends getLogObjectsByRoleAsTable
 
+    // Returns the number of logs that will be shown for a specific user. Used for pagination math
+    public function getLogObjectsByRoleCount($userID, $userType) {
+
+        if ($userType == "Admin") {
+
+            $data = $this->getAllObjects("SELECT * FROM log", "Log");
+
+        } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
+            "Log");
+
+        } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
+
+            $data = $this->getAllObjects("SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID", 
+            "Log");
+
+        } // Ends if
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getLogObjectsByRoleCount
+
+    // Returns information for one log in an array
     public function getLogByID($logID) {
 
         $data = $this->getAllObjects("SELECT * FROM log WHERE logId = '$logID'", "Log");
@@ -657,7 +916,7 @@ class DB {
     } // Ends getAllLoginAttemptObjectsAfterDateTime
     
     // Returns the number of login attempts from today
-    public function getCountLoginAttemptsToday($successType, $userID, $userType) {
+    public function getLoginAttemptsTodayCount($successType, $userID, $userType) {
 
         switch ($successType) {
 
@@ -736,6 +995,106 @@ class DB {
         } // Ends if
 
     } // Ends getCountLoginAttemptsToday
+
+    // Returns the number of login attempts from today
+    public function getLoginAttemptsTodayAsTable($successType, $userID, $userType, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        switch ($successType) {
+
+            case "all":
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } // Ends if
+                
+                break;
+
+            case "failure":
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 0 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } // Ends if
+
+                break;
+
+            case "success":
+
+                if ($userType == "Admin") { // Gets all login attempts from today
+
+                    $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE DATE(loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Professor") { // Gets all loginAttempts for students that are in the classes under the professor
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN classEntry ON student.studentId = classEntry.studentId INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } else if ($userType == "Support") { // Gets all loginAttempts for students that are in the same school under a support
+        
+                    $data = $this->getAllObjects("SELECT loginAttempt.* FROM loginAttempt
+                    INNER JOIN student ON loginAttempt.studentId = student.studentId INNER JOIN school ON student.schoolId = school.schoolId INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+                    WHERE DATE(loginAttempt.loginAttemptTimeEntered) = CURDATE() AND loginAttemptSuccess = 1 LIMIT $offset, $recordsPerPage", "LoginAttempt");
+        
+                } // Ends if
+
+                break;
+
+        } // Ends successType switch
+
+        if (count($data) > 0) {
+
+            $outputTable = "<tr>
+                            <th>Login Attempt ID</th>
+                            <th>Login Attempt Username</th>
+                            <th>Login Attempt Password</th>
+                            <th>Login Attempt Time Entered</th>
+                            <th>Login Attempt Success</th>
+                            <th>Student ID</th>
+            </tr>\n";
+    
+            foreach ($data as $loginAttempt) {
+
+                $outputTable .= $loginAttempt->getTableData();
+
+            } // Ends loginAttempt foreach
+    
+        } else {
+            $outputTable = "<h3>There have been no login attempts created today that match your query.</h3>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getLoginAttemptsTodayAsTable
 
 /********************************SCHOOL FUNCTIONS*************************************/
     

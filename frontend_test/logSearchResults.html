@@ -13,10 +13,6 @@
     <link rel="stylesheet" href="https://seniordevteam1.in/src/css/mdb.min.css" />
     <!-- Custom styles -->
     <link rel="stylesheet" href="https://seniordevteam1.in/src/css/style.css" />
-    <link rel="stylesheet" href="../src/css/style.css" />
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-
 </head>
 <body>
     <!--Main Navigation-->
@@ -116,7 +112,7 @@
           />
           <span class="input-group-text border-0"
           ><a href="logSearchResults.html"><i class="fas fa-search" style="cursor: pointer"></i
-            ></a></span>
+          ></a></span>
         </form>
       </div>
 
@@ -160,91 +156,106 @@
 
     <!--Main layout-->
     <main style="margin-top: 58px">
-      <div class="container pt-4 d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center gap-4">
-              <p class="h3 m-auto">All Logs</p>
-              <div class="dropdown">
-                  <!--                <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Options">-->
-                  <a
-                          class="btn btn-outline-dark btn-rounded"
-                          type="button"
-                          id="dropdownMenuButton"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                  >
-                      <div class="d-flex align-items-center gap-2">
-                          <i class="fas fa-sort-amount-down-alt fa-lg" ></i>
-                          <p class="lh-1 fs-6 m-auto">Sort By</p>
-                      </div>
+      <div class="container pt-4">
+        <div class="d-flex">
+            <h1>Search Results</h1>
+            <div class="chip" style="display: inline-block;
+            padding: 0 25px;
+            height: 50px;
+            font-size: 16px;
+            line-height: 50px;
+            border-radius: 25px;
+            background-color: lightblue;">
+                Log Type: Successful
+                <span class="closebtn" onclick="this.parentElement.style.display='none'">&times;</span>
+            </div>
+        </div>
+        <div class="table-responsive table">
 
-                  </a>
-                  <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
-                      <li>
-                          <div class="form-check">
-                              <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" checked />
-                              <label class="form-check-label" for="MostRecent"> Most Recent </label>
-                          </div>
-                      </li>
-                      <li>
-                          <div class="form-check">
-                              <input class="form-check-input" type="radio" name="SortBy" id="Username"/>
-                              <label class="form-check-label" for="Username"> Username </label>
-                          </div>
-                      </li>
-                      <li>
-                          <div class="form-check">
-                              <input class="form-check-input" type="radio" name="SortBy" id="School"/>
-                              <label class="form-check-label" for="School"> School </label>
-                          </div>
-                      </li>
-
-                  </ul>
-              </div>
-          </div>
-
-          <nav aria-label>
-              <ul class="pagination pagination-circle pagination-custom">
-                  <li class="page-item pagination-plain-text">
-                      <p class="lh-1 fs-6">Page</p>
-                  </li>
-                  <li class="page-item active" aria-current="page">
-                      <a id="page-picker" class="page-link page-picker d-flex" href="#">
-                          <div class="form-outline">
-                              <input type="text" id="form12" class="form-control" value="1" />
-                          </div>
-                          <span class="visually-hidden">(current)</span>
-                      </a>
-                  </li>
-                  <li class="page-item pagination-plain-text">
-                      <p class="lh-1 fs-6 pe-0">of</p>
-                  </li>
-                  <li class="page-item pagination-plain-text">
-                      <p class="lh-1 fs-6">
-                          10
-                          <!--                        getNumTotalPagesFunction()-->
-                      </p>
-                  </li>
-                  <li class="page-item">
-                      <a class="page-link"><i class="fas fa-chevron-left fa-md"></i></a>
-                  </li>
-                  <li class="page-item">
-                      <a class="page-link" href="#"><i class="fas fa-chevron-right fa-md"></i></a>
-                  </li>
-              </ul>
-          </nav>
-
-      </div>
-
-      <div class="container pt-2 long-table-container">
-        <div class="table-responsive search-table">
-          <table id="logsListTable" class="table table-hover">
-            <!--                          '.$studentObjects.'-->
+          <table class="table table-bordered table-hover mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Log ID</th>
+                <th scope="col">Log Time Created</th>
+                <th scope="col">Log Time Edited</th>
+                <th scope="col">Login Attempt ID</th>
+                <th scope="col">Student Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="window.location='https://seniordevteam1.in/frontend_test/mainDashboard.html'" >
+                <th scope="row">1</th>
+                <td>2023-01-23 12:45:56</td>
+                <td>2023-01-23 12:45:56</td>
+                <td>1</td>
+                <td>rkv7131</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>2023-01-23 12:46:19</td>
+                <td>2023-01-23 12:46:19</td>
+                <td>2</td>
+                <td>rkv7131</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>2023-01-25 08:23:42</td>
+                <td>2023-01-25 08:23:42</td>
+                <td>4</td>
+                <td>EvanUsername</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>2023-01-28 11:19:07</td>
+                <td>2023-01-28 11:19:07</td>
+                <td>5</td>
+                <td>BGMD</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>2023-01-28 12:37:43</td>
+                <td>2023-01-28 12:37:43</td>
+                <td>6</td>
+                <td>realhuman</td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>2023-01-28 12:38:15</td>
+                <td>2023-01-28 12:38:15</td>
+                <td>7</td>
+                <td>realhuman</td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td>2023-01-28 12:38:52</td>
+                <td>2023-01-28 12:38:52</td>
+                <td>8</td>
+                <td>realhuman</td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td>2023-02-01 06:35:12</td>
+                <td>2023-02-01 06:35:12</td>
+                <td>9</td>
+                <td>JohnnyBGoode</td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td>2023-04-12 02:54:07</td>
+                <td>2023-04-12 02:54:07</td>
+                <td>10</td>
+                <td>JeffersonSteelflex</td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td>2023-05-13 08:32:41</td>
+                <td>2023-05-13 08:32:41</td>
+                <td>11</td>
+                <td>AlvinYakitori</td>
+              </tr>
+            </tbody>
           </table>
-          <nav aria-label="Pagination">
-            <ul class="pagination pagination-circle">
-              <!--                              '.getPaginationLinks($totalNumberOfPages, $currentPage).'-->
-            </ul>
-          </nav>
+        
         </div>
       </div>
     </main>
@@ -306,7 +317,6 @@
     <!-- MDB -->
     <!-- <script type="text/javascript" src="../js/mdb.min.js"></script> -->
     <script type="text/javascript" src="https://seniordevteam1.in/src/js/mdb.min.js"></script>
-    <script type="text/javascript" src="../src/js/studentLogSampleData.js"></script>
     <!-- Custom scripts -->
 
 
