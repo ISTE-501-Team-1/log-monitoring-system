@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>Student</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <!-- MDB -->
+  <link rel="stylesheet" href="https://seniordevteam1.in/src/css/mdb.min.css" />
+  <!-- Custom styles -->
+  <!-- <link rel="stylesheet" href="../css/style.css" /> -->
+  <link rel="stylesheet" href="../src/css/style.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+<!--Main Navigation-->
+<header>
+  <!-- Sidebar -->
+  <nav
+          id="sidebarMenu"
+          class="collapse d-lg-block sidebar collapse bg-white"
+  >
+    <div class="position-sticky">
+      <div class="list-group list-group-flush mt-4">
+        <a
+                href="mainDashboard.html"
+                class="list-group-item list-group-item-action py-2 ripple"
+                aria-current="true"
+        >
+          <i class="far fa-chart-bar fa-fw me-3"></i
+          ><span>Main dashboard</span>
+        </a>
+        <a
+                href="logs.html"
+                class="list-group-item list-group-item-action py-2 ripple"
+        >
+          <i class="far fa-file-alt fa-fw me-3"></i
+          ><span>Search Logs</span>
+        </a>
+        <a
+                href="users.html"
+                class="list-group-item list-group-item-action py-2 ripple active"
+        ><i class="fas fa-users fa-fw me-3"></i><span>Search Users</span></a
+        >
+        <a
+                href="alerts.html"
+                class="list-group-item list-group-item-action py-2 ripple"
+        ><i class="fas fa-exclamation-circle fa-fw me-3"></i
+        ><span>Alerts</span><span class="badge badge-danger rounded-pill ms-3">3</span></a
+        >
+        <a
+                href="settings.html"
+                class="list-group-item list-group-item-action py-2 ripple"
+        >
+          <i class="fas fa-cogs fa-fw me-3"></i><span>Settings</span>
+        </a>
+
+      </div>
+    </div>
+  </nav>
+  <!-- Sidebar -->
+
+  <!-- Navbar -->
+  <nav
+          id="main-navbar"
+          class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+  >
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+
+      <div class="d-flex flex-row">
+        <!-- Toggle button -->
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#sidebarMenu"
+                aria-controls="sidebarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">
+          <img
+                  src="https://seniordevteam1.in/src/img/Logo_LMS.svg"
+                  height="35"
+                  alt="MDB Logo"
+                  loading="lazy"
+          />
+        </a>
+      </div>
+
+
+      <div class="d-flex flex-row gap-3 navbar-title">
+
+        <h2>Student View</h2>
+
+        <!-- Search form -->
+        <form class="d-none d-md-flex input-group w-auto my-auto">
+          <input
+                  autocomplete="off"
+                  type="search"
+                  class="form-control rounded"
+                  placeholder='Search'
+                  style="min-width: 225px"
+          />
+          <span class="input-group-text border-0"
+          ><i class="fas fa-search"></i
+          ></span>
+        </form>
+      </div>
+
+      <!-- Right links -->
+      <ul class="navbar-nav ms-auto d-flex flex-row flex-grow-1 justify-content-end">
+        <!-- Notification dropdown -->
+
+
+        <!-- Avatar -->
+        <li class="nav-item dropdown">
+          <a
+                  class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
+                  href="#"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-mdb-toggle="dropdown"
+                  aria-expanded="false"
+          >
+            <button type="button" class="btn btn-primary btn-floating btn-lg">
+              <p class="avatar">JD</p>
+            </button>
+
+
+          </a>
+          <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdownMenuLink"
+          >
+            <li><a class="dropdown-item" href="#">My profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+</header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main style="margin-top: 58px">
+  <div class="container pt-4">
+
+    <div class="card">
+      <div class="card-header table-header text-center py-3">
+
+        <div class ="table-header-title">
+          <i class="fas fa-user fa-fw me-3"></i>
+          <h5 class="mb-0 text-center">
+            <strong>User: jps1234</strong>
+          </h5>
+        </div>
+        <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Options">
+          <i class="fas fa-ellipsis-h fa-lg"></i>
+        </button>
+      </div>
+      <div id="student-card-body" class="card-body d-flex flex-column">
+        <div class="d-flex gap-2">
+          <p class="h6 lh-1">Name:</p>
+          <p class="fs-6 lh-1">John P Smith</p>
+        </div>
+
+        <div class="d-flex gap-2">
+          <p class="h6 lh-1">School:</p>
+          <p class="fs-6 lh-1">Department of Computer Science</p>
+        </div>
+
+        <div class="d-flex gap-2">
+          <p class="h6 lh-1">Last Log Time:</p>
+          <p class="fs-6 lh-1">01/15/2023 @ 12:45:56</p>
+        </div>
+
+        <div class="d-flex gap-2">
+          <p class="h6 lh-1">Student ID:</p>
+          <p class="fs-6 lh-1">456</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container pt-4 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <p class="h5">All logs from this student:</p>
+      </div>
+
+      <nav aria-label>
+        <ul class="pagination pagination-circle pagination-custom">
+          <li class="page-item pagination-plain-text">
+            <p class="lh-1 fs-6">Page</p>
+          </li>
+          <li class="page-item active" aria-current="page">
+            <a id="page-picker" class="page-link page-picker d-flex" href="#">
+              <div class="form-outline">
+                <input type="text" id="form12" class="form-control" value="1" />
+              </div>
+              <span class="visually-hidden">(current)</span>
+            </a>
+          </li>
+          <li class="page-item pagination-plain-text">
+            <p class="lh-1 fs-6 pe-0">of</p>
+          </li>
+          <li class="page-item pagination-plain-text">
+            <p class="lh-1 fs-6">
+              10
+              <!--                        getNumTotalPagesFunction()-->
+            </p>
+          </li>
+          <li class="page-item">
+            <a class="page-link"><i class="fas fa-chevron-left fa-md"></i></a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#"><i class="fas fa-chevron-right fa-md"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="container pt-2 long-table-container">
+      <div class="table-responsive search-table">
+        <table id="singleStudentListTable" class="table table-hover">
+          <!--                          '.$studentObjects.'-->
+        </table>
+        <nav aria-label="Pagination">
+          <ul class="pagination pagination-circle">
+            <!--                              '.getPaginationLinks($totalNumberOfPages, $currentPage).'-->
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+
+</main>
+<!--Main layout-->
+<!-- MDB -->
+<script type="text/javascript" src="https://seniordevteam1.in/src/js/mdb.min.js"></script>
+<!-- Custom scripts -->
+<script type="text/javascript" src="../src/js/studentLogSampleData.js"></script>
+<!--    <script type="text/javascript" src="../src/js/pagePicker.js"></script>-->
+
+</body>
+</html>

@@ -49,7 +49,7 @@ body {
   border-radius: 1rem;
 }
 
-#dashboard-stats .card:hover {
+#dashboard-stats .card:hover, #classes .card:hover {
   box-shadow: 0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 10%);
 }
 
@@ -57,17 +57,6 @@ body {
   box-shadow: none;
 }
 
-@media (max-width: 991.98px) {
-  .sidebar {
-    width: 100%;
-  }
-
-  .navbar-brand {
-    width: auto;
-    margin-right: 1.5rem;
-  }
-
-}
 .sidebar .badge-danger {
   background-color: #FF005C;
 }
@@ -111,7 +100,88 @@ body {
 }
 
 
-  .table-responsive{
-    overflow-y: scroll;
-    display: block;
+.table-responsive{
+  overflow-y: scroll;
+  display: block;
+}
+
+  /* Search tables */
+.search-table {
+  height: 87vh;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
   }
+
+  .navbar-brand {
+    width: auto;
+    margin-right: 1.5rem;
+  }
+
+}
+
+@media (max-width: 992px) {
+  .container{
+    max-width: none;
+  }
+}
+
+.pagination-circle {
+  margin: 0;
+}
+
+.pagination-plain-text {
+  display: flex;
+  align-items: center;
+}
+.pagination-plain-text p {
+  margin: 0;
+  padding: 0 .7rem;
+}
+
+.pagination-circle #page-picker {
+  border-radius: 10px;
+  /*background-color: #dfe7f6;*/
+  /*color: #2c58a0;*/
+  /*font-weight: 600;*/
+  padding: 0;
+}
+
+#page-picker input {
+  background-color: #dfe7f6;
+  color: #2c58a0;
+  font-weight: 600;
+  text-align: center;
+  width: 3rem;
+}
+
+.pagination-circle #page-picker .form-notch {
+  display: none;
+}
+
+#log-card-body > *, #student-card-body > * {
+  align-items: center;
+  padding: .5rem 0;
+}
+
+#log-card-body > * p, #student-card-body > * p {
+  margin: auto 0;
+}
+
+.btn{
+  text-transform: none;
+}
+
+.sort-menu > * {
+  padding: .5rem;
+}
+
+.sort-menu {
+  padding-left: .5rem;
+}
+
+#classes{
+  max-width: 650px;
+}
