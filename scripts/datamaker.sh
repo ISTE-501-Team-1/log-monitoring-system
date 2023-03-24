@@ -5,7 +5,6 @@
 # items that have to do with a student should use existing student table entries
 
 # function to add leading 0s to output
-
 leadingZeros () {
 	output=$(shuf -i $1-$2 -n 1)
 	if [[ $output -lt 10 ]]
