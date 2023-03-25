@@ -5,6 +5,7 @@ class DB {
     private $dbh;
 
 /********************************GENERAL FUNCTIONS*************************************/
+    
     function __construct() {
 
         require '../models/pdo-config.php';
@@ -59,13 +60,13 @@ class DB {
 
         if (count($data) > 0) {
             
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Activity ID</th>
                             <th>Activity User ID</th>
                             <th>Activyty Log ID</th>
                             <th>Activity Student ID</th>
                             <th>Activity Datetime</th>
-            </tr>\n";
+            </tr></thead>\n";
 
             foreach ($data as $activity) {
 
@@ -92,14 +93,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
                             <th>Student Username</th>
                             <th>Student School</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $activity) {
 
@@ -143,13 +144,13 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Log ID</th>
+                            <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student Username</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $activity) {
 
@@ -193,13 +194,13 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Log ID</th>
+                            <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student Username</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $activity) {
 
@@ -255,14 +256,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
                             <th>Student Username</th>
                             <th>Student School</th>
-            </tr>\n";
+            </tr></thead>\n";
 
             foreach ($data as $activity) {
 
@@ -410,12 +411,12 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Class ID</th>
                             <th>Class Name</th>
                             <th>Class Professor</th>
                             <th>School ID</th>
-            </tr>\n";
+            </tr></thead>\n";
 
             foreach ($data as $class) {
 
@@ -443,18 +444,18 @@ class DB {
 
     } // Ends getAllClassObjectsAsTable
 
-
 /********************************CLASSENTRY FUNCTIONS*************************************/
+    
     public function getAllClassEntryObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM classEntry", "ClassEntry");
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Class ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $classEntry) {
 
@@ -471,13 +472,14 @@ class DB {
     } // Ends getAllClassEntryObjectsAsTable
 
 /********************************FILE FUNCTIONS*************************************/
+    
     public function getAllFileObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM file", "File");
 
         if (count($data) > 0) {
             
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>File ID</th>
                             <th>File Name</th>
                             <th>File Time Created</th>
@@ -511,19 +513,20 @@ class DB {
     } // Ends getAllFileObjectsAsTable
 
 /********************************LOG FUNCTIONS*************************************/
+    
     public function getAllLogObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM log", "Log");
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Log ID</th>
+                            <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $log) {
 
@@ -549,7 +552,6 @@ class DB {
 
     } // Ends getAllLogObjectsAsTable
 
-    // get all logs after a datetime
     public function getAllLogObjectsAfterDatetime($datetime) {
 
         $data = array();
@@ -566,13 +568,13 @@ class DB {
             return array();
         } // Ends try catch
 
-        $outputTable = "<tr>
+        $outputTable = "<thead><tr>
                         <th>Log ID</th>
+                        <th>Log Type</th>
                         <th>Log Time Created</th>
-                        <th>Log Time Edited</th>
                         <th>Login Attempt ID</th>
                         <th>Student ID</th>
-        </tr>\n";
+        </tr></thead>\n";
             
         if (count($data) > 0) {
             
@@ -644,13 +646,13 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Log ID</th>
+                            <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student Username</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $log) {
 
@@ -707,15 +709,13 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<thead>
-                        <tr>
+            $outputTable = "<thead><tr>
                             <th>Log ID</th>
+                            <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student Username</th>
-                        </tr>
-            </thead>\n";
+            </tr></thead>\n";
     
             foreach ($data as $log) {
 
@@ -782,8 +782,8 @@ class DB {
         if (count($data) > 0) {
 
             $outputLog[] = $data[0]->getLogID();
+            $outputLog[] = $data[0]->getLogType();
             $outputLog[] = $data[0]->getLogTimeCreated();
-            $outputLog[] = $data[0]->getLogTimeEdited();
             $outputLog[] = $data[0]->getLogLoginAttemptID();
             $outputLog[] = $data[0]->getLogStudentID();
     
@@ -809,14 +809,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Login Attempt ID</th>
                             <th>Login Attempt Username</th>
                             <th>Login Attempt Password</th>
                             <th>Login Attempt Time Entered</th>
                             <th>Login Attempt Success</th>
                             <th>Student ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $loginAttempt) {
 
@@ -852,14 +852,14 @@ class DB {
             return array();
         } // Ends try catch
 
-        $outputTable = "<tr>
+        $outputTable = "<thead><tr>
                         <th>Login Attempt ID</th>
                         <th>Login Attempt Username</th>
                         <th>Login Attempt Password</th>
                         <th>Login Attempt Time Entered</th>
                         <th>Login Attempt Success</th>
                         <th>Student ID</th>
-        </tr>\n";
+        </tr></thead>\n";
 
         if(count($data) > 0) {
             foreach ($data as $loginAttempt) {
@@ -894,14 +894,14 @@ class DB {
             return array();
         } // Ends try catch
 
-        $outputTable = "<tr>
+        $outputTable = "<thead><tr>
                         <th>Login Attempt ID</th>
                         <th>Login Attempt Username</th>
                         <th>Login Attempt Password</th>
                         <th>Login Attempt Time Entered</th>
                         <th>Login Attempt Success</th>
                         <th>Student ID</th>
-        </tr>\n";
+        </tr></thead>\n";
 
         if(count($data) > 0) {
             foreach ($data as $loginAttempt) {
@@ -1075,14 +1075,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Login Attempt ID</th>
                             <th>Login Attempt Username</th>
                             <th>Login Attempt Password</th>
                             <th>Login Attempt Time Entered</th>
                             <th>Login Attempt Success</th>
                             <th>Student ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $loginAttempt) {
 
@@ -1098,6 +1098,34 @@ class DB {
 
     } // Ends getLoginAttemptsTodayAsTable
 
+    // Returns information for one login attempt in an array
+    public function getLoginAttemptByID($loginAttemptID) {
+
+        $data = $this->getAllObjects("SELECT * FROM loginAttempt WHERE loginAttemptId = '$loginAttemptID'", "LoginAttempt");
+
+        if (count($data) > 0) {
+
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptID();
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptUsername();
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptPassword();
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptTimeEntered();
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptSuccess();
+            $outputLoginAttempt[] = $data[0]->getLoginAttemptStudentID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputLoginAttempt = "ERROR500";
+
+        } else {
+
+            $outputLoginAttempt = "ERROR404";
+
+        }// Ends if
+
+        return $outputLoginAttempt;
+
+    } // Ends getLoginAttemptByID
+
 /********************************SCHOOL FUNCTIONS*************************************/
     
     public function getAllSchoolObjectsAsTable() {
@@ -1106,10 +1134,10 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>School ID</th>
                             <th>School Name</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $school) {
 
@@ -1133,14 +1161,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
                             <th>Student Username</th>
                             <th>Student School</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $student) {
 
@@ -1182,14 +1210,14 @@ class DB {
             return array();
         } // Ends try catch
 
-        $outputTable = "<tr>
+        $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
                             <th>Student Username</th>
                             <th>Student School</th>
-            </tr>\n";
+            </tr></thead>\n";
 
         if(count($data) > 0) {
             foreach ($data as $loginAttempt) {
@@ -1232,14 +1260,14 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
                             <th>Student Username</th>
                             <th>Student School</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $student) {
 
@@ -1330,7 +1358,7 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead><tr>
                             <th>User ID</th>
                             <th>User First Name</th>
                             <th>User Last Name</th>
@@ -1339,7 +1367,7 @@ class DB {
                             <th>User Password</th>
                             <th>User Classification</th>
                             <th>School ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $user) {
 

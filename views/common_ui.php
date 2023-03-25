@@ -209,7 +209,7 @@ function get_common_pagination($numPages, $currentPage) {
     $links .= '<li class="page-item active" aria-current="page">';
     $links .= '<a id="page-picker" class="page-link page-picker d-flex" href="#">';
     $links .= '<div class="form-outline">';
-    $links .= '<input type="text" id="form12" class="form-control" value="'.$currentPage.'" />';
+    $links .= '<input type="text" id="form12" class="form-control" value="'.$currentPage.'" readonly />';
     $links .= '</div><span class="visually-hidden">(current)</span></a></li>';
 
     $links .= '<li class="page-item pagination-plain-text"><p class="lh-1 fs-6 pe-0">of</p></li>';
@@ -225,28 +225,5 @@ function get_common_pagination($numPages, $currentPage) {
     $links .= '<li class="page-item '.$nextDisabled.'"><a class="page-link" href="?page='.$nextPage.$paramsString.'"><i class="fas fa-chevron-right fa-md"></i></a></li>';
 
     return $links;
-
-    // $links = '';
-    
-    // for ($i = 1; $i <= $numPages; $i++) {
-
-    //     $isActive = ($i == $currentPage) ? 'active' : '';
-    //     if (count($_GET) == 0) {
-    //         $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
-    //     } else if ( isset($_GET['today']) ) {
-    //         if ($_GET['today'] == "success") {
-    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today=success&page='.$i.'">'.$i.'</a></li>';
-    //         } else if ($_GET['today'] == "failure") {
-    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today=failure&page='.$i.'">'.$i.'</a></li>';
-    //         } else {
-    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today&page='.$i.'">'.$i.'</a></li>';
-    //         }
-    //     } else if ( (count($_GET) == 1) && isset($_GET['page']) ) {
-    //         $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
-    //     } // Ends if
-
-    // } // Ends for
-
-    // return $links;
 
 } // Ends get_common_pagination

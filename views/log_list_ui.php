@@ -88,7 +88,7 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
             <div class="d-flex align-items-center gap-4">
 
-                <p class="h3 m-auto">All Logs</p>
+                <p class="h3 m-auto">Logs</p>
 
                 <!-- Sort By Filter -->
                 <div class="dropdown">

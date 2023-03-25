@@ -139,18 +139,25 @@ class File {
 class Log {
 
     private $logId;
+    private $logType;
     private $logTimeCreated;
-    private $logTimeEdited;
     private $loginAttemptId;
     private $studentId;
 
-    // This function will be changed depending on the frontend team's styling
     public function getTableData() {
+
+        if ($this->logType == 0) {
+            $logTypeString = "Login";
+        } else if ($this->logType == 1) {
+            $logTypeString = "File Created";
+        } else if ($this->logType == 2) {
+            $logTypeString = "File Modified";
+        } // Ends if
 
         return "<tr>
             <td>{$this->logId}</td>
+            <td>{$logTypeString}</td>
             <td>{$this->logTimeCreated}</td>
-            <td>{$this->logTimeEdited}</td>
             <td>{$this->loginAttemptId}</td>
             <td>{$this->studentId}</td>
         </tr>\n";
@@ -159,11 +166,19 @@ class Log {
 
     public function getTableLinkingRow() {
 
+        if ($this->logType == 0) {
+            $logTypeString = "Login";
+        } else if ($this->logType == 1) {
+            $logTypeString = "File Created";
+        } else if ($this->logType == 2) {
+            $logTypeString = "File Modified";
+        } // Ends if
+
         $returnString =
         "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=log&id={$this->logId}'\">
             <td>{$this->logId}</td>
+            <td>{$logTypeString}</td>
             <td>{$this->logTimeCreated}</td>
-            <td>{$this->logTimeEdited}</td>
             <td>{$this->loginAttemptId}</td>
             <td>{$this->studentId}</td>
         ";
@@ -178,14 +193,14 @@ class Log {
     // Getters
     public function getLogID() { return $this->logId; }
     public function getLogTimeCreated() { return $this->logTimeCreated; }
-    public function getLogTimeEdited() { return $this->logTimeEdited; }
+    public function getLogType() { return $this->logType; }
     public function getLogLoginAttemptID() { return $this->loginAttemptId; }
     public function getLogStudentID() { return $this->studentId; }
 
     // Setters
     public function setLogID($logId) { $this->logId = $logId; }
     public function setLogTimeCreated($logTimeCreated) { $this->logTimeCreated = $logTimeCreated; }
-    public function setLogTimeEdited($logTimeEdited) { $this->logTimeEdited = $logTimeEdited; }
+    public function setLogType($logType) { $this->logType = $logType; }
     public function setLogLoginAttemptID($loginAttemptId) { $this->loginAttemptId = $loginAttemptId; }
     public function setLogStudentID($studentId) { $this->studentId = $studentId; }
 
