@@ -307,7 +307,7 @@ class DB {
 
     } // Ends getActivityStudentObjectsCount
 
-    // Inserts a record with the current user ID and the ID of the student the user was viewing. Updates the record if the user has previously viewd the student
+    // Inserts a record with the current user ID and the ID of the student the user was viewing. Updates the record if the user has previously viewed the student
     public function insertActivityViewedStudent($userID, $studentID) {
 
         require_once("DB.Controller.class.php");
@@ -324,7 +324,7 @@ class DB {
 
                 $stmt = $this->dbh->prepare("
                     UPDATE activity
-                    SET activityUserId = :activityUserId, activityStudentId = :activityStudentId
+                    activityUserId = :activityUserId, activityStudentId = :activityStudentId, activityDatetime = NOW()
                     WHERE activityUserId = :activityUserId AND activityStudentId = :activityStudentId
                 ");
 
@@ -371,7 +371,7 @@ class DB {
 
                 $stmt = $this->dbh->prepare("
                     UPDATE activity
-                    SET activityUserId = :activityUserId, activityLogId = :activityLogId
+                    SET activityUserId = :activityUserId, activityLogId = :activityLogId, activityDatetime = NOW()
                     WHERE activityUserId = :activityUserId AND activityLogId = :activityLogId
                 ");
 
@@ -707,13 +707,15 @@ class DB {
 
         if (count($data) > 0) {
 
-            $outputTable = "<tr>
+            $outputTable = "<thead>
+                        <tr>
                             <th>Log ID</th>
                             <th>Log Time Created</th>
                             <th>Log Time Edited</th>
                             <th>Login Attempt ID</th>
                             <th>Student Username</th>
-            </tr>\n";
+                        </tr>
+            </thead>\n";
     
             foreach ($data as $log) {
 

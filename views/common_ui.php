@@ -200,18 +200,53 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 function get_common_pagination($numPages, $currentPage) {
 
     $links = '';
-    
-    for ($i = 1; $i <= $numPages; $i++) {
+    $urlParams = $_GET;
+    unset($urlParams['page']);
 
-        $isActive = ($i == $currentPage) ? 'active' : '';
-        if (count($_GET) == 0) {
-            $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
-        } else if (count($_GET) > 0) {
-            $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="&page='.$i.'">'.$i.'</a></li>';
-        } // Ends if
+    $paramsString = http_build_query($urlParams);
+    $paramsString = $paramsString ? '&' . $paramsString : '';
 
-    } // Ends for
+    $links .= '<li class="page-item active" aria-current="page">';
+    $links .= '<a id="page-picker" class="page-link page-picker d-flex" href="#">';
+    $links .= '<div class="form-outline">';
+    $links .= '<input type="text" id="form12" class="form-control" value="'.$currentPage.'" />';
+    $links .= '</div><span class="visually-hidden">(current)</span></a></li>';
+
+    $links .= '<li class="page-item pagination-plain-text"><p class="lh-1 fs-6 pe-0">of</p></li>';
+
+    $links .= '<li class="page-item pagination-plain-text"><p class="lh-1 fs-6">'.$numPages.'</p></li>';
+
+    $prevPage = $currentPage - 1;
+    $prevDisabled = ($prevPage < 1) ? 'disabled' : '';
+    $links .= '<li class="page-item '.$prevDisabled.'"><a class="page-link" href="?page='.$prevPage.$paramsString.'"><i class="fas fa-chevron-left fa-md"></i></a></li>';
+
+    $nextPage = $currentPage + 1;
+    $nextDisabled = ($nextPage > $numPages) ? 'disabled' : '';
+    $links .= '<li class="page-item '.$nextDisabled.'"><a class="page-link" href="?page='.$nextPage.$paramsString.'"><i class="fas fa-chevron-right fa-md"></i></a></li>';
 
     return $links;
+
+    // $links = '';
+    
+    // for ($i = 1; $i <= $numPages; $i++) {
+
+    //     $isActive = ($i == $currentPage) ? 'active' : '';
+    //     if (count($_GET) == 0) {
+    //         $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+    //     } else if ( isset($_GET['today']) ) {
+    //         if ($_GET['today'] == "success") {
+    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today=success&page='.$i.'">'.$i.'</a></li>';
+    //         } else if ($_GET['today'] == "failure") {
+    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today=failure&page='.$i.'">'.$i.'</a></li>';
+    //         } else {
+    //             $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?today&page='.$i.'">'.$i.'</a></li>';
+    //         }
+    //     } else if ( (count($_GET) == 1) && isset($_GET['page']) ) {
+    //         $links .= '<li class="page-item '.$isActive.'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+    //     } // Ends if
+
+    // } // Ends for
+
+    // return $links;
 
 } // Ends get_common_pagination
