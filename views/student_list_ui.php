@@ -96,11 +96,12 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
                                 <label class="form-check-label" for="School"> School </label>
                             </div>
                         </li>
+
                     </ul>
 
                 </div>
 
-                <span><i class="fas fa-filter" style="padding-right: 1em; padding-left: 3em; padding-top: 0.5em; cursor: pointer;" data-mdb-toggle="modal" data-mdb-target="#logModal"></i></span>
+                <span><i class="fas fa-filter" style="padding-right: 1em; padding-left: 3em; padding-top: 0.5em; cursor: pointer;" data-mdb-toggle="modal" data-mdb-target="#studentModal"></i></span>
 
             </div>
 
@@ -135,31 +136,31 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
 function view_student_list_filter_modal() {
     
     echo '
-    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">User Search Filters</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Student Search Filters</h5>
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
 
-                    <label for="userSearch">Username:</label>
-                    <input type="search" id="userSearchBar" placeholder="Username">
+                    <label for="studentSearch">Username:</label>
+                    <input type="search" id="studentSearchBar" placeholder="Username">
 
                     <br>
 
                     <!--Class Dropdown Filter-->
-                    <label for="userClass" style="padding-top:1em">Class:</label>
-                    <input type="search" id="userClassSearch" name="userClass" placeholder="Class ID">
+                    <label for="studentClass" style="padding-top:1em">Class:</label>
+                    <input type="search" id="studentClassSearch" name="studentClass" placeholder="Class ID">
                     
                     <br>
 
                     <!--Last Log Dropdown Filter-->
-                    <label for="userLastLog" style="padding-top:1em">Last Log:</label>
-                    <select name="userLastLog" id="userLastLog">
+                    <label for="studentLastLog" style="padding-top:1em">Last Log:</label>
+                    <select name="studentLastLog" id="studentLastLog">
                         <option value="anyTime">Any</option>
                         <option value="lastHour">Last Hour</option>
                         <option value="lastTwelveHours">Last Twelve Hours</option>
@@ -172,8 +173,8 @@ function view_student_list_filter_modal() {
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning">Apply Filter</button>
                 </div>
 
             </div>

@@ -60,19 +60,8 @@ function view_login_main() {
                                             <label class="form-label" for="typePasswordX-2">Password</label>
                                         </div>
 
-                                        <!-- Checkbox -->
-                                        <div class="form-check d-flex justify-content-start mb-4">
-                                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                                            <label class="form-check-label" for="form1Example3"> Remember password </label>
-                                        </div>
-
                                         <!-- Login Button -->
                                         <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
-
-                                        <!-- Request Access Link -->
-                                        <div class="text-start register">
-                                            <p>Don\'t have an account? <a href="#!">Request Access</a></p>
-                                        </div>
 
                                     </form>
 
