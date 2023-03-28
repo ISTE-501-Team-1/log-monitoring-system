@@ -105,18 +105,7 @@
         <h2>Search Students</h2>
 
         <!-- Search form -->
-        <form class="d-none d-md-flex input-group w-auto my-auto">
-          <span><i class="fas fa-filter" style="padding-right: 1em; padding-left: 3em; padding-top: 0.5em; cursor: pointer;" data-mdb-toggle="modal" data-mdb-target="#userModal"></i></span>
-          <input
-                  autocomplete="off"
-                  type="search"
-                  class="form-control rounded"
-                  placeholder='Search'
-                  style="min-width: 225px"
-          />
-          <span class="input-group-text border-0"
-          ><a href="userSearchResults.html"><i class="fas fa-search" style="cursor: pointer;"></i> </a> </span>
-        </form>
+        
       </div>
 
       <!-- Right links -->
@@ -162,7 +151,7 @@
 
     <div class="container pt-4 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-4">
-            <p class="h3 m-auto">All Users</p>
+            <p class="h3 m-auto">Students</p>
             <div class="dropdown">
 <!--                <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Options">-->
                 <a
@@ -200,6 +189,17 @@
 
                 </ul>
             </div>
+              <!--Filter Button-->
+              <a class="btn btn-outline-dark btn-rounded ripple-surface" type="button" cursor: pointer; data-mdb-toggle="modal" data-mdb-target="#userModal">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-filter" ></i>
+                        <p class="lh-1 fs-6 m-auto">Filter</p>
+                    </div>
+
+                </a>
+                  
+              
+
         </div>
 
         <nav aria-label>
@@ -256,23 +256,25 @@
         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <label for="userSearch">Username:</label>
-        <input type="search" id="userSearchBar" placeholder="Username">
-        <br>
-        <!--Class Dropdown Filter-->
-        <label for="userClass" style="padding-top:1em">Class:</label>
-        <input type="search" id="userClassSearch" name="userClass" placeholder="Class ID">
-        <br>
-        <!--Last Log Dropdown Filter-->
-        <label for="userLastLog" style="padding-top:1em">Last Log:</label>
-        <select name="userLastLog" id="userLastLog">
-          <option value="anyTime">Any</option>
-          <option value="lastHour">Last Hour</option>
-          <option value="lastTwelveHours">Last Twelve Hours</option>
-          <option value="last24Hours">Last 24 Hours</option>
-          <option value="lastWeek">Last Week</option>
-        </select>
-        <br>
+        <form>
+          <label for="userSearch">Username:</label>
+          <input type="search" id="userSearchBar" placeholder="Username">
+          <br>
+          <!--Class Dropdown Filter-->
+          <label for="userClass" style="padding-top:1em">Class:</label>
+          <input type="search" id="userClassSearch" name="userClass" placeholder="Class ID">
+          <br>
+          <!--Last Log Dropdown Filter-->
+          <label for="userLastLog" style="padding-top:1em">Last Log:</label>
+          <select name="userLastLog" id="userLastLog">
+            <option value="anyTime">Any</option>
+            <option value="lastHour">Last Hour</option>
+            <option value="lastTwelveHours">Last Twelve Hours</option>
+            <option value="last24Hours">Last 24 Hours</option>
+            <option value="lastWeek">Last Week</option>
+          </select>
+          <br>
+        </form>
         
         
         
