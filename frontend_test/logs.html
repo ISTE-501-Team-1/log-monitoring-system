@@ -261,20 +261,14 @@
                     style="min-width: 225px"
             />
             <br>
-          <!--Log Date Dropdown Filter-->
-          <label for="logDateStart logDateEnd">Log Date:</label>
-          <input type="date" id="datePicker" name="logDateStart" value="2023-03-18" min="2023-01-01" max="2023-12-31">
-          To
-          <input type="date" id="datePicker" name="logDateEnd" value="2023-03-18" min="2023-01-01" max="2023-12-31">
-          <br>
           <!--Log Time Dropdown Filter-->
           <label for="logTime">Log Time:</label>
           <select name="logTime" id="searchLogTime">
             <option value="anyTime">Any</option>
-            <option value="lastHour">Last Hour</option>
-            <option value="lastSixHours">Last Six Hours</option>
-            <option value="lastTwelveHours">Last Twelve Hours</option>
-            <option value="last24Hours">Last 24 Hours</option>
+            <option value="today">Today</option>
+            <option value="thisWeek">This Week</option>
+            <option value="thisMonth">This Month</option>
+            <option value="thisSemester">This Semester</option>
           </select>
           <br>
           <!--Log Type Dropdown Filter-->

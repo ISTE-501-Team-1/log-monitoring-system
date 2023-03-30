@@ -255,7 +255,6 @@ let sampleDataStringRecentLogs = "" +
     "<th>Log ID</th>" +
     "<th>Log Time Created</th>" +
     "<th>Log Time Edited</th>" +
-    "<th>Login Attempt ID</th>" +
     "<th>Student ID</th>" +
     "</tr>" +
     "</thead>" +
@@ -265,7 +264,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -274,7 +272,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -283,7 +280,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -292,7 +288,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>" +
 
@@ -301,7 +296,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -310,7 +304,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -319,7 +312,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -328,7 +320,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>" +
 
@@ -337,7 +328,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -346,7 +336,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -355,7 +344,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -364,7 +352,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>" +
 
@@ -373,7 +360,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -382,7 +368,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -391,7 +376,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -400,7 +384,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>" +
 
@@ -409,7 +392,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -418,7 +400,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -427,7 +408,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -436,7 +416,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>" +
 
@@ -445,7 +424,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>1</td>" +
     "<td>2023-01-23 12:45:56</td>" +
     "<td>2023-01-23 12:45:56</td>" +
-    "<td>1</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -454,7 +432,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>2</td>" +
     "<td>2023-01-23 12:46:19</td>" +
     "<td>2023-01-23 12:46:19</td>" +
-    "<td>2</td>" +
     "<td>rxv7131</td>" +
     "</tr>" +
 
@@ -463,7 +440,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>3</td>" +
     "<td>2023-01-25 08:23:42</td>" +
     "<td>2023-01-25 08:23:42</td>" +
-    "<td>4</td>" +
     "<td>EvanUsername</td>" +
     "</tr>" +
 
@@ -472,7 +448,6 @@ let sampleDataStringRecentLogs = "" +
     "<td>4</td>" +
     "<td>2023-01-28 11:19:07</td>" +
     "<td>2023-01-28 11:19:07</td>" +
-    "<td>5</td>" +
     "<td>BGMD123</td>" +
     "</tr>"
 ;
