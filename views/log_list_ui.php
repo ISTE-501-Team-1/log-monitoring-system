@@ -103,19 +103,19 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=time\'" checked />
                                 <label class="form-check-label" for="MostRecent"> Most Recent </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Username"/>
+                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=username\'" />
                                 <label class="form-check-label" for="Username"> Username </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="School"/>
+                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=\'" />
                                 <label class="form-check-label" for="School"> School </label>
                             </div>
                         </li>
@@ -123,7 +123,12 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
                 </div>
 
-                <span><i class="fas fa-filter" style="padding-right: 1em; padding-left: 3em; padding-top: 0.5em; cursor: pointer;" data-mdb-toggle="modal" data-mdb-target="#logModal"></i></span>
+                <a class="btn btn-outline-dark btn-rounded ripple-surface" type="button" cursor: pointer; data-mdb-toggle="modal" data-mdb-target="#logModal">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-filter" ></i>
+                        <p class="lh-1 fs-6 m-auto">Filter</p>
+                    </div>
+                </a>
 
             </div>
 
@@ -139,7 +144,7 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
         </div>
 
-        <!-- Log Table --> 
+        <!-- Log Table -->
         <div class="container pt-2 long-table-container">
             <div class="table-responsive search-table">
 
@@ -168,43 +173,39 @@ function view_log_list_filter_modal() {
                 </div>
 
                 <div class="modal-body">
-                    
-                    <!--Log Date Dropdown Filter-->
-                    <label for="logDateStart logDateEnd">Log Date:</label>
-                    <input type="date" id="datePicker" name="logDateStart" value="2023-03-18" min="2023-01-01" max="2023-12-31">
-                        To
-                    <input type="date" id="datePicker" name="logDateEnd" value="2023-03-18" min="2023-01-01" max="2023-12-31">
-                    
-                    <br>
+                    <form action="../controllers/search_controller.php?log" method="post">
 
-                    <!--Log Time Dropdown Filter-->
-                    <label for="logTime">Log Time:</label>
-                    <select name="logTime" id="searchLogTime">
-                        <option value="anyTime">Any</option>
-                        <option value="lastHour">Last Hour</option>
-                        <option value="lastSixHours">Last Six Hours</option>
-                        <option value="lastTwelveHours">Last Twelve Hours</option>
-                        <option value="last24Hours">Last 24 Hours</option>
-                    </select>
+                        <!--Log Time Dropdown Filter-->
+                        <label for="logSearchTime">Log Time:</label>
+                        <select name="logSearchTime" id="searchLogTime">
+                            <option value="any">Any</option>
+                            <option value="lastDay">Last Day</option>
+                            <option value="lastThreeDays">Last 3 Days</option>
+                            <option value="lastWeek">Last Week</option>
+                            <option value="lastMonth">Last Month</option>
+                        </select>
 
-                    <br>
+                        <br>
 
-                    <!--Log Type Dropdown Filter-->\
-                    <label for="logType">Log Type:</label>
-                    <select name="logType" id="searchLogType">
-                        <option value="anyType">Any</option>
-                        <option value="failed">Failed</option>
-                        <option value="successful">Successful</option>
-                    </select>
+                        <!--Log Type Dropdown Filter-->\
+                        <label for="logSearchType">Log Type:</label>
+                        <select name="logSearchType" id="searchLogType">
+                            <option value="any">Any</option>
+                            <option value="failedLogin">Failed Login</option>
+                            <option value="successfulLogin">Successful Login</option>
+                            <option value="fileCreated">File Created</option>
+                            <option value="fileModified">File Modified</option>
+                        </select>
 
-                    <br>
+                        <br>
 
-                    <!--Log Type Dropdown Filter-->
-                    <label for="logUser">Username:</label>
-                    <input type="search" id="logUserSearchBar" placeholder="Username">
+                        <!--Log Type Dropdown Filter-->
+                        <label for="logSearchUsername">Username:</label>
+                        <input type="search" name="logSearchUsername" id="logUserSearchBar" placeholder="Username">
 
-                    <br>
-        
+                        <br>
+
+                    </form>
                 </div>
 
                 <div class="modal-footer">
