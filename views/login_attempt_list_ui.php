@@ -39,18 +39,32 @@ function view_login_attempt_list_table($logObjects, $totalNumberOfPages, $curren
     <!--Main layout-->
     <main style="margin-top: 58px">
 
-        <div class="container pt-4">
-            <div class="table-responsive table">
+    <div class="container pt-4 d-flex align-items-center justify-content-between">
+
+            <div class="d-flex align-items-center gap-4">
+
+                <p class="h3 m-auto">Login Attempts</p>
+
+            </div>
+
+            <!-- Pagination links -->
+            <nav aria-label="Pagination">
+                <ul class="pagination pagination-circle pagination-custom">
+                    <li class="page-item pagination-plain-text">
+                        <p class="lh-1 fs-6">Page</p>
+                    </li>
+                    '.get_common_pagination($totalNumberOfPages, $currentPage).'
+                </ul>
+            </nav>
+
+        </div>
+
+        <div class="container pt-2 long-table-container">
+            <div class="table-responsive search-table">
 
                 <table class="table table-bordered table-hover mb-0">
                     '.$logObjects.'
                 </table>
-
-                <nav aria-label="Pagination">
-                    <ul class="pagination pagination-circle justify-content-center">
-                        '.get_common_pagination($totalNumberOfPages, $currentPage).'
-                    </ul>
-                </nav>
 
             </div>
         </div>

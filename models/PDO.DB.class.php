@@ -741,6 +741,102 @@ class DB {
 
     } // Ends getLogObjectsByRoleAsTable
 
+    public function getLogObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        $sortQuery = "";
+        if ($sortBy === "type") {
+            $sortQuery = "ORDER BY log.logType";
+        } elseif ($sortBy === "student") {
+            $sortQuery = "ORDER BY log.studentId";
+        }
+
+        $filterConditions = array();
+
+        if (!empty($filterByUsername)) {
+            $filteredStudent = $this->getStudentByUsername($filterByUsername);
+            if (!is_array($filteredStudent)) {
+                $filterConditions[] = "log.studentId = $filteredStudent[0]";
+            }
+        }
+
+        if (!empty($filterByType)) {
+            $filterConditions[] = "log.logType = $filterByType";
+        }
+
+        if ($filterByTime === "lastDay") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+        } elseif ($filterByTime === "lastThreeDays") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 3 DAY)";
+        } elseif ($filterByTime === "lastWeek") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+        } elseif ($filterByTime === "lastMonth") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        }
+
+        if ($userType == "Admin") {
+
+            $query = "SELECT * FROM log";
+
+        } elseif ($userType == "Professor") {
+
+            $query = "SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
+
+        } elseif ($userType == "Support") {
+
+            $query = "SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId 
+            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+
+        } // Ends if
+
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $query .= " $sortQuery LIMIT $offset, $recordsPerPage";
+
+        $data = $this->getAllObjects($query, "Log");
+
+        if (count($data) > 0) {
+
+            $outputTable = "<thead><tr>
+                            <th>Log ID</th>
+                            <th>Log Type</th>
+                            <th>Log Time Created</th>
+                            <th>Login Attempt ID</th>
+                            <th>Student Username</th>
+            </tr></thead>\n";
+    
+            foreach ($data as $log) {
+
+                $logStudentID = $log->getLogStudentID();
+                $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $logStudentID", "Student");
+             
+                foreach ($studentObject as $student) {
+
+                    $logStudentUsername = $student->getStudentUsername();
+                    $log->setLogStudentID($logStudentUsername);
+
+                } // Ends student foreach
+
+                $outputTable .= $log->getTableLinkingRow();
+
+            } // Ends log foreach
+    
+        } else {
+            $outputTable = "<h2>No logs exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getLogObjectsByRoleFilteredAsTable
+
     // Returns the number of logs that will be shown for a specific user. Used for pagination math
     public function getLogObjectsByRoleCount($userID, $userType) {
 
@@ -751,17 +847,17 @@ class DB {
         } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
 
             $data = $this->getAllObjects("SELECT log.* FROM log
-            INNER JOIN student ON log.studentId = student.studentId 
-            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
-            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID",
             "Log");
 
         } else if ($userType == "Support") { // Gets all logs for students that are in the same school under a support
 
             $data = $this->getAllObjects("SELECT log.* FROM log
-            INNER JOIN student ON log.studentId = student.studentId 
-            INNER JOIN school ON student.schoolId = school.schoolId 
-            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID", 
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN school ON student.schoolId = school.schoolId
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID",
             "Log");
 
         } // Ends if
@@ -773,6 +869,65 @@ class DB {
         } // Ends if
 
     } // Ends getLogObjectsByRoleCount
+
+    public function getLogObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
+
+        $filterConditions = array();
+
+        if (!empty($filterByUsername)) {
+            $filteredStudent = $this->getStudentByUsername($filterByUsername);
+            if (!is_array($filteredStudent)) {
+                $filterConditions[] = "log.studentId = $filteredStudent[0]";
+            }
+        }
+
+        if (!empty($filterByType)) {
+            $filterConditions[] = "log.logType = $filterByType";
+        }
+
+        if ($filterByTime === "lastDay") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+        } elseif ($filterByTime === "lastThreeDays") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 3 DAY)";
+        } elseif ($filterByTime === "lastWeek") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+        } elseif ($filterByTime === "lastMonth") {
+            $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        }
+
+        if ($userType == "Admin") {
+
+            $query = "SELECT * FROM log";
+
+        } elseif ($userType == "Professor") {
+
+            $query = "SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
+
+        } elseif ($userType == "Support") {
+
+            $query = "SELECT log.* FROM log
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN school ON student.schoolId = school.schoolId
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+
+        } // Ends if
+
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $data = $this->getAllObjects($query, "Log");
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getLogObjectsByRoleFilteredCount
 
     // Returns information for one log in an array
     public function getLogByID($logID) {
@@ -1293,20 +1448,114 @@ class DB {
 
     } // Ends getStudentObjectsByRoleAsTable
 
+    public function getStudentObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLog) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        $sortQuery = "";
+        if ($sortBy === "school") {
+            $sortQuery = "ORDER BY student.schoolId";
+        } elseif ($sortBy === "username") {
+            $sortQuery = "ORDER BY student.studentUsername";
+        }
+
+        $filterConditions = array();
+
+        if (!empty($filterByUsername)) {
+            $filterConditions[] = "student.studentUsername = $filterByUsername";
+        }
+
+        if (!empty($filterByClass)) {
+            $filterConditions[] = "class.classId = $filterByClass";
+        }
+
+        // if ($filterByLog === "lastDay") {
+        //     $filterConditions[] = "class.classId = $filterByClass";
+        // } elseif ($filterByLog === "lastDay") {
+
+        // } elseif ($filterByLog === "lastThreeDays") {
+
+        // } elseif ($filterByLog === "lastWeek") {
+
+        // } elseif ($filterByLog === "lastMonth") {
+
+        // }
+
+        if ($userType == "Admin") {
+
+            $query = "SELECT * FROM student";
+
+        } elseif ($userType == "Professor") { // Gets all students that are in the classes under the professor
+
+            $query = "SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
+
+        } elseif ($userType == "Support") { // Gets all students that are in the same school under a support
+
+            $query = "SELECT student.* FROM student
+            INNER JOIN school ON student.schoolId = school.schoolId
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+
+        } // Ends if
+
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $query .= " $sortQuery LIMIT $offset, $recordsPerPage";
+
+        $data = $this->getAllObjects($query, "Student");
+
+        if (count($data) > 0) {
+
+            $outputTable = "<thead><tr>
+                            <th>Student ID</th>
+                            <th>Student First Name</th>
+                            <th>Student Middle Initial</th>
+                            <th>Student Last Name</th>
+                            <th>Student Username</th>
+                            <th>Student School</th>
+            </tr></thead>\n";
+    
+            foreach ($data as $student) {
+
+                $studentSchoolID = $student->getStudentSchoolID();
+                $schoolObject = $this->getAllObjects("SELECT * FROM school WHERE schoolId = $studentSchoolID", "School");
+             
+                foreach ($schoolObject as $school) {
+
+                    $studentSchoolName = $school->getSchoolName();
+                    $student->setStudentSchoolID($studentSchoolName);
+
+                } // Ends school foreach
+
+                $outputTable .= $student->getTableLinkingRow();
+
+            } // Ends student foreach
+    
+        } else {
+            $outputTable = "<h2>No students exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getStudentObjectsByRoleFilteredAsTable
+
     public function getStudentObjectsByRoleCount($userID, $userType) {
 
         if ($userType == "Admin") {
 
             $data = $this->getAllObjects("SELECT * FROM student", "Student");
 
-        } else if ($userType == "Professor") { // Gets all students that are in the classes under the professor
+        } elseif ($userType == "Professor") { // Gets all students that are in the classes under the professor
 
             $data = $this->getAllObjects("SELECT student.* FROM student
             INNER JOIN classEntry ON student.studentId = classEntry.studentId 
             INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID", 
             "Student");
 
-        } else if ($userType == "Support") { // Gets all students that are in the same school under a support
+        } elseif ($userType == "Support") { // Gets all students that are in the same school under a support
 
             $data = $this->getAllObjects("SELECT student.* FROM student
             INNER JOIN school ON student.schoolId = school.schoolId 
@@ -1322,6 +1571,62 @@ class DB {
         } // Ends if
 
     } // Ends getStudentObjectsByRoleCount
+
+    public function getStudentObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByClass, $filterByLog) {
+
+        $filterConditions = array();
+
+        if (!empty($filterByUsername)) {
+            $filterConditions[] = "student.studentUsername = $filterByUsername";
+        }
+
+        if (!empty($filterByClass)) {
+            $filterConditions[] = "class.classId = $filterByClass";
+        }
+
+        // if ($filterByLog === "lastDay") {
+        //     $filterConditions[] = "class.classId = $filterByClass";
+        // } elseif ($filterByLog === "lastDay") {
+
+        // } elseif ($filterByLog === "lastThreeDays") {
+
+        // } elseif ($filterByLog === "lastWeek") {
+
+        // } elseif ($filterByLog === "lastMonth") {
+
+        // }
+
+        if ($userType == "Admin") {
+
+            $query = "SELECT * FROM student";
+
+        } elseif ($userType == "Professor") { // Gets all students that are in the classes under the professor
+
+            $query = "SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
+
+        } elseif ($userType == "Support") { // Gets all students that are in the same school under a support
+
+            $query = "SELECT student.* FROM student
+            INNER JOIN school ON student.schoolId = school.schoolId
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+
+        } // Ends if
+
+        if (!empty($conditions)) {
+            $query .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $data = $this->getAllObjects($query, "Student");
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getStudentObjectsByRoleFilteredAsTable
 
     public function getStudentByID($studentID) {
 
@@ -1349,6 +1654,33 @@ class DB {
         return $outputStudent;
 
     } // Ends getStudentByID
+
+    public function getStudentByUsername($studentUsername) {
+
+        $data = $this->getAllObjects("SELECT * FROM student WHERE studentUsername = '$studentUsername'", "Student");
+
+        if (count($data) > 0) {
+
+            $outputStudent[] = $data[0]->getStudentID();
+            $outputStudent[] = $data[0]->getStudentFirstName();
+            $outputStudent[] = $data[0]->getStudentMiddleInitial();
+            $outputStudent[] = $data[0]->getStudentLastName();
+            $outputStudent[] = $data[0]->getStudentUsername();
+            $outputStudent[] = $data[0]->getStudentSchoolID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputStudent = "ERROR500";
+
+        } else {
+
+            $outputStudent = "ERROR404";
+
+        }// Ends if
+
+        return $outputStudent;
+
+    } // Ends getStudentByUsername
 
 /********************************USER FUNCTIONS*************************************/
     

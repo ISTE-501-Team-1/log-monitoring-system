@@ -3,13 +3,14 @@
 require_once "../views/common_ui.php";
 view_common_includes('../');
 view_common_header();
-view_common_navigation("Log Details", true, 1);
+view_common_navigation("Log Details", false, 1);
+view_log_details_main();
+view_common_footer();
 
 function view_log_details_main() {
 
     $db = new DB();
-
-    // Need log ID, log type, time created, time edited, login attempt ID student ID and student name 
+ 
     $currentLog = $db->getLogByID($_GET["id"]);
 
     $logTypeString = "";
@@ -62,9 +63,6 @@ function view_log_details_main() {
                             <strong>Log ID: '.$currentLog[0].'</strong>
                         </h5>
                     </div>
-                    <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Options">
-                        <i class="fas fa-ellipsis-h fa-lg"></i>
-                    </button>
                 </div>
 
                 <div id="log-card-body" class="card-body d-flex flex-column">
