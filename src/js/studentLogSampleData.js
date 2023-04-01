@@ -452,6 +452,243 @@ let sampleDataStringRecentLogs = "" +
     "</tr>"
 ;
 
+let sampleDataStringStudentFiles = "" +
+    "<thead>" +
+    "<tr>" +
+    "<th>File ID</th>" +
+    "<th>File Name</th>" +
+    "<th>Time Created</th>" +
+    "<th>Time Edited</th>" +
+    "<th>File Location</th>" +
+    "<th>Student</th>" +
+    "</tr>" +
+    "</thead>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>" +
+
+    "<tr>" +
+    "<td>1</td>" +
+    "<td>Assignment1.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Documents</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>2</td>" +
+    "<td>Lab2.pdf</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Labs</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+
+    "<tr>" +
+    "<td>3</td>" +
+    "<td>WorkImage.png</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>2023-01-23 12:45:56</td>" +
+    "<td>C:/Users/rxv7131/Pictures</td>" +
+    "<td>rxv7131</td>" +
+    "</tr>" +
+    "<tr>"
+;
+
 
 function getSampleData(){
     return sampleDataString;
@@ -461,7 +698,7 @@ function getSampleData(){
 window.onload = function(){
     $("#studentsListTable").append( sampleDataStringRecentStudents );
     $("#logsListTable").append( sampleDataStringRecentLogs );
-    $("#singleStudentListTable").append( sampleDataStringRecentLogs );
+    $("#singleStudentListTable").append( sampleDataStringStudentFiles );
 
     $("#studentsListTable").find("td").click(function(){
         window.location = "../../../log-monitoring-system/frontend_test/user.html";
