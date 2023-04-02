@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://seniordevteam1.in/src/css/mdb.min.css" />
     <!-- Custom styles -->
     <link rel="stylesheet" href="https://seniordevteam1.in/src/css/style.css" />
-    <link rel="stylesheet" href="../src/css/style.css" />
+<!--    <link rel="stylesheet" href="../src/css/style.css" />-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
@@ -158,6 +158,7 @@
                           id="dropdownMenuButton"
                           data-mdb-toggle="dropdown"
                           aria-expanded="false"
+                          data-mdb-ripple-color="dark"
                   >
                       <div class="d-flex align-items-center gap-2">
                           <i class="fas fa-sort-amount-down-alt fa-lg" ></i>
@@ -188,7 +189,7 @@
                   </ul>
               </div>
               <!--Filter Button-->
-              <a class="btn btn-outline-dark btn-rounded ripple-surface" type="button" cursor: pointer; data-mdb-toggle="modal" data-mdb-target="#logModal">
+              <a class="btn btn-outline-dark btn-rounded ripple-surface" type="button" style="cursor: pointer;" data-mdb-ripple-color="dark" data-mdb-toggle="modal" data-mdb-target="#logModal">
                 <div class="d-flex align-items-center gap-2">
                     <i class="fas fa-filter" ></i>
                     <p class="lh-1 fs-6 m-auto">Filter</p>
@@ -283,13 +284,12 @@
           <label for="logUser">Username:</label>
           <input type="search" id="logUserSearchBar" placeholder="Username">
           <br>
-          
-        </div>
       
-    </form>
+        </form>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-outline-dark btn-rounded" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-rounded btn-primary">Save changes</button>
       </div>
     </div>
   </div>
