@@ -35,9 +35,19 @@ function view_log_list_main() {
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
-            $filterByType = $_POST["logSearchType"];
-            $filterByTime = $_POST["logSearchTime"];
+
+            if ($_POST["logSearchUsername"]) {
+                $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
+            }
+
+            if ($_POST["logSearchType"]) {
+                $filterByType = $_POST["logSearchType"];
+            }
+
+            if ($_POST["logSearchTime"]) {
+                $filterByTime = $_POST["logSearchTime"];
+            }
+            
         } // Ends if
 
         $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByType, $filterByTime);

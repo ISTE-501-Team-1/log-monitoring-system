@@ -33,8 +33,15 @@ function view_student_list_main() {
         }
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
-            $filterByClass = sanitize_string($_POST["studentSearchClass"]);
+
+            if ($_POST["studentSearchUsername"]) {
+                $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
+            }
+
+            if ($_POST["studentSearchClass"]) {
+                $filterByClass = sanitize_string($_POST["studentSearchClass"]);
+            }
+            
             //$filterByLog = sanitize_string($_POST["studentSearchLastLog"]);
         } // Ends if
 

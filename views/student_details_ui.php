@@ -15,13 +15,22 @@ function view_log_details_main() {
     $currentSchool = $db->getSchoolByID($currentStudent[5]);
     $latestLog = $db->getLogLatestByStudentID($currentStudent[0]);
 
+    if ($latestLog[1] == 0) {
+        $logTypeString = "Login Attempt";
+    } else if ($latestLog[1] == 1) {
+        $logTypeString = "File Creation";
+    } else if ($latestLog[1] == 2) {
+        $logTypeString = "File Modification";
+    } else {
+        $logTypeString = "INVALID";
+    } // Ends if
+
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $recordsPerPage = 20;
 
     $fileObjects = $db->getFileObjectsByStudentAsTable($currentStudent[0], $currentPage, $recordsPerPage);
     $totalRows = $db->getFileObjectsByStudentCount($currentStudent[0]);
     $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
-
 
     echo('
     <main style="margin-top: 58px">
@@ -35,10 +44,7 @@ function view_log_details_main() {
                             <strong>User: '.$currentStudent[4].'</strong>
                         </h5>
                     </div>
-                    <button type="button" class="btn btn-floating chevron-btn" data-mdb-toggle="tooltip" data-mdb-placement="bottom" title="Options">
-                        <i class="fas fa-ellipsis-h fa-lg"></i>
-                    </button>
-                    <form action="https://seniordevteam1.in/views/student_list_ui.php?student" method="POST">
+                    <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="POST">
                         <input type="hidden" name="logSearchUsername" value="'.$currentStudent[4].'">
                         <button type="submit" class="btn btn-outline-dark btn-rounded font-weight-bold" data-mdb-ripple-color="dark">
                             View Logs
@@ -65,7 +71,7 @@ function view_log_details_main() {
 
                     <div class="d-flex gap-2">
                         <p class="h6 lh-1">Lastest Log Type:</p>
-                        <p class="fs-6 lh-1">'.$latestLog[1].'</p>
+                        <p class="fs-6 lh-1">'.$logTypeString.'</p>
                     </div>
 
                     <div class="d-flex gap-2">
