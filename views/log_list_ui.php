@@ -1,9 +1,10 @@
 <?php
 
 require_once "../views/common_ui.php";
+require_once "../controllers/validation_controller.php";
 view_common_includes('../');
 view_common_header();
-view_common_navigation("Search Logs", true, 1);
+view_common_navigation("Search Logs", false, 1);
 
 if (isset($_GET['recent'])) {
     view_log_list_recent();    
@@ -25,11 +26,31 @@ function view_log_list_main() {
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $recordsPerPage = 20;
 
-    $totalRows = $db->getLogObjectsByRoleCount($currentUser[0], $currentUser[6]);
-    $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
+    if (isset($_GET["log"])) {
+
+        $filterByUsername = $filterByType = $filterByTime = $sortBy = "";
+
+        if (isset($_GET["sortBy"])) {
+            $sortBy = $_GET["sortBy"];
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
+            $filterByType = $_POST["logSearchType"];
+            $filterByTime = $_POST["logSearchTime"];
+        } // Ends if
+
+        $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByType, $filterByTime);
+        $totalRows = $db->getLogObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByType, $filterByTime);
     
-    // Get the log objects for the current page
-    $logObjects = $db->getLogObjectsByRoleAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
+    } else {
+        
+        $logObjects = $db->getLogObjectsByRoleAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
+        $totalRows = $db->getLogObjectsByRoleCount($currentUser[0], $currentUser[6]);
+    
+    }// Ends if
+
+    $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
 
     view_log_list_table($logObjects, $totalNumberOfPages, $currentPage);
     view_log_list_filter_modal();
@@ -103,19 +124,19 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=time\'" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=time\'" checked />
                                 <label class="form-check-label" for="MostRecent"> Most Recent </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=username\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=username\'" />
                                 <label class="form-check-label" for="Username"> Username </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'../controllers/search_controller.php?log&sortBy=\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=\'" />
                                 <label class="form-check-label" for="School"> School </label>
                             </div>
                         </li>
@@ -129,7 +150,64 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
                         <p class="lh-1 fs-6 m-auto">Filter</p>
                     </div>
                 </a>
+    ');
 
+    // Displays chips for each filter that is added
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        if (isset($_POST["logSearchTime"])) {
+
+            echo('
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
+                    Time: '.$_POST["logSearchTime"].'
+                </div>
+            ');
+
+        } // Ends if
+
+        if (isset($_POST["logSearchType"])) {
+
+            echo('
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
+                    Type: '.$_POST["logSearchType"].'
+                </div>
+            ');
+
+        } // Ends if
+
+        if (isset($_POST["logSearchUsername"]) && !empty(sanitize_string($_POST["logSearchUsername"]))) {
+
+            echo('
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
+                    Username: '.sanitize_string($_POST["logSearchUsername"]).'
+                </div>
+            ');
+
+        } // Ends if
+
+        if (isset($_GET['recent'])) {
+
+            echo('
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php\'">
+                    Clear Filters
+                    <span class="closebtn">&times;</span>
+                </div>
+            ');
+
+        } else {
+
+            echo('
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php\'">
+                    Clear Filters
+                    <span class="closebtn">&times;</span>
+                </div>
+            ');
+
+        }
+
+    } // Ends if
+
+    echo('
             </div>
 
             <!-- Pagination links -->
@@ -172,41 +250,43 @@ function view_log_list_filter_modal() {
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
-                    <form action="../controllers/search_controller.php?log" method="post">
+                <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="post">
 
-                        <!--Log Time Dropdown Filter-->
-                        <label for="logSearchTime">Log Time:</label>
-                        <select name="logSearchTime" id="searchLogTime">
-                            <option value="any">Any</option>
-                            <option value="lastDay">Last Day</option>
-                            <option value="lastThreeDays">Last 3 Days</option>
-                            <option value="lastWeek">Last Week</option>
-                            <option value="lastMonth">Last Month</option>
-                        </select>
+                    <div class="modal-body">
 
-                        <br>
+                            <!--Log Time Dropdown Filter-->
+                            <label for="logSearchTime">Log Time:</label>
+                            <select name="logSearchTime" id="searchLogTime">
+                                <option value="Any">Any</option>
+                                <option value="Last Day">Last Day</option>
+                                <option value="Last Three Days">Last 3 Days</option>
+                                <option value="Last Week">Last Week</option>
+                                <option value="Last Month">Last Month</option>
+                            </select>
 
-                        <!--Log Type Dropdown Filter-->\
-                        <label for="logSearchType">Log Type:</label>
-                        <select name="logSearchType" id="searchLogType">
-                            <option value="any">Any</option>
-                            <option value="failedLogin">Failed Login</option>
-                            <option value="successfulLogin">Successful Login</option>
-                            <option value="fileCreated">File Created</option>
-                            <option value="fileModified">File Modified</option>
-                        </select>
+                            <br>
 
-                        <br>
+                            <!--Log Type Dropdown Filter-->
+                            <label for="logSearchType">Log Type:</label>
+                            <select name="logSearchType" id="searchLogType">
+                                <option value="Any">Any</option>
+                                <option value="Failed Login">Failed Login</option>
+                                <option value="Successful Login">Successful Login</option>
+                                <option value="File Created">File Created</option>
+                                <option value="File Modified">File Modified</option>
+                            </select>
 
-                        <!--Log Type Dropdown Filter-->
-                        <label for="logSearchUsername">Username:</label>
-                        <input type="search" name="logSearchUsername" id="logUserSearchBar" placeholder="Username">
+                            <br>
 
-                        <br>
+                            <!--Log Type Dropdown Filter-->
+                            <label for="logSearchUsername">Username:</label>
+                            <input type="search" name="logSearchUsername" id="logUserSearchBar" placeholder="Username">
 
-                    </form>
-                </div>
+                            <br>
+
+                    </div>
+
+                </form>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>

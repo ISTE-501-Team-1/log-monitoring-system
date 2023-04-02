@@ -486,7 +486,7 @@ class DB {
                             <th>File Time Edited</th>
                             <th>File Location</th>
                             <th>Student ID</th>
-            </tr>\n";
+            </tr></thead>\n";
     
             foreach ($data as $file) {
 
@@ -511,6 +511,59 @@ class DB {
         return $outputTable;
 
     } // Ends getAllFileObjectsAsTable
+
+    public function getFileObjectsByStudentAsTable($studentID, $currentPageNumber, $recordsPerPage) {
+
+        $offset = ($currentPageNumber - 1) * $recordsPerPage;
+
+        $data = $this->getAllObjects("SELECT * FROM file WHERE studentId = $studentID LIMIT $offset, $recordsPerPage", "File");
+
+        if (count($data) > 0) {
+
+            $outputTable = "<thead><tr>
+                            <th>File ID</th>
+                            <th>File Name</th>
+                            <th>File Time Created</th>
+                            <th>File Time Edited</th>
+                            <th>File Location</th>
+                            <th>Student ID</th>
+            </tr></thead>\n";
+    
+            foreach ($data as $file) {
+
+                $fileStudentID = $file->getFileStudentID();
+                $studentObject = $this->getAllObjects("SELECT * FROM student WHERE studentId = $fileStudentID", "Student");
+             
+                foreach ($studentObject as $student) {
+
+                    $fileStudentUsername = $student->getStudentUsername();
+                    $file->setFileStudentID($fileStudentUsername);
+
+                } // Ends student foreach
+
+                $outputTable .= $file->getTableData();
+
+            } // Ends file foreach
+    
+        } else {
+            $outputTable = "<h2>No files exist.</h2>";
+        }// Ends if
+
+        return $outputTable;
+
+    } // Ends getFileObjectsByStudentAsTable
+
+    public function getFileObjectsByStudentCount($studentID) {
+
+        $data = $this->getAllObjects("SELECT * FROM file WHERE studentId = $studentID", "File");
+
+        if (count($data) > 0) {
+            return count($data);
+        } else {
+            return 0;
+        } // Ends if
+
+    } // Ends getFileObjectsByStudentCount
 
 /********************************LOG FUNCTIONS*************************************/
     
@@ -747,9 +800,9 @@ class DB {
 
         $sortQuery = "";
         if ($sortBy === "type") {
-            $sortQuery = "ORDER BY log.logType";
+            $sortQuery = "GROUP BY log.logId, log.logType ORDER BY log.logType";
         } elseif ($sortBy === "student") {
-            $sortQuery = "ORDER BY log.studentId";
+            $sortQuery = "GROUP BY log.logId, log.studentId ORDER BY log.studentId";
         }
 
         $filterConditions = array();
@@ -765,13 +818,13 @@ class DB {
             $filterConditions[] = "log.logType = $filterByType";
         }
 
-        if ($filterByTime === "lastDay") {
+        if ($filterByTime === "Last Day") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-        } elseif ($filterByTime === "lastThreeDays") {
+        } elseif ($filterByTime === "Last Three Days") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 3 DAY)";
-        } elseif ($filterByTime === "lastWeek") {
+        } elseif ($filterByTime === "Last Week") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
-        } elseif ($filterByTime === "lastMonth") {
+        } elseif ($filterByTime === "Last Month") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
         }
 
@@ -782,21 +835,25 @@ class DB {
         } elseif ($userType == "Professor") {
 
             $query = "SELECT log.* FROM log
-            INNER JOIN student ON log.studentId = student.studentId 
-            INNER JOIN classEntry ON student.studentId = classEntry.studentId 
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
             INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
 
         } elseif ($userType == "Support") {
 
             $query = "SELECT log.* FROM log
-            INNER JOIN student ON log.studentId = student.studentId 
-            INNER JOIN school ON student.schoolId = school.schoolId 
+            INNER JOIN student ON log.studentId = student.studentId
+            INNER JOIN school ON student.schoolId = school.schoolId
             INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
 
         } // Ends if
 
-        if (!empty($conditions)) {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+        if (!empty($filterConditions)) {
+            $query .= " WHERE " . implode(" AND ", $filterConditions);
+        }
+
+        if (empty($sortQuery)) {
+            $sortQuery = "GROUP BY log.logId";
         }
 
         $query .= " $sortQuery LIMIT $offset, $recordsPerPage";
@@ -872,6 +929,13 @@ class DB {
 
     public function getLogObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
 
+        $sortQuery = "";
+        if ($sortBy === "type") {
+            $sortQuery = "GROUP BY log.logId, log.logType ORDER BY log.logType";
+        } elseif ($sortBy === "student") {
+            $sortQuery = "GROUP BY log.logId, log.studentId ORDER BY log.studentId";
+        }
+
         $filterConditions = array();
 
         if (!empty($filterByUsername)) {
@@ -885,13 +949,13 @@ class DB {
             $filterConditions[] = "log.logType = $filterByType";
         }
 
-        if ($filterByTime === "lastDay") {
+        if ($filterByTime === "Last Day") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-        } elseif ($filterByTime === "lastThreeDays") {
+        } elseif ($filterByTime === "Last Three Days") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 3 DAY)";
-        } elseif ($filterByTime === "lastWeek") {
+        } elseif ($filterByTime === "Last Week") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
-        } elseif ($filterByTime === "lastMonth") {
+        } elseif ($filterByTime === "Last Month") {
             $filterConditions[] = "log.logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
         }
 
@@ -915,9 +979,15 @@ class DB {
 
         } // Ends if
 
-        if (!empty($conditions)) {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+        if (!empty($filterConditions)) {
+            $query .= " WHERE " . implode(" AND ", $filterConditions);
         }
+
+        if (empty($sortQuery)) {
+            $sortQuery = "GROUP BY log.logId";
+        }
+
+        $query .= " $sortQuery";
 
         $data = $this->getAllObjects($query, "Log");
 
@@ -955,6 +1025,35 @@ class DB {
         return $outputLog;
 
     } // Ends getLogByID
+
+    public function getLogLatestByStudentID($studentID) {
+
+        $data = $this->getAllObjects("SELECT * FROM log
+        WHERE studentId = '$studentID'
+        ORDER BY logTimeCreated DESC
+        LIMIT 1", "Log");
+
+        if (count($data) > 0) {
+
+            $outputLog[] = $data[0]->getLogID();
+            $outputLog[] = $data[0]->getLogType();
+            $outputLog[] = $data[0]->getLogTimeCreated();
+            $outputLog[] = $data[0]->getLogLoginAttemptID();
+            $outputLog[] = $data[0]->getLogStudentID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputLog = "ERROR500";
+
+        } else {
+
+            $outputLog = "ERROR404";
+
+        }// Ends if
+
+        return $outputLog;
+
+    } // Ends getLogLatestByStudentID
 
 /********************************LOGINATTEMPT FUNCTIONS*************************************/
     
@@ -1308,6 +1407,29 @@ class DB {
 
     } // Ends getAllSchoolObjectsAsTable
 
+    public function getSchoolByID($schoolID) {
+
+        $data = $this->getAllObjects("SELECT * FROM school WHERE schoolId = '$schoolID'", "School");
+
+        if (count($data) > 0) {
+
+            $outputSchool[] = $data[0]->getSchoolID();
+            $outputSchool[] = $data[0]->getSchoolName();
+    
+        } elseif (count($data) > 1) {
+
+            $outputSchool = "ERROR500";
+
+        } else {
+
+            $outputSchool = "ERROR404";
+
+        }// Ends if
+
+        return $outputSchool;
+
+    } // Ends getSchoolByID
+
 /********************************STUDENT FUNCTIONS*************************************/
     
     public function getAllStudentObjectsAsTable() {
@@ -1454,17 +1576,17 @@ class DB {
 
         $sortQuery = "";
         if ($sortBy === "school") {
-            $sortQuery = "ORDER BY student.schoolId";
+            $sortQuery = "GROUP BY student.studentId, student.schoolId ORDER BY student.schoolId";
         } elseif ($sortBy === "username") {
-            $sortQuery = "ORDER BY student.studentUsername";
+            $sortQuery = "GROUP BY student.studentUsername ORDER BY student.studentUsername";
         }
 
         $filterConditions = array();
 
         if (!empty($filterByUsername)) {
-            $filterConditions[] = "student.studentUsername = $filterByUsername";
+            $filterConditions[] = "student.studentUsername = \"$filterByUsername\"";
         }
-
+        
         if (!empty($filterByClass)) {
             $filterConditions[] = "class.classId = $filterByClass";
         }
@@ -1483,7 +1605,9 @@ class DB {
 
         if ($userType == "Admin") {
 
-            $query = "SELECT * FROM student";
+            $query = "SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId";
 
         } elseif ($userType == "Professor") { // Gets all students that are in the classes under the professor
 
@@ -1495,16 +1619,22 @@ class DB {
 
             $query = "SELECT student.* FROM student
             INNER JOIN school ON student.schoolId = school.schoolId
-            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId";
 
         } // Ends if
 
-        if (!empty($conditions)) {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+        if (!empty($filterConditions)) {
+            $query .= " WHERE " . implode(" AND ", $filterConditions);
+        }
+
+        if (empty($sortQuery)) {
+            $sortQuery = "GROUP BY student.studentId";
         }
 
         $query .= " $sortQuery LIMIT $offset, $recordsPerPage";
-
+        
         $data = $this->getAllObjects($query, "Student");
 
         if (count($data) > 0) {
@@ -1574,12 +1704,19 @@ class DB {
 
     public function getStudentObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByClass, $filterByLog) {
 
+        $sortQuery = "";
+        if ($sortBy === "school") {
+            $sortQuery = "GROUP BY student.studentId, student.schoolId ORDER BY student.schoolId";
+        } elseif ($sortBy === "username") {
+            $sortQuery = "GROUP BY student.studentUsername ORDER BY student.studentUsername";
+        }
+
         $filterConditions = array();
 
         if (!empty($filterByUsername)) {
-            $filterConditions[] = "student.studentUsername = $filterByUsername";
+            $filterConditions[] = "student.studentUsername = \"$filterByUsername\"";
         }
-
+        
         if (!empty($filterByClass)) {
             $filterConditions[] = "class.classId = $filterByClass";
         }
@@ -1598,7 +1735,9 @@ class DB {
 
         if ($userType == "Admin") {
 
-            $query = "SELECT * FROM student";
+            $query = "SELECT student.* FROM student
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId";
 
         } elseif ($userType == "Professor") { // Gets all students that are in the classes under the professor
 
@@ -1610,14 +1749,22 @@ class DB {
 
             $query = "SELECT student.* FROM student
             INNER JOIN school ON student.schoolId = school.schoolId
-            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
+            INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            INNER JOIN classEntry ON student.studentId = classEntry.studentId
+            INNER JOIN class ON classEntry.classId = class.classId";
 
         } // Ends if
 
-        if (!empty($conditions)) {
-            $query .= " WHERE " . implode(" AND ", $conditions);
+        if (!empty($filterConditions)) {
+            $query .= " WHERE " . implode(" AND ", $filterConditions);
         }
 
+        if (empty($sortQuery)) {
+            $sortQuery = "GROUP BY student.studentId";
+        }
+
+        $query .= " $sortQuery";
+        
         $data = $this->getAllObjects($query, "Student");
 
         if (count($data) > 0) {
