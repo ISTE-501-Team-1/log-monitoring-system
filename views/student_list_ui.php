@@ -25,24 +25,24 @@ function view_student_list_main() {
     $recordsPerPage = 20;
 
     if (isset($_GET["student"])) {
-    
+
         $filterByUsername = $filterByClass = $filterByLog = $sortBy = "";
 
         if (isset($_GET["sortBy"])) {
             $sortBy = $_GET["sortBy"];
         }
 
-        if (isset($_POST)) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
             $filterByClass = sanitize_string($_POST["studentSearchClass"]);
-            $filterByLog = sanitize_string($_POST["studentSearchLastLog"]);
+            //$filterByLog = sanitize_string($_POST["studentSearchLastLog"]);
         } // Ends if
 
         $studentObjects = $db->getStudentObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLog);
         $totalRows = $db->getStudentObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByClass, $filterByLog);
     
     } else {
-
+        
         $studentObjects = $db->getStudentObjectsByRoleAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
         $totalRows = $db->getStudentObjectsByRoleCount($currentUser[0], $currentUser[6]);
     
@@ -101,13 +101,13 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="StudentID" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=id\'" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="StudentID" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=id\'" checked />
                                 <label class="form-check-label" for="MostRecent"> ID </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=username\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=username\'" />
                                 <label class="form-check-label" for="Username"> Username </label>
                             </div>
                         </li>
@@ -117,7 +117,6 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
                                 <label class="form-check-label" for="School"> School </label>
                             </div>
                         </li>
-
                     </ul>
 
                 </div>
@@ -131,53 +130,53 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
     ');
 
     // Displays chips for each filter that is added
-    if (isset($_POST)) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        if (!empty(sanitize_string($_POST["studentSearchUsername"]))) {
+        if (isset($_POST["studentSearchUsername"]) && !empty(sanitize_string($_POST["studentSearchUsername"]))) {
 
             echo('
-                <div class="chip" style="display: inline-block; padding: 0 25px; height: 50px; font-size: 16px; line-height: 50px; border-radius: 25px; background-color: lightblue;">
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
                     Username: '.sanitize_string($_POST["studentSearchUsername"]).'
                 </div>
             ');
 
         } // Ends if
 
-        if (!empty(sanitize_string($_POST["studentSearchClass"]))) {
+        if (isset($_POST["studentSearchClass"]) && !empty(sanitize_string($_POST["studentSearchClass"]))) {
 
             echo('
-                <div class="chip" style="display: inline-block; padding: 0 25px; height: 50px; font-size: 16px; line-height: 50px; border-radius: 25px; background-color: lightblue;">
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
                     Class ID: '.sanitize_string($_POST["studentSearchClass"]).'
                 </div>
             ');
 
         } // Ends if
 
-        if (!empty(sanitize_string($_POST["studentSearchLastLog"]))) {
+        // if (isset($_POST["studentSearchLastLog"]) && !empty(sanitize_string($_POST["studentSearchLastLog"]))) {
 
-            echo('
-                <div class="chip" style="display: inline-block; padding: 0 25px; height: 50px; font-size: 16px; line-height: 50px; border-radius: 25px; background-color: lightblue;">
-                    Username: '.sanitize_string($_POST["studentSearchLastLog"]).'
-                </div>
-            ');
+        //     echo('
+        //         <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
+        //             Username: '.sanitize_string($_POST["studentSearchLastLog"]).'
+        //         </div>
+        //     ');
 
-        } // Ends if
+        // } // Ends if
 
         if (isset($_GET['recent'])) {
 
             echo('
-                <div class="chip" style="display: inline-block; padding: 0 25px; height: 50px; font-size: 16px; line-height: 50px; border-radius: 25px; background-color: lightblue;">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php\'">
                     Clear Filters
-                    <span class="closebtn" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?recent\'">&times;</span>
+                    <span class="closebtn">&times;</span>
                 </div>
             ');
 
         } else {
 
             echo('
-                <div class="chip" style="display: inline-block; padding: 0 25px; height: 50px; font-size: 16px; line-height: 50px; border-radius: 25px; background-color: lightblue;">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php\'">
                     Clear Filters
-                    <span class="closebtn" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php\'">&times;</span>
+                    <span class="closebtn">&times;</span>
                 </div>
             ');
 
@@ -228,46 +227,48 @@ function view_student_list_filter_modal() {
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
+                <form action="https://seniordevteam1.in/views/student_list_ui.php?student" method="post">
 
-                    <form action="https://seniordevteam1.in/views/student_list_ui.php?student" method="post">
+                    <div class="modal-body">
 
-                        <label for="studentSearchUsername">Username:</label>
-                        <input name="studentSearchUsername" type="search" id="studentSearchBar" placeholder="Username">
+                            <label for="studentSearchUsername">Username:</label>
+                            <input name="studentSearchUsername" type="search" id="studentSearchBar" placeholder="Username">
 
-                        <br>
+                            <br>
 
-                        <!--Class Dropdown Filter-->
-                        <label for="studentSearchClass" style="padding-top:1em">Class:</label>
-                        <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
-                        
-                        <br>
+                            <!--Class Dropdown Filter-->
+                            <label for="studentSearchClass" style="padding-top:1em">Class:</label>
+                            <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
+                            
+                            <br>
+                            
+                        </form>
 
-                        <!--Last Log Dropdown Filter-->
-                        <label for="studentSearchLastLog" style="padding-top:1em">Last Log:</label>
-                        <select name="studentSearchLastLog" id="studentLastLog">
-                            <option value="any">Any</option>
-                            <option value="lastDay">Last Day</option>
-                            <option value="lastThreeDays">Last 3 Days</option>
-                            <option value="lastWeek">Last Week</option>
-                            <option value="lastMonth">Last Month</option>
-                        </select>
+                    </div>
 
-                        <br>
-                        
-                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
+                        <button class="btn btn-warning" type="submit">Apply Filter</button>
+                    </div>
 
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning">Apply Filter</button>
-                </div>
+                </form>
 
             </div>
         </div>
     </div>
     ';
+
+// <!--Last Log Dropdown Filter-->
+// <label for="studentSearchLastLog" style="padding-top:1em">Last Log:</label>
+// <select name="studentSearchLastLog" id="studentLastLog">
+//     <option value="any">Any</option>
+//     <option value="lastDay">Last Day</option>
+//     <option value="lastThreeDays">Last 3 Days</option>
+//     <option value="lastWeek">Last Week</option>
+//     <option value="lastMonth">Last Month</option>
+// </select>
+
+// <br>
 
 } // Ends view_student_list_filter_modal
 
