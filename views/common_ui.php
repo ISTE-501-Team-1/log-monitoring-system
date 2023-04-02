@@ -78,6 +78,11 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
     } // Ends switch
 
+//     <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple'.$activeSettings.'>
+//     <i class="fas fa-cogs fa-fw me-3"></i>
+//     <span>Settings</span>
+//     </a>
+
     echo('
         <!--Main Navigation-->
         <header>
@@ -107,11 +112,6 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
                             <i class="fas fa-exclamation-circle fa-fw me-3"></i>
                             <span>Alerts</span>
                             <span class="badge badge-danger rounded-pill ms-3">3</span>
-                        </a>
-
-                        <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple'.$activeSettings.'>
-                            <i class="fas fa-cogs fa-fw me-3"></i>
-                            <span>Settings</span>
                         </a>
 
                     </div>
@@ -180,8 +180,6 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
                             </a>
 
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">My profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
                                 <li><a class="dropdown-item" href="https://seniordevteam1.in/controllers/login_controller.php?logout">Logout</a></li>
                             </ul>
 
