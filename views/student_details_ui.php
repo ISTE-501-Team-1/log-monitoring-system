@@ -46,6 +46,8 @@ function view_log_details_main() {
                     </div>
                     <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="POST">
                         <input type="hidden" name="logSearchUsername" value="'.$currentStudent[4].'">
+                        <input type="hidden" name="logSearchTime" value="Any">
+                        <input type="hidden" name="logSearchType" value="Any">
                         <button type="submit" class="btn btn-outline-dark btn-rounded font-weight-bold" data-mdb-ripple-color="dark">
                             View Logs
                         </button>
@@ -104,7 +106,7 @@ function view_log_details_main() {
             <div class="container pt-2 long-table-container">
                 <div class="table-responsive search-table">
 
-                    <table id="singleStudentListTable" class="table table-hover">
+                    <table id="singleStudentListTable" class="table">
                         '.$fileObjects.'
                     </table>
 

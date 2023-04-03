@@ -36,22 +36,22 @@ function view_log_list_main() {
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            if ($_POST["logSearchUsername"]) {
+            if (isset($_POST["logSearchUsername"])) {
                 $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
             }
 
-            if ($_POST["logSearchType"]) {
+            if (isset($_POST["logSearchType"])) {
                 $filterByType = $_POST["logSearchType"];
             }
 
-            if ($_POST["logSearchTime"]) {
+            if (isset($_POST["logSearchTime"])) {
                 $filterByTime = $_POST["logSearchTime"];
             }
             
         } // Ends if
 
-        $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByType, $filterByTime);
-        $totalRows = $db->getLogObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByType, $filterByTime);
+        $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByTime, $filterByType);
+        $totalRows = $db->getLogObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByTime, $filterByType);
     
     } else {
         
@@ -134,20 +134,20 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=time\'" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=mostRecent\'" checked />
                                 <label class="form-check-label" for="MostRecent"> Most Recent </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=username\'" />
-                                <label class="form-check-label" for="Username"> Username </label>
+                                <input class="form-check-input" type="radio" name="SortBy" id="Student" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=student\'" />
+                                <label class="form-check-label" for="Student"> Student </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?log&sortBy=\'" />
-                                <label class="form-check-label" for="School"> School </label>
+                                <input class="form-check-input" type="radio" name="SortBy" id="Type" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=type\'" />
+                                <label class="form-check-label" for="Type"> Type </label>
                             </div>
                         </li>
                     </ul>
@@ -296,12 +296,12 @@ function view_log_list_filter_modal() {
 
                     </div>
 
-                </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark btn-rounded" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-rounded btn-primary">Apply Filter</button>
+                    </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-warning">Apply Filter</button>
-                </div>
+                </form>
 
             </div>
         </div>

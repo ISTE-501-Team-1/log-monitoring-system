@@ -229,12 +229,12 @@ function view_student_list_filter_modal() {
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Student Search Filters</h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                </div>
-
                 <form action="https://seniordevteam1.in/views/student_list_ui.php?student" method="post">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Student Search Filters</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
                     <div class="modal-body">
 
@@ -248,14 +248,12 @@ function view_student_list_filter_modal() {
                             <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
                             
                             <br>
-                            
-                        </form>
 
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-warning" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
-                        <button class="btn btn-warning" type="submit">Apply Filter</button>
+                        <button type="button" class="btn btn-outline-dark btn-rounded" data-mdb-ripple-color="dark" data-mdb-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-rounded btn-primary">Apply Filter</button>
                     </div>
 
                 </form>

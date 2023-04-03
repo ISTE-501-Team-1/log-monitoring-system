@@ -800,22 +800,38 @@ class DB {
 
         $sortQuery = "";
         if ($sortBy === "type") {
-            $sortQuery = "GROUP BY log.logId, log.logType ORDER BY log.logType";
+            $sortQuery = "GROUP BY log.logId ORDER BY log.logType";
         } elseif ($sortBy === "student") {
-            $sortQuery = "GROUP BY log.logId, log.studentId ORDER BY log.studentId";
+            $sortQuery = "GROUP BY log.logId ORDER BY log.studentId";
+        } elseif ($sortBy === "mostRecent") {
+            $sortQuery = "GROUP BY log.logId ORDER BY log.logTimeCreated DESC";
         }
 
         $filterConditions = array();
-
         if (!empty($filterByUsername)) {
             $filteredStudent = $this->getStudentByUsername($filterByUsername);
-            if (!is_array($filteredStudent)) {
+            
+            if (is_array($filteredStudent)) {
                 $filterConditions[] = "log.studentId = $filteredStudent[0]";
+            } else {
+                return "<h2>No matching records found with that username.</h2>";
             }
         }
 
-        if (!empty($filterByType)) {
-            $filterConditions[] = "log.logType = $filterByType";
+        if (!empty($filterByType) && $filterByType != "Any") {
+            
+            if ($filterByType == "Successful Login") {
+                $filterConditions[] = "log.logType = 0";
+                $filterConditions[] = "loginAttempt.loginAttemptSuccess = 1";
+            } elseif ($filterByType == "Failed Login") {
+                $filterConditions[] = "log.logType = 0";
+                $filterConditions[] = "loginAttempt.loginAttemptSuccess = 0";
+            } elseif ($filterByType == "File Created") {
+                $filterConditions[] = "log.logType = 1";
+            } elseif ($filterByType == "File Modified") {
+                $filterConditions[] = "log.logType = 2";
+            }
+            
         }
 
         if ($filterByTime === "Last Day") {
@@ -830,11 +846,14 @@ class DB {
 
         if ($userType == "Admin") {
 
-            $query = "SELECT * FROM log";
+            $query = "SELECT * FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
+            INNER JOIN student ON log.studentId = student.studentId";
 
         } elseif ($userType == "Professor") {
 
             $query = "SELECT log.* FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
             INNER JOIN student ON log.studentId = student.studentId
             INNER JOIN classEntry ON student.studentId = classEntry.studentId
             INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
@@ -842,12 +861,13 @@ class DB {
         } elseif ($userType == "Support") {
 
             $query = "SELECT log.* FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
             INNER JOIN student ON log.studentId = student.studentId
             INNER JOIN school ON student.schoolId = school.schoolId
             INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
 
         } // Ends if
-
+        
         if (!empty($filterConditions)) {
             $query .= " WHERE " . implode(" AND ", $filterConditions);
         }
@@ -855,7 +875,7 @@ class DB {
         if (empty($sortQuery)) {
             $sortQuery = "GROUP BY log.logId";
         }
-
+        
         $query .= " $sortQuery LIMIT $offset, $recordsPerPage";
 
         $data = $this->getAllObjects($query, "Log");
@@ -887,7 +907,7 @@ class DB {
             } // Ends log foreach
     
         } else {
-            $outputTable = "<h2>No logs exist.</h2>";
+            $outputTable = "<h3>No logs found.</h3>";
         }// Ends if
 
         return $outputTable;
@@ -929,24 +949,39 @@ class DB {
 
     public function getLogObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
 
-        $sortQuery = "";
         if ($sortBy === "type") {
-            $sortQuery = "GROUP BY log.logId, log.logType ORDER BY log.logType";
+            $sortQuery = "GROUP BY log.logId ORDER BY log.logType";
         } elseif ($sortBy === "student") {
-            $sortQuery = "GROUP BY log.logId, log.studentId ORDER BY log.studentId";
+            $sortQuery = "GROUP BY log.logId ORDER BY log.studentId";
+        } elseif ($sortBy === "mostRecent") {
+            $sortQuery = "GROUP BY log.logId ORDER BY log.logTimeCreated DESC";
         }
 
         $filterConditions = array();
-
         if (!empty($filterByUsername)) {
             $filteredStudent = $this->getStudentByUsername($filterByUsername);
-            if (!is_array($filteredStudent)) {
+            
+            if (is_array($filteredStudent)) {
                 $filterConditions[] = "log.studentId = $filteredStudent[0]";
+            } else {
+                return "<h2>No matching records found with that username.</h2>";
             }
         }
 
-        if (!empty($filterByType)) {
-            $filterConditions[] = "log.logType = $filterByType";
+        if (!empty($filterByType) && $filterByType != "Any") {
+            
+            if ($filterByType == "Successful Login") {
+                $filterConditions[] = "log.logType = 0";
+                $filterConditions[] = "loginAttempt.loginAttemptSuccess = 1";
+            } elseif ($filterByType == "Failed Login") {
+                $filterConditions[] = "log.logType = 0";
+                $filterConditions[] = "loginAttempt.loginAttemptSuccess = 0";
+            } elseif ($filterByType == "File Created") {
+                $filterConditions[] = "log.logType = 1";
+            } elseif ($filterByType == "File Modified") {
+                $filterConditions[] = "log.logType = 2";
+            }
+            
         }
 
         if ($filterByTime === "Last Day") {
@@ -961,11 +996,14 @@ class DB {
 
         if ($userType == "Admin") {
 
-            $query = "SELECT * FROM log";
+            $query = "SELECT * FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
+            INNER JOIN student ON log.studentId = student.studentId";
 
         } elseif ($userType == "Professor") {
 
             $query = "SELECT log.* FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
             INNER JOIN student ON log.studentId = student.studentId
             INNER JOIN classEntry ON student.studentId = classEntry.studentId
             INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID";
@@ -973,12 +1011,13 @@ class DB {
         } elseif ($userType == "Support") {
 
             $query = "SELECT log.* FROM log
+            INNER JOIN loginAttempt on log.loginAttemptId = loginAttempt.loginAttemptId
             INNER JOIN student ON log.studentId = student.studentId
             INNER JOIN school ON student.schoolId = school.schoolId
             INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID";
 
         } // Ends if
-
+        
         if (!empty($filterConditions)) {
             $query .= " WHERE " . implode(" AND ", $filterConditions);
         }
@@ -986,7 +1025,7 @@ class DB {
         if (empty($sortQuery)) {
             $sortQuery = "GROUP BY log.logId";
         }
-
+        
         $query .= " $sortQuery";
 
         $data = $this->getAllObjects($query, "Log");
