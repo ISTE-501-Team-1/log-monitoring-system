@@ -12,6 +12,10 @@ class Activity {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->activityId}</td>
+            <td>{$this->activityUserId}</td>
+            <td>{$this->activityLogId}</td>
+            <td>{$this->activityStudentId}</td>
             <td>{$this->activityDatetime}</td>
         </tr>\n";
 
@@ -44,8 +48,10 @@ class ClassTable {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->classId}</td>
             <td>{$this->className}</td>
             <td>{$this->classProfessor}</td>
+            <td>{$this->schoolId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -102,10 +108,12 @@ class File {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->fileId}</td>
             <td>{$this->fileName}</td>
             <td>{$this->fileTimeCreated}</td>
             <td>{$this->fileTimeEdited}</td>
             <td>{$this->fileLocation}</td>
+            <td>{$this->studentId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -147,8 +155,11 @@ class Log {
         } // Ends if
 
         return "<tr>
+            <td>{$this->logId}</td>
             <td>{$logTypeString}</td>
             <td>{$this->logTimeCreated}</td>
+            <td>{$this->loginAttemptId}</td>
+            <td>{$this->studentId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -165,8 +176,11 @@ class Log {
 
         $returnString =
         "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=log&id={$this->logId}'\">
+            <td>{$this->logId}</td>
             <td>{$logTypeString}</td>
             <td>{$this->logTimeCreated}</td>
+            <td>{$this->loginAttemptId}</td>
+            <td>{$this->studentId}</td>
         ";
 
         $returnString .= "
@@ -204,9 +218,11 @@ class LoginAttempt {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->loginAttemptId}</td>
             <td>{$this->loginAttemptUsername}</td>
             <td>{$this->loginAttemptTimeEntered}</td>
             <td>{$this->loginAttemptSuccess}</td>
+            <td>{$this->studentId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -241,10 +257,12 @@ class Student {
 
         $returnString =
         "<tr>
+            <td>{$this->studentId}</td>
             <td>{$this->studentFirstName}</td>
             <td>{$this->studentMiddleInitial}</td>
             <td>{$this->studentLastName}</td>
             <td>{$this->studentUsername}</td>
+            <td>{$this->schoolId}</td>
         ";
 
         $returnString .= "
@@ -258,10 +276,12 @@ class Student {
 
         $returnString =
         "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=student&id={$this->studentId}'\">
+            <td>{$this->studentId}</td>
             <td>{$this->studentFirstName}</td>
             <td>{$this->studentMiddleInitial}</td>
             <td>{$this->studentLastName}</td>
             <td>{$this->studentUsername}</td>
+            <td>{$this->schoolId}</td>
         ";
 
         $returnString .= "
@@ -298,6 +318,7 @@ class School {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->schoolId}</td>
             <td>{$this->schoolName}</td>
         </tr>\n";
 
@@ -328,12 +349,14 @@ class User {
     public function getTableData() {
 
         return "<tr>
+            <td>{$this->userId}</td>
             <td>{$this->userFirstName}</td>
             <td>{$this->userLastName}</td>
             <td>{$this->userEmail}</td>
             <td>{$this->userUsername}</td>
             <td>{$this->userPassword}</td>
             <td>{$this->userClassification}</td>
+            <td>{$this->schoolId}</td>
         </tr>\n";
 
     } // Ends getTableData function
