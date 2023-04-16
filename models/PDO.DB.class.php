@@ -94,7 +94,6 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -145,11 +144,9 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
                             <th>Log Type</th>
+                            <th>Associated Student Username</th>
                             <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
-                            <th>Student Username</th>
             </tr></thead>\n";
     
             foreach ($data as $activity) {
@@ -195,10 +192,8 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
                             <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
                             <th>Student Username</th>
             </tr></thead>\n";
     
@@ -257,7 +252,6 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -1446,10 +1440,16 @@ class DB {
             $outputTable = "<thead><tr>
                             <th>Login Attempt Username</th>
                             <th>Login Attempt Time Entered</th>
-                            <th>Login Attempt Success</th>
+                            <th>Login Attempt Outcome</th>
             </tr></thead>\n";
     
             foreach ($data as $loginAttempt) {
+
+                if ($loginAttempt->getLoginAttemptSuccess() == 0) {
+                    $loginAttempt->setLoginAttemptSuccess("Failed Login");
+                } elseif ($loginAttempt->getLoginAttemptSuccess() == 1) {
+                    $loginAttempt->setLoginAttemptSuccess("Successful Login");
+                } // Ends if
 
                 $relatedLog = $this->getLogByLoginAttemptID($loginAttempt->getLoginAttemptID());
                 $outputTable .= $loginAttempt->getTableData($relatedLog[0]);

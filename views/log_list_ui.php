@@ -2,6 +2,7 @@
 
 require_once "../views/common_ui.php";
 require_once "../controllers/validation_controller.php";
+require_once "../controllers/filter_controller.php";
 view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Logs", false, 1);
@@ -10,13 +11,15 @@ if (isset($_GET['recent'])) {
     view_log_list_recent();    
 } else if (isset($_GET['today'])) {
     view_log_list_created_today();
-} else if (isset($_GET['setFilters'])) {
-    action_log_list_set_filters(); 
-} else if (isset($_GET['clearFilters'])) {
-    action_log_list_clear_filters();
 } else {
     view_log_list_main();
 } // Ends if
+
+// else if (isset($_GET['setFilters'])) {
+//     create_log_filter_cookies(); 
+// } else if (isset($_GET['clearFilters'])) {
+//     destroy_log_filter_cookies();
+// } 
 
 view_common_footer();
 
@@ -127,10 +130,11 @@ function view_log_list_created_today() {
 
 function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
+    $checkedRecent = $checkedStudent = $checkedType = "\"";
+
     if (isset($_GET["sortBy"])) {
 
         $sortBy = $_GET["sortBy"];
-        $checkedRecent = $checkedStudent = $checkedType = "\"";
 
         switch ($sortBy) {
 
@@ -244,7 +248,7 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
         } else {
 
             echo('
-                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?clearFilters\'">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/controllers/filter_controller.php?clearLog\'">
                     Clear Filters
                     <span class="closebtn">&times;</span>
                 </div>
@@ -297,7 +301,7 @@ function view_log_list_filter_modal() {
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="https://seniordevteam1.in/views/log_list_ui.php?setFilters" method="post">
+                <form action="https://seniordevteam1.in/controllers/filter_controller.php?setLog" method="post">
 
                     <div class="modal-body">
 
@@ -346,59 +350,5 @@ function view_log_list_filter_modal() {
     ';
 
 } // Ends view_log_list_filter_modal
-
-function action_log_list_set_filters() {
-
-    date_default_timezone_set('EST');
-    $expire = time() + (60*180); // Expires in 3 hours
-    $path = "/";
-    $domain = "seniordevteam1.in";
-    $secure = false;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        setcookie("logSearchGeneralCookie", true, $expire, $path, $domain, $secure);
-
-        if (isset($_POST["logSearchUsername"])) {
-            setcookie("logSearchUsernameCookie", sanitize_string($_POST["logSearchUsername"]), $expire, $path, $domain, $secure);
-        }
-
-        if (isset($_POST["logSearchType"])) {
-            setcookie("logSearchTypeCookie", $_POST["logSearchType"], $expire, $path, $domain, $secure);
-        }
-
-        if (isset($_POST["logSearchTime"])) {
-            setcookie("logSearchTimeCookie", $_POST["logSearchTime"], $expire, $path, $domain, $secure);
-        }
-        
-    } // Ends if
-
-    header("Location: https://seniordevteam1.in/views/log_list_ui.php?log");
-    exit;
-
-} // Ends action_log_list_set_filters
-
-function action_log_list_clear_filters() {
-
-    unset($_COOKIE["logSearchGeneralCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("logSearchGeneralCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["logSearchUsernameCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("logSearchUsernameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["logSearchTypeCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("logSearchTypeCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["logSearchTimeCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("logSearchTimeCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    header("Location: https://seniordevteam1.in/views/log_list_ui.php");
-    exit;
-
-} // Ends action_log_list_clear_filters
 
 ?>
