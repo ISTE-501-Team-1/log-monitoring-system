@@ -210,7 +210,6 @@ class LoginAttempt {
 
     private $loginAttemptId;
     private $loginAttemptUsername;
-    private $loginAttemptPassword;
     private $loginAttemptTimeEntered;
     private $loginAttemptSuccess;
     private $studentId;
@@ -221,7 +220,6 @@ class LoginAttempt {
         return "<tr>
             <td>{$this->loginAttemptId}</td>
             <td>{$this->loginAttemptUsername}</td>
-            <td>{$this->loginAttemptPassword}</td>
             <td>{$this->loginAttemptTimeEntered}</td>
             <td>{$this->loginAttemptSuccess}</td>
             <td>{$this->studentId}</td>
@@ -232,7 +230,6 @@ class LoginAttempt {
     // Getters
     public function getLoginAttemptID() { return $this->loginAttemptId; }
     public function getLoginAttemptUsername() { return $this->loginAttemptUsername; }
-    public function getLoginAttemptPassword() { return $this->loginAttemptPassword; }
     public function getLoginAttemptTimeEntered() { return $this->loginAttemptTimeEntered; }
     public function getLoginAttemptSuccess() { return $this->loginAttemptSuccess; }
     public function getLoginAttemptStudentID() { return $this->studentId; }
@@ -240,7 +237,6 @@ class LoginAttempt {
     // Setters
     public function setloginAttemptID($loginAttemptId) { $this->loginAttemptId = $loginAttemptId; }
     public function setloginAttemptUsername($loginAttemptUsername) { $this->loginAttemptUsername = $loginAttemptUsername; }
-    public function setloginAttemptPassword($loginAttemptPassword) { $this->loginAttemptPassword = $loginAttemptPassword; }
     public function setloginAttemptTimeEntered($loginAttemptTimeEntered) { $this->loginAttemptTimeEntered = $loginAttemptTimeEntered; }
     public function setloginAttemptSuccess($loginAttemptSuccess) { $this->loginAttemptSuccess = $loginAttemptSuccess; }
     public function setloginAttemptStudentID($studentId) { $this->studentId = $studentId; }
