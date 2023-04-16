@@ -57,8 +57,10 @@ function view_student_list_main() {
 
     $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
 
+    $classArray = $db->getClassArray($currentUser[0], $currentUser[6]);
+
     view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage);
-    view_student_list_filter_modal();
+    view_student_list_filter_modal($classArray);
 
 } // Ends view_student_list_main()
 
@@ -78,8 +80,10 @@ function view_student_list_recent() {
     // Get the student objects for the current page
     $studentObjects = $db->getActivityStudentObjectsAsTable($currentUser[0], $currentPage, $recordsPerPage);
 
+    $classArray = $db->getClassArray($currentUser[0], $currentUser[6]);
+
     view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage);
-    view_student_list_filter_modal();
+    view_student_list_filter_modal($classArray);
 
 } // Ends view_student_list_recent
 
@@ -222,8 +226,8 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
 
 } // Ends view_student_list_table
 
-function view_student_list_filter_modal() {
-    
+function view_student_list_filter_modal($classArray) {
+
     echo '
     <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -240,14 +244,27 @@ function view_student_list_filter_modal() {
 
                             <label for="studentSearchUsername">Username:</label>
                             <input name="studentSearchUsername" type="search" id="studentSearchBar" placeholder="Username">
-
+                            
                             <br>
 
                             <!--Class Dropdown Filter-->
                             <label for="studentSearchClass" style="padding-top:1em">Class:</label>
-                            <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
-                            
-                            <br>
+                            <select name="studentSearchClass" id="studentSearchClass">
+    ';
+
+    $classDropdown = "";
+    foreach ($classArray as $class) {
+        $classID = $class['classId'];
+        $className = $class['className'];
+        $classDropdown .= '<option value="' . $classID . '">' . $className . '</option>';
+    }
+
+    echo $classDropdown;
+                                
+    echo '
+                            </select>
+
+                            <br />
 
                     </div>
 
@@ -263,17 +280,11 @@ function view_student_list_filter_modal() {
     </div>
     ';
 
-// <!--Last Log Dropdown Filter-->
-// <label for="studentSearchLastLog" style="padding-top:1em">Last Log:</label>
-// <select name="studentSearchLastLog" id="studentLastLog">
-//     <option value="any">Any</option>
-//     <option value="lastDay">Last Day</option>
-//     <option value="lastThreeDays">Last 3 Days</option>
-//     <option value="lastWeek">Last Week</option>
-//     <option value="lastMonth">Last Month</option>
-// </select>
+    // <br>
 
-// <br>
+    //                         <!--Class Dropdown Filter-->
+    //                         <label for="studentSearchClass" style="padding-top:1em">Class:</label>
+    //                         <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
 
 } // Ends view_student_list_filter_modal
 

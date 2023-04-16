@@ -15,38 +15,76 @@ function view_log_details_main() {
 
     $logTypeString = "";
     $logDetailsOutput = "";
+    $loginOutcomeString = "";
 
     if ($currentLog[1] == 0) {
 
         $logTypeString = "Login";
         $currentLoginAttempt = $db->getLoginAttemptByID($currentLog[3]);
 
+        if ($currentLoginAttempt[4] == 0) {
+            $loginOutcomeString = "Failure";
+        } elseif ($currentLoginAttempt[4] == 1) {
+            $loginOutcomeString = "Success";
+        }
+
         $logDetailsOutput = '
                     <div class="d-flex gap-2">
-                        <p class="h6 lh-1">Attempt ID:</p>
-                        <p class="fs-6 lh-1">'.$currentLoginAttempt[0].'</p>
-                    </div>
-
-                    <div class="d-flex gap-2">
                         <p class="h6 lh-1">Attempt Outcome:</p>
-                        <p class="fs-6 lh-1">'.$currentLoginAttempt[4].'</p>
+                        <p class="fs-6 lh-1">'.$loginOutcomeString.'</p>
                     </div>
 
                     <div class="d-flex gap-2">
                         <p class="h6 lh-1">Attempt Username:</p>
                         <p class="fs-6 lh-1">'.$currentLoginAttempt[1].'</p>
                     </div>
-
-                    <div class="d-flex gap-2">
-                        <p class="h6 lh-1">Attempt Password:</p>
-                        <p class="fs-6 lh-1">'.$currentLoginAttempt[2].'</p>
-                    </div>
         ';
 
     } else if ($currentLog[1] == 1) {
+
         $logTypeString = "File Created";
+        $currentFile = $db->getFileByID($currentLog[3]);
+
+        $logDetailsOutput = '
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Name:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[1].'</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Location:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[4].'</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Time Created:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[2].'</p>
+                    </div>
+        ';
+
     } else if ($currentLog[1] == 2) {
+
         $logTypeString = "File Modified";
+
+        $currentFile = $db->getFileByID($currentLog[3]);
+
+        $logDetailsOutput = '
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Name:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[1].'</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Location:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[4].'</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">File Time Modified:</p>
+                        <p class="fs-6 lh-1">'.$currentFile[3].'</p>
+                    </div>
+        ';
+
     } // Ends if
 
     echo('
@@ -71,16 +109,14 @@ function view_log_details_main() {
                         <p class="h6 lh-1">Log Type:</p>
                         <p class="fs-6 lh-1">'.$logTypeString.'</p>
                     </div>
-    ');
 
-    echo ($logDetailsOutput);
-
-    echo ('
                     <div class="d-flex gap-2">
                         <p class="h6 lh-1">Log Time Created:</p>
                         <p class="fs-6 lh-1">'.$currentLog[2].'</p>
                     </div>
     ');
+
+    echo ($logDetailsOutput);
 
     if ($db->getStudentByID($currentLog[4]) !== null) {
         

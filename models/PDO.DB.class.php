@@ -444,6 +444,44 @@ class DB {
 
     } // Ends getAllClassObjectsAsTable
 
+    public function getClassArray($userID, $userType) {
+
+        if ($userType == "Admin") {
+
+            $data = $this->getAllObjects("SELECT classId, className FROM class", "ClassTable");
+
+        } else if ($userType == "Professor") {
+
+            $data = $this->getAllObjects("SELECT classId, className FROM class WHERE classProfessor = $userID", "ClassTable");
+
+        } else if ($userType == "Support") {
+
+            $supportUser = $this->getUserByID($userID);
+            $data = $this->getAllObjects("SELECT classId, className FROM class WHERE schoolId = $supportUser[7]", "ClassTable");
+
+        } // Ends if
+
+        if (!empty($data)) {
+
+            foreach ($data as $item) {
+
+                $class = array();
+                $class['classId'] = $item->getClassID();
+                $class['className'] = $item->getClassName();
+                $resultArray[] = $class;
+
+            } // Ends foreach
+
+            return $resultArray;
+
+        } else {
+
+            return "ERROR404";
+
+        } // Ends if
+
+    } // Ends getClassArray
+
 /********************************CLASSENTRY FUNCTIONS*************************************/
     
     public function getAllClassEntryObjectsAsTable() {
@@ -564,6 +602,33 @@ class DB {
         } // Ends if
 
     } // Ends getFileObjectsByStudentCount
+
+    public function getFileByID($fileID) {
+
+        $data = $this->getAllObjects("SELECT * FROM file WHERE fileId = '$fileID'", "File");
+
+        if (count($data) > 0) {
+
+            $outputFile[] = $data[0]->getFileID();
+            $outputFile[] = $data[0]->getFileName();
+            $outputFile[] = $data[0]->getFileTimeCreated();
+            $outputFile[] = $data[0]->getFileTimeEdited();
+            $outputFile[] = $data[0]->getFileLocation();
+            $outputFile[] = $data[0]->getFileStudentID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputFile = "ERROR500";
+
+        } else {
+
+            $outputFile = "ERROR404";
+
+        }// Ends if
+
+        return $outputFile;
+
+    } // Ends getFileByID
 
 /********************************LOG FUNCTIONS*************************************/
     
