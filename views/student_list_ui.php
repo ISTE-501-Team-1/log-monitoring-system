@@ -2,19 +2,22 @@
 
 require_once "../views/common_ui.php";
 require_once "../controllers/validation_controller.php";
+require_once "../controllers/filter_controller.php";
 view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Student", false, 2);
 
 if (isset($_GET['recent'])) {
     view_student_list_recent();
-} elseif (isset($_GET['setFilters'])) {
-    action_student_list_set_filters();
-} elseif (isset($_GET['clearFilters'])) {
-    action_student_list_clear_filters();
 } else {
     view_student_list_main();
 } // Ends if
+
+// elseif (isset($_GET['setFilters'])) {
+//     create_student_filter_cookies();
+// } elseif (isset($_GET['clearFilters'])) {
+//     destroy_student_filter_cookies();
+// } 
 
 view_common_footer();
 
@@ -108,10 +111,11 @@ function view_student_list_recent() {
 
 function view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage) {
 
+    $checkedID = $checkedUsername = $checkedSchool = $checkedLastName = "\"";
+
     if (isset($_GET["sortBy"])) {
 
         $sortBy = $_GET["sortBy"];
-        $checkedID = $checkedUsername = $checkedSchool = "\"";
 
         switch ($sortBy) {
 
@@ -234,7 +238,7 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
         } else {
 
             echo('
-                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?clearFilters\'">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/controllers/filter_controller.php?clearStudent\'">
                     Clear Filters
                     <span class="closebtn">&times;</span>
                 </div>
@@ -282,7 +286,7 @@ function view_student_list_filter_modal($classArray) {
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <form action="https://seniordevteam1.in/views/student_list_ui.php?setFilters" method="post">
+                <form action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
 
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Student Search Filters</h5>
@@ -335,59 +339,5 @@ function view_student_list_filter_modal($classArray) {
     ';
 
 } // Ends view_student_list_filter_modal
-
-function action_student_list_set_filters() {
-
-    date_default_timezone_set('EST');
-    $expire = time() + (60*180); // Expires in 3 hours
-    $path = "/";
-    $domain = "seniordevteam1.in";
-    $secure = false;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        setcookie("studentSearchGeneralCookie", true, $expire, $path, $domain, $secure);
-
-        if (isset($_POST["studentSearchUsername"])) {
-            setcookie("studentSearchUsernameCookie", sanitize_string($_POST["studentSearchUsername"]), $expire, $path, $domain, $secure);
-        }
-
-        if (isset($_POST["studentSearchLastName"])) {
-            setcookie("studentSearchLastNameCookie", sanitize_string($_POST["studentSearchLastName"]), $expire, $path, $domain, $secure);
-        }
-
-        if (isset($_POST["studentSearchClass"])) {
-            setcookie("studentSearchClassCookie", $_POST["studentSearchClass"], $expire, $path, $domain, $secure);
-        }
-        
-    } // Ends if
-
-    header("Location: https://seniordevteam1.in/views/student_list_ui.php?log");
-    exit;
-
-} // Ends action_student_list_set_filters
-
-function action_student_list_clear_filters() {
-
-    unset($_COOKIE["studentSearchGeneralCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("studentSearchGeneralCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["studentSearchUsernameCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("studentSearchUsernameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["studentSearchLastNameCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("studentSearchLastNameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    unset($_COOKIE["studentSearchClassCookie"]);
-    $params = session_get_cookie_params();
-    setcookie("studentSearchClassCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
-
-    header("Location: https://seniordevteam1.in/views/student_list_ui.php");
-    exit;
-
-} // Ends action_student_list_clear_filters
 
 ?>
