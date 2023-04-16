@@ -8,6 +8,10 @@ view_common_navigation("Search Student", false, 2);
 
 if (isset($_GET['recent'])) {
     view_student_list_recent();
+} elseif (isset($_GET['setFilters'])) {
+    action_student_list_set_filters();
+} elseif (isset($_GET['clearFilters'])) {
+    action_student_list_clear_filters();
 } else {
     view_student_list_main();
 } // Ends if
@@ -26,27 +30,42 @@ function view_student_list_main() {
 
     if (isset($_GET["student"])) {
 
-        $filterByUsername = $filterByClass = $filterByLog = $sortBy = "";
+        $filterByUsername = $filterByClass = $filterByLastName = $sortBy = "";
 
         if (isset($_GET["sortBy"])) {
             $sortBy = $_GET["sortBy"];
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            if ($_POST["studentSearchUsername"]) {
-                $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
-            }
+        //     if ($_POST["studentSearchUsername"]) {
+        //         $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
+        //     }
 
-            if ($_POST["studentSearchClass"]) {
-                $filterByClass = sanitize_string($_POST["studentSearchClass"]);
-            }
+        //     if ($_POST["studentSearchLastName"]) {
+        //         $filterByLastName = sanitize_string($_POST["studentSearchLastName"]);
+        //     }
+
+        //     if ($_POST["studentSearchClass"]) {
+        //         $filterByClass = sanitize_string($_POST["studentSearchClass"]);
+        //     }
             
-            //$filterByLog = sanitize_string($_POST["studentSearchLastLog"]);
-        } // Ends if
+        // } // Ends if
 
-        $studentObjects = $db->getStudentObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLog);
-        $totalRows = $db->getStudentObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByClass, $filterByLog);
+        if (isset($_COOKIE["studentSearchUsernameCookie"])) {
+            $filterByUsername = $_COOKIE["studentSearchUsernameCookie"];
+        }
+
+        if (isset($COOKIE["studentSearchLastNameCookie"])) {
+            $filterByLastName = $_COOKIE["studentSearchLastNameCookie"];
+        }
+
+        if (isset($_COOKIE["studentSearchClassCookie"])) {
+            $filterByClass = $_COOKIE["studentSearchClassCookie"];
+        }
+
+        $studentObjects = $db->getStudentObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLastName);
+        $totalRows = $db->getStudentObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByClass, $filterByLastName);
     
     } else {
         
@@ -89,6 +108,30 @@ function view_student_list_recent() {
 
 function view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage) {
 
+    if (isset($_GET["sortBy"])) {
+
+        $sortBy = $_GET["sortBy"];
+        $checkedID = $checkedUsername = $checkedSchool = "\"";
+
+        switch ($sortBy) {
+
+            case "id":
+                $checkedID = "checked";
+                break;
+            case "username":
+                $checkedUsername = "checked";
+                break;
+            case "school":
+                $checkedSchool = "checked";
+                break;
+            case "lastName":
+                $checkedLastName = "checked";
+                break;
+
+        } // Ends switch
+        
+    } // Ends if
+
     echo('
     <!--Main layout-->
     <main style="margin-top: 58px">
@@ -112,20 +155,26 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="StudentID" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=id\'" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="StudentID" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=id\'" '.$checkedID.' />
                                 <label class="form-check-label" for="MostRecent"> ID </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=username\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="Username" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=username\'" '.$checkedUsername.' />
                                 <label class="form-check-label" for="Username"> Username </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=school\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="School" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=school\'" '.$checkedSchool.' />
                                 <label class="form-check-label" for="School"> School </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="SortBy" id="LastName" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?student&sortBy=lastName\'" '.$checkedLastName.' />
+                                <label class="form-check-label" for="LastName"> Last Name </label>
                             </div>
                         </li>
                     </ul>
@@ -141,37 +190,37 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
     ');
 
     // Displays chips for each filter that is added
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_COOKIE["studentSearchGeneralCookie"])) {
 
-        if (isset($_POST["studentSearchUsername"]) && !empty(sanitize_string($_POST["studentSearchUsername"]))) {
+        if (isset($_COOKIE["studentSearchUsernameCookie"]) && !empty($_COOKIE["studentSearchUsernameCookie"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Username: '.sanitize_string($_POST["studentSearchUsername"]).'
+                    Username: '.$_COOKIE["studentSearchUsernameCookie"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_POST["studentSearchClass"]) && !empty(sanitize_string($_POST["studentSearchClass"]))) {
+        if (isset($_COOKIE["studentSearchLastNameCookie"]) && !empty($_COOKIE["studentSearchLastNameCookie"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Class ID: '.sanitize_string($_POST["studentSearchClass"]).'
+                    Last Name: '.$_COOKIE["studentSearchLastNameCookie"].'
                 </div>
             ');
 
         } // Ends if
 
-        // if (isset($_POST["studentSearchLastLog"]) && !empty(sanitize_string($_POST["studentSearchLastLog"]))) {
+        if (isset($_COOKIE["studentSearchClassCookie"]) && !empty($_COOKIE["studentSearchClassCookie"])) {
 
-        //     echo('
-        //         <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-        //             Username: '.sanitize_string($_POST["studentSearchLastLog"]).'
-        //         </div>
-        //     ');
+            echo('
+                <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
+                    Class: '.$_COOKIE["studentSearchClassCookie"].'
+                </div>
+            ');
 
-        // } // Ends if
+        } // Ends if
 
         if (isset($_GET['recent'])) {
 
@@ -185,7 +234,7 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
         } else {
 
             echo('
-                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php\'">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php?clearFilters\'">
                     Clear Filters
                     <span class="closebtn">&times;</span>
                 </div>
@@ -233,7 +282,7 @@ function view_student_list_filter_modal($classArray) {
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <form action="https://seniordevteam1.in/views/student_list_ui.php?student" method="post">
+                <form action="https://seniordevteam1.in/views/student_list_ui.php?setFilters" method="post">
 
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Student Search Filters</h5>
@@ -245,11 +294,16 @@ function view_student_list_filter_modal($classArray) {
                             <label for="studentSearchUsername">Username:</label>
                             <input name="studentSearchUsername" type="search" id="studentSearchBar" placeholder="Username">
                             
-                            <br>
+                            <br />
+
+                            <label for="studentSearchLastName">Last Name:</label>
+                            <input name="studentSearchLastName" type="search" id="studentSearchBar" placeholder="Last Name">
+                            
+                            <br />
 
                             <!--Class Dropdown Filter-->
                             <label for="studentSearchClass" style="padding-top:1em">Class:</label>
-                            <select name="studentSearchClass" id="studentSearchClass">
+                            <select name="studentSearchClass" id="studentSearchClass" style="width: 200px; overflow-wrap: break-word; word-wrap: break-word;">
     ';
 
     $classDropdown = "";
@@ -280,12 +334,60 @@ function view_student_list_filter_modal($classArray) {
     </div>
     ';
 
-    // <br>
-
-    //                         <!--Class Dropdown Filter-->
-    //                         <label for="studentSearchClass" style="padding-top:1em">Class:</label>
-    //                         <input type="search" id="studentClassSearch" name="studentSearchClass" placeholder="Class ID">
-
 } // Ends view_student_list_filter_modal
+
+function action_student_list_set_filters() {
+
+    date_default_timezone_set('EST');
+    $expire = time() + (60*180); // Expires in 3 hours
+    $path = "/";
+    $domain = "seniordevteam1.in";
+    $secure = false;
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        setcookie("studentSearchGeneralCookie", true, $expire, $path, $domain, $secure);
+
+        if (isset($_POST["studentSearchUsername"])) {
+            setcookie("studentSearchUsernameCookie", sanitize_string($_POST["studentSearchUsername"]), $expire, $path, $domain, $secure);
+        }
+
+        if (isset($_POST["studentSearchLastName"])) {
+            setcookie("studentSearchLastNameCookie", sanitize_string($_POST["studentSearchLastName"]), $expire, $path, $domain, $secure);
+        }
+
+        if (isset($_POST["studentSearchClass"])) {
+            setcookie("studentSearchClassCookie", $_POST["studentSearchClass"], $expire, $path, $domain, $secure);
+        }
+        
+    } // Ends if
+
+    header("Location: https://seniordevteam1.in/views/student_list_ui.php?log");
+    exit;
+
+} // Ends action_student_list_set_filters
+
+function action_student_list_clear_filters() {
+
+    unset($_COOKIE["studentSearchGeneralCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("studentSearchGeneralCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["studentSearchUsernameCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("studentSearchUsernameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["studentSearchLastNameCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("studentSearchLastNameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["studentSearchClassCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("studentSearchClassCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    header("Location: https://seniordevteam1.in/views/student_list_ui.php");
+    exit;
+
+} // Ends action_student_list_clear_filters
 
 ?>

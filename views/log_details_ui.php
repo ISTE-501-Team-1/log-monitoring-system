@@ -22,9 +22,9 @@ function view_log_details_main() {
         $logTypeString = "Login";
         $currentLoginAttempt = $db->getLoginAttemptByID($currentLog[3]);
 
-        if ($currentLoginAttempt[4] == 0) {
+        if ($currentLoginAttempt[3] == 0) {
             $loginOutcomeString = "Failure";
-        } elseif ($currentLoginAttempt[4] == 1) {
+        } elseif ($currentLoginAttempt[3] == 1) {
             $loginOutcomeString = "Success";
         }
 

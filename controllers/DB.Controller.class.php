@@ -108,12 +108,10 @@ class File {
     public function getTableData() {
 
         return "<tr>
-            <td>{$this->fileId}</td>
             <td>{$this->fileName}</td>
+            <td>{$this->fileLocation}</td>
             <td>{$this->fileTimeCreated}</td>
             <td>{$this->fileTimeEdited}</td>
-            <td>{$this->fileLocation}</td>
-            <td>{$this->studentId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -155,11 +153,9 @@ class Log {
         } // Ends if
 
         return "<tr>
-            <td>{$this->logId}</td>
             <td>{$logTypeString}</td>
-            <td>{$this->logTimeCreated}</td>
-            <td>{$this->loginAttemptId}</td>
             <td>{$this->studentId}</td>
+            <td>{$this->logTimeCreated}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -176,11 +172,9 @@ class Log {
 
         $returnString =
         "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=log&id={$this->logId}'\">
-            <td>{$this->logId}</td>
             <td>{$logTypeString}</td>
-            <td>{$this->logTimeCreated}</td>
-            <td>{$this->loginAttemptId}</td>
             <td>{$this->studentId}</td>
+            <td>{$this->logTimeCreated}</td>
         ";
 
         $returnString .= "
@@ -214,15 +208,12 @@ class LoginAttempt {
     private $loginAttemptSuccess;
     private $studentId;
 
-    // This function will be changed depending on the frontend team's styling
-    public function getTableData() {
+    public function getTableData($logId) {
 
-        return "<tr>
-            <td>{$this->loginAttemptId}</td>
+        return "<tr onclick=\"window.location='https://seniordevteam1.in/views/log_details_ui.php?id={$logId}'\">
             <td>{$this->loginAttemptUsername}</td>
             <td>{$this->loginAttemptTimeEntered}</td>
             <td>{$this->loginAttemptSuccess}</td>
-            <td>{$this->studentId}</td>
         </tr>\n";
 
     } // Ends getTableData function
@@ -257,7 +248,6 @@ class Student {
 
         $returnString =
         "<tr>
-            <td>{$this->studentId}</td>
             <td>{$this->studentFirstName}</td>
             <td>{$this->studentMiddleInitial}</td>
             <td>{$this->studentLastName}</td>
@@ -276,7 +266,6 @@ class Student {
 
         $returnString =
         "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/activity_controller.php?type=student&id={$this->studentId}'\">
-            <td>{$this->studentId}</td>
             <td>{$this->studentFirstName}</td>
             <td>{$this->studentMiddleInitial}</td>
             <td>{$this->studentLastName}</td>

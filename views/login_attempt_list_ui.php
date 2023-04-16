@@ -27,13 +27,13 @@ function view_login_attempt_list_created_today($successType) {
     $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
     
     // Get the login attempt objects for the current page
-    $logObjects = $db->getLoginAttemptsTodayAsTable($successType, $currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
+    $loginAttemptObjects = $db->getLoginAttemptsTodayAsTable($successType, $currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
 
-    view_login_attempt_list_table($logObjects, $totalNumberOfPages, $currentPage);
+    view_login_attempt_list_table($loginAttemptObjects, $totalNumberOfPages, $currentPage);
 
 } // Ends view_login_attempt_list_created_today
 
-function view_login_attempt_list_table($logObjects, $totalNumberOfPages, $currentPage) {
+function view_login_attempt_list_table($loginAttemptObjects, $totalNumberOfPages, $currentPage) {
 
     echo('
     <!--Main layout-->
@@ -62,8 +62,8 @@ function view_login_attempt_list_table($logObjects, $totalNumberOfPages, $curren
         <div class="container pt-2 long-table-container">
             <div class="table-responsive search-table">
 
-                <table class="table table-bordered table-hover mb-0">
-                    '.$logObjects.'
+                <table class="table table-hover">
+                    '.$loginAttemptObjects.'
                 </table>
 
             </div>

@@ -518,12 +518,10 @@ class DB {
         if (count($data) > 0) {
             
             $outputTable = "<thead><tr>
-                            <th>File ID</th>
-                            <th>File Name</th>
-                            <th>File Time Created</th>
-                            <th>File Time Edited</th>
-                            <th>File Location</th>
-                            <th>Student ID</th>
+                                <th>File Name</th>
+                                <th>File Location</th>
+                                <th>File Time Created</th>
+                                <th>File Time Edited</th>
             </tr></thead>\n";
     
             foreach ($data as $file) {
@@ -559,12 +557,10 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>File ID</th>
                             <th>File Name</th>
+                            <th>File Location</th>
                             <th>File Time Created</th>
                             <th>File Time Edited</th>
-                            <th>File Location</th>
-                            <th>Student ID</th>
             </tr></thead>\n";
     
             foreach ($data as $file) {
@@ -639,11 +635,9 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
                             <th>Log Type</th>
                             <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
-                            <th>Student ID</th>
+                            <th>Student Username</th>
             </tr></thead>\n";
     
             foreach ($data as $log) {
@@ -765,11 +759,9 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
                             <th>Log Type</th>
+                            <th>Associated Student Username</th>
                             <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
-                            <th>Student Username</th>
             </tr></thead>\n";
     
             foreach ($data as $log) {
@@ -803,7 +795,7 @@ class DB {
 
         if ($userType == "Admin") {
 
-            $data = $this->getAllObjects("SELECT * FROM log LIMIT $offset, $recordsPerPage", "Log");
+            $data = $this->getAllObjects("SELECT * FROM log ORDER BY logTimeCreated DESC LIMIT $offset, $recordsPerPage", "Log");
 
         } else if ($userType == "Professor") { // Gets all logs for students that are in the classes under the professor
 
@@ -811,6 +803,7 @@ class DB {
             INNER JOIN student ON log.studentId = student.studentId 
             INNER JOIN classEntry ON student.studentId = classEntry.studentId 
             INNER JOIN class ON classEntry.classId = class.classId AND class.classProfessor = $userID
+            ORDER BY logTimeCreated DESC
             LIMIT $offset, $recordsPerPage", 
             "Log");
 
@@ -820,6 +813,7 @@ class DB {
             INNER JOIN student ON log.studentId = student.studentId 
             INNER JOIN school ON student.schoolId = school.schoolId 
             INNER JOIN user ON school.schoolId = user.schoolId AND user.userId = $userID
+            ORDER BY logTimeCreated DESC
             LIMIT $offset, $recordsPerPage", 
             "Log");
 
@@ -828,11 +822,9 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
-                            <th>Log Type</th>
-                            <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
-                            <th>Student Username</th>
+                                <th>Log Type</th>
+                                <th>Associated Student Username</th>
+                                <th>Log Time Created</th>
             </tr></thead>\n";
     
             foreach ($data as $log) {
@@ -865,9 +857,9 @@ class DB {
 
         $sortQuery = "";
         if ($sortBy === "type") {
-            $sortQuery = "GROUP BY log.logId ORDER BY log.logType";
+            $sortQuery = "GROUP BY log.logId ORDER BY log.logType, log.logTimeCreated DESC";
         } elseif ($sortBy === "student") {
-            $sortQuery = "GROUP BY log.logId ORDER BY log.studentId";
+            $sortQuery = "GROUP BY log.logId ORDER BY student.studentUsername, log.logTimeCreated DESC";
         } elseif ($sortBy === "mostRecent") {
             $sortQuery = "GROUP BY log.logId ORDER BY log.logTimeCreated DESC";
         }
@@ -948,11 +940,9 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Log ID</th>
-                            <th>Log Type</th>
-                            <th>Log Time Created</th>
-                            <th>Login Attempt ID</th>
-                            <th>Student Username</th>
+                <th>Log Type</th>
+                <th>Associated Student Username</th>
+                <th>Log Time Created</th>
             </tr></thead>\n";
     
             foreach ($data as $log) {
@@ -1130,6 +1120,32 @@ class DB {
 
     } // Ends getLogByID
 
+    public function getLogByLoginAttemptID($loginAttemptID) {
+
+        $data = $this->getAllObjects("SELECT * FROM log WHERE loginAttemptId = '$loginAttemptID'", "Log");
+
+        if (count($data) > 0) {
+
+            $outputLog[] = $data[0]->getLogID();
+            $outputLog[] = $data[0]->getLogType();
+            $outputLog[] = $data[0]->getLogTimeCreated();
+            $outputLog[] = $data[0]->getLogLoginAttemptID();
+            $outputLog[] = $data[0]->getLogStudentID();
+    
+        } elseif (count($data) > 1) {
+
+            $outputLog = "ERROR500";
+
+        } else {
+
+            $outputLog = "ERROR404";
+
+        }// Ends if
+
+        return $outputLog;
+
+    } // Ends getLogByLoginAttemptID
+
     public function getLogLatestByStudentID($studentID) {
 
         $data = $this->getAllObjects("SELECT * FROM log
@@ -1168,9 +1184,7 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Login Attempt ID</th>
                             <th>Login Attempt Username</th>
-                            <th>Login Attempt Password</th>
                             <th>Login Attempt Time Entered</th>
                             <th>Login Attempt Success</th>
                             <th>Student ID</th>
@@ -1211,9 +1225,7 @@ class DB {
         } // Ends try catch
 
         $outputTable = "<thead><tr>
-                        <th>Login Attempt ID</th>
                         <th>Login Attempt Username</th>
-                        <th>Login Attempt Password</th>
                         <th>Login Attempt Time Entered</th>
                         <th>Login Attempt Success</th>
                         <th>Student ID</th>
@@ -1253,9 +1265,7 @@ class DB {
         } // Ends try catch
 
         $outputTable = "<thead><tr>
-                        <th>Login Attempt ID</th>
                         <th>Login Attempt Username</th>
-                        <th>Login Attempt Password</th>
                         <th>Login Attempt Time Entered</th>
                         <th>Login Attempt Success</th>
                         <th>Student ID</th>
@@ -1434,17 +1444,15 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Login Attempt ID</th>
                             <th>Login Attempt Username</th>
-                            <th>Login Attempt Password</th>
                             <th>Login Attempt Time Entered</th>
                             <th>Login Attempt Success</th>
-                            <th>Student ID</th>
             </tr></thead>\n";
     
             foreach ($data as $loginAttempt) {
 
-                $outputTable .= $loginAttempt->getTableData();
+                $relatedLog = $this->getLogByLoginAttemptID($loginAttempt->getLoginAttemptID());
+                $outputTable .= $loginAttempt->getTableData($relatedLog[0]);
 
             } // Ends loginAttempt foreach
     
@@ -1465,7 +1473,6 @@ class DB {
 
             $outputLoginAttempt[] = $data[0]->getLoginAttemptID();
             $outputLoginAttempt[] = $data[0]->getLoginAttemptUsername();
-            $outputLoginAttempt[] = $data[0]->getLoginAttemptPassword();
             $outputLoginAttempt[] = $data[0]->getLoginAttemptTimeEntered();
             $outputLoginAttempt[] = $data[0]->getLoginAttemptSuccess();
             $outputLoginAttempt[] = $data[0]->getLoginAttemptStudentID();
@@ -1543,7 +1550,6 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -1592,7 +1598,6 @@ class DB {
         } // Ends try catch
 
         $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -1642,7 +1647,6 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -1674,7 +1678,7 @@ class DB {
 
     } // Ends getStudentObjectsByRoleAsTable
 
-    public function getStudentObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLog) {
+    public function getStudentObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLastName) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
 
@@ -1683,6 +1687,8 @@ class DB {
             $sortQuery = "GROUP BY student.studentId, student.schoolId ORDER BY student.schoolId";
         } elseif ($sortBy === "username") {
             $sortQuery = "GROUP BY student.studentUsername ORDER BY student.studentUsername";
+        } elseif ($sortBy === "lastName") {
+            $sortQuery = "GROUP BY student.studentLastName ORDER BY student.studentLastName";
         }
 
         $filterConditions = array();
@@ -1691,21 +1697,13 @@ class DB {
             $filterConditions[] = "student.studentUsername = \"$filterByUsername\"";
         }
         
+        if (!empty($filterByLastName)) {
+            $filterConditions[] = "student.studentLastName = $filterByLastName";
+        }
+
         if (!empty($filterByClass)) {
             $filterConditions[] = "class.classId = $filterByClass";
         }
-
-        // if ($filterByLog === "lastDay") {
-        //     $filterConditions[] = "class.classId = $filterByClass";
-        // } elseif ($filterByLog === "lastDay") {
-
-        // } elseif ($filterByLog === "lastThreeDays") {
-
-        // } elseif ($filterByLog === "lastWeek") {
-
-        // } elseif ($filterByLog === "lastMonth") {
-
-        // }
 
         if ($userType == "Admin") {
 
@@ -1744,7 +1742,6 @@ class DB {
         if (count($data) > 0) {
 
             $outputTable = "<thead><tr>
-                            <th>Student ID</th>
                             <th>Student First Name</th>
                             <th>Student Middle Initial</th>
                             <th>Student Last Name</th>
@@ -1824,18 +1821,6 @@ class DB {
         if (!empty($filterByClass)) {
             $filterConditions[] = "class.classId = $filterByClass";
         }
-
-        // if ($filterByLog === "lastDay") {
-        //     $filterConditions[] = "class.classId = $filterByClass";
-        // } elseif ($filterByLog === "lastDay") {
-
-        // } elseif ($filterByLog === "lastThreeDays") {
-
-        // } elseif ($filterByLog === "lastWeek") {
-
-        // } elseif ($filterByLog === "lastMonth") {
-
-        // }
 
         if ($userType == "Admin") {
 

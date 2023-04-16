@@ -10,6 +10,10 @@ if (isset($_GET['recent'])) {
     view_log_list_recent();    
 } else if (isset($_GET['today'])) {
     view_log_list_created_today();
+} else if (isset($_GET['setFilters'])) {
+    action_log_list_set_filters(); 
+} else if (isset($_GET['clearFilters'])) {
+    action_log_list_clear_filters();
 } else {
     view_log_list_main();
 } // Ends if
@@ -34,21 +38,33 @@ function view_log_list_main() {
             $sortBy = $_GET["sortBy"];
         }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            if (isset($_POST["logSearchUsername"])) {
-                $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
-            }
+        //     if (isset($_POST["logSearchUsername"])) {
+        //         $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
+        //     }
 
-            if (isset($_POST["logSearchType"])) {
-                $filterByType = $_POST["logSearchType"];
-            }
+        //     if (isset($_POST["logSearchType"])) {
+        //         $filterByType = $_POST["logSearchType"];
+        //     }
 
-            if (isset($_POST["logSearchTime"])) {
-                $filterByTime = $_POST["logSearchTime"];
-            }
+        //     if (isset($_POST["logSearchTime"])) {
+        //         $filterByTime = $_POST["logSearchTime"];
+        //     }
             
-        } // Ends if
+        // } // Ends if
+
+        if (isset($_COOKIE["logSearchUsernameCookie"])) {
+            $filterByUsername = $_COOKIE["logSearchUsernameCookie"];
+        }
+
+        if (isset($COOKIE["logSearchTypeCookie"])) {
+            $filterByType = $_COOKIE["logSearchTypeCookie"];
+        }
+
+        if (isset($_COOKIE["logSearchTimeCookie"])) {
+            $filterByTime = $_COOKIE["logSearchTimeCookie"];
+        }
 
         $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByTime, $filterByType);
         $totalRows = $db->getLogObjectsByRoleFilteredCount($currentUser[0], $currentUser[6], $sortBy, $filterByUsername, $filterByTime, $filterByType);
@@ -111,6 +127,27 @@ function view_log_list_created_today() {
 
 function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
+    if (isset($_GET["sortBy"])) {
+
+        $sortBy = $_GET["sortBy"];
+        $checkedRecent = $checkedStudent = $checkedType = "\"";
+
+        switch ($sortBy) {
+
+            case "mostRecent":
+                $checkedRecent = "checked";
+                break;
+            case "student":
+                $checkedStudent = "checked";
+                break;
+            case "type":
+                $checkedType = "checked";
+                break;
+
+        } // Ends switch
+        
+    } // Ends if
+
     echo('
     <!--Main layout-->
     <main style="margin-top: 58px">
@@ -134,19 +171,19 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
                     <ul class="dropdown-menu sort-menu" aria-labelledby="dropdownMenuButton">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=mostRecent\'" checked />
+                                <input class="form-check-input" type="radio" name="SortBy" id="MostRecent" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=mostRecent\'" '.$checkedRecent.' />
                                 <label class="form-check-label" for="MostRecent"> Most Recent </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Student" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=student\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="Student" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=student\'" '.$checkedStudent.' />
                                 <label class="form-check-label" for="Student"> Student </label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="SortBy" id="Type" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=type\'" />
+                                <input class="form-check-input" type="radio" name="SortBy" id="Type" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?log&sortBy=type\'" '.$checkedType.' />
                                 <label class="form-check-label" for="Type"> Type </label>
                             </div>
                         </li>
@@ -163,33 +200,33 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
     ');
 
     // Displays chips for each filter that is added
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_COOKIE["logSearchGeneralCookie"])) {
 
-        if (isset($_POST["logSearchTime"])) {
+        if (isset($_COOKIE["logSearchTimeCookie"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Time: '.$_POST["logSearchTime"].'
+                    Time: '.$_COOKIE["logSearchTimeCookie"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_POST["logSearchType"])) {
+        if (isset($_COOKIE["logSearchTypeCookie"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Type: '.$_POST["logSearchType"].'
+                    Type: '.$_COOKIE["logSearchType"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_POST["logSearchUsername"]) && !empty(sanitize_string($_POST["logSearchUsername"]))) {
+        if (isset($_COOKIE["logSearchUsernameCookie"]) && !empty($_COOKIE["logSearchUsernameCookie"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Username: '.sanitize_string($_POST["logSearchUsername"]).'
+                    Username: '.$_COOKIE["logSearchUsernameCookie"].'
                 </div>
             ');
 
@@ -207,7 +244,7 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
         } else {
 
             echo('
-                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php\'">
+                <div class="btn btn-rounded" type="button" style="background-color: lightblue;" onclick="window.location.href=\'https://seniordevteam1.in/views/log_list_ui.php?clearFilters\'">
                     Clear Filters
                     <span class="closebtn">&times;</span>
                 </div>
@@ -260,7 +297,7 @@ function view_log_list_filter_modal() {
                     <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="post">
+                <form action="https://seniordevteam1.in/views/log_list_ui.php?setFilters" method="post">
 
                     <div class="modal-body">
 
@@ -309,5 +346,59 @@ function view_log_list_filter_modal() {
     ';
 
 } // Ends view_log_list_filter_modal
+
+function action_log_list_set_filters() {
+
+    date_default_timezone_set('EST');
+    $expire = time() + (60*180); // Expires in 3 hours
+    $path = "/";
+    $domain = "seniordevteam1.in";
+    $secure = false;
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        setcookie("logSearchGeneralCookie", true, $expire, $path, $domain, $secure);
+
+        if (isset($_POST["logSearchUsername"])) {
+            setcookie("logSearchUsernameCookie", sanitize_string($_POST["logSearchUsername"]), $expire, $path, $domain, $secure);
+        }
+
+        if (isset($_POST["logSearchType"])) {
+            setcookie("logSearchTypeCookie", $_POST["logSearchType"], $expire, $path, $domain, $secure);
+        }
+
+        if (isset($_POST["logSearchTime"])) {
+            setcookie("logSearchTimeCookie", $_POST["logSearchTime"], $expire, $path, $domain, $secure);
+        }
+        
+    } // Ends if
+
+    header("Location: https://seniordevteam1.in/views/log_list_ui.php?log");
+    exit;
+
+} // Ends action_log_list_set_filters
+
+function action_log_list_clear_filters() {
+
+    unset($_COOKIE["logSearchGeneralCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("logSearchGeneralCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["logSearchUsernameCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("logSearchUsernameCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["logSearchTypeCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("logSearchTypeCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    unset($_COOKIE["logSearchTimeCookie"]);
+    $params = session_get_cookie_params();
+    setcookie("logSearchTimeCookie", '', 1, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+    header("Location: https://seniordevteam1.in/views/log_list_ui.php");
+    exit;
+
+} // Ends action_log_list_clear_filters
 
 ?>
