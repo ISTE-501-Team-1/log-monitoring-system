@@ -20,11 +20,22 @@ function view_dashboard_main() {
         <!--Section: Stat Cards-->
         <div class="container pt-4">
         
-            <div class="d-flex pt-xl-4 align-items-center gap-2">
-                <p class="h2">Welcome, '.$currentUser[1].' '.$currentUser[2].'</p>
-                <p class="h5">
-                    <span class="badge rounded-pill bg-info">'.$currentUser[6].'</span>
-                </p>
+            <div class="d-flex flex-column flex-md-row pt-xl-4 justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                    <p class="h2">Welcome, '.$currentUser[1].' '.$currentUser[2].'</p>
+                    <p class="h5">
+                        <span class="badge rounded-pill bg-info">'.$currentUser[6].'</span>
+                    </p>
+                </div>
+
+                <div class="d-flex pt-xl-4 align-items-center gap-3 justify-content-end">
+                    <p class="h4 fw-normal text-nowrap m-0">Server Overview</p>
+                    <select class="form-select form-select-sm btn-outline btn-rounded fs-5" style="flex-basis: fit-content;">
+                        <option class="bg-white" value="today">Today</option>
+                        <option class="bg-white" value="week">This Week</option>
+                        <option class="bg-white" value="week">This Month</option>
+                    </select>
+                </div>
             </div>
         
             <div id="dashboard-stats" class="row align-items-stretch pt-xl-4 pt-md-2">
@@ -40,7 +51,10 @@ function view_dashboard_main() {
                                     </div>
                                     <div>
                                         <h4>Server Activity</h4>
-                                        <p class="mb-0">Logs Created Today</p>
+                                        <div class="d-flex align-content-center gap-2 flex-wrap">
+                                            <p class="mb-0">Logs Created </p>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">
@@ -63,7 +77,10 @@ function view_dashboard_main() {
                                     </div>
                                     <div>
                                         <h4>Logins</h4>
-                                        <p class="mb-0">Successful Logins Today</p>
+                                        <div class="d-flex align-content-center gap-2 flex-wrap">
+                                            <p class="mb-0">Successful Logins </p>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">
@@ -86,7 +103,10 @@ function view_dashboard_main() {
                                     </div>
                                     <div>
                                         <h4>Failed Logins</h4>
-                                        <p class="mb-0">Failed Logins Today</p>
+                                        <div class="d-flex align-content-center gap-2 flex-wrap">
+                                            <p class="mb-0">Failed Logins </p>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">

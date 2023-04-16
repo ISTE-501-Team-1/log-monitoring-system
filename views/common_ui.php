@@ -56,7 +56,11 @@ function view_common_footer() {
 
 function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
-    $activeDash = $activeLogs = $activeStudents = $activeAlerts = $activeSettings = "\"";
+    $db = new DB();
+    $currentUser = $db->getUserByID($_COOKIE["loggedInUserID"]);
+    $currentUserInitials = substr($currentUser[1], 0, 1) . substr($currentUser[2], 0, 1);
+
+    $activeDash = $activeLogs = $activeStudents = $activeAlerts = "\"";
 
     switch ($activeIndex) {
 
@@ -72,16 +76,8 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
         case 3:
             $activeAlerts = " active\" aria-current=\"true\"";
             break;
-        case 4:
-            $activeSettings = " active\" aria-current=\"true\"";
-            break;
 
     } // Ends switch
-
-//     <a href="settings.html" class="list-group-item list-group-item-action py-2 ripple'.$activeSettings.'>
-//     <i class="fas fa-cogs fa-fw me-3"></i>
-//     <span>Settings</span>
-//     </a>
 
     echo('
         <!--Main Navigation-->
@@ -136,7 +132,7 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
                 
                         <!-- Brand -->
                         <a class="navbar-brand" href="https://seniordevteam1.in">
-                            <img src="https://seniordevteam1.in/src/img/Logo_LMS.svg" height="35" alt="MDB Logo" loading="lazy" />
+                            <img src="https://seniordevteam1.in/src/img/Logo_LMS.svg" height="35" alt="LMS Logo" loading="lazy" />
                         </a>
 
                     </div>
@@ -175,7 +171,7 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
                             <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
                                 <button type="button" class="btn btn-primary btn-floating btn-lg">
-                                    <p class="avatar">JD</p>
+                                    <p class="avatar">'.$currentUserInitials.'</p>
                                 </button>
                             </a>
 

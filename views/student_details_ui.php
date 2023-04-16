@@ -22,8 +22,12 @@ function view_log_details_main() {
     } else if ($latestLog[1] == 2) {
         $logTypeString = "File Modification";
     } else {
-        $logTypeString = "INVALID";
+        $logTypeString = "";
     } // Ends if
+
+    if (!is_array($latestLog)) {
+        $latestLog = "";
+    }
 
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $recordsPerPage = 20;
@@ -41,11 +45,13 @@ function view_log_details_main() {
                     <div class ="table-header-title">
                         <i class="fas fa-user fa-fw me-3"></i>
                         <h5 class="mb-0 text-center">
-                            <strong>User: '.$currentStudent[4].'</strong>
+                            <strong>Student ID: '.$currentStudent[0].'</strong>
                         </h5>
                     </div>
                     <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="POST">
                         <input type="hidden" name="logSearchUsername" value="'.$currentStudent[4].'">
+                        <input type="hidden" name="logSearchTime" value="Any">
+                        <input type="hidden" name="logSearchType" value="Any">
                         <button type="submit" class="btn btn-outline-dark btn-rounded font-weight-bold" data-mdb-ripple-color="dark">
                             View Logs
                         </button>
@@ -55,8 +61,13 @@ function view_log_details_main() {
                 <div id="student-card-body" class="card-body d-flex flex-column">
 
                     <div class="d-flex gap-2">
-                        <p class="h6 lh-1">Name:</p>
+                        <p class="h6 lh-1">Full Name:</p>
                         <p class="fs-6 lh-1">'.$currentStudent[1].' '.$currentStudent[2].' '.$currentStudent[3].'</p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <p class="h6 lh-1">Student Username:</p>
+                        <p class="fs-6 lh-1">'.$currentStudent[4].'</p>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -74,10 +85,6 @@ function view_log_details_main() {
                         <p class="fs-6 lh-1">'.$logTypeString.'</p>
                     </div>
 
-                    <div class="d-flex gap-2">
-                        <p class="h6 lh-1">Student ID:</p>
-                        <p class="fs-6 lh-1">'.$currentStudent[0].'</p>
-                    </div>
                 </div>
 
             </div>
@@ -85,7 +92,7 @@ function view_log_details_main() {
             <div class="container pt-4 d-flex align-items-center justify-content-between">
                 
                 <div class="d-flex align-items-center gap-2">
-                    <p class="h5">All files from this student:</p>
+                    <p class="h5">Files from this student:</p>
                 </div>
 
                 <!-- Pagination links -->
@@ -104,7 +111,7 @@ function view_log_details_main() {
             <div class="container pt-2 long-table-container">
                 <div class="table-responsive search-table">
 
-                    <table id="singleStudentListTable" class="table table-hover">
+                    <table id="singleStudentListTable" class="table">
                         '.$fileObjects.'
                     </table>
 
