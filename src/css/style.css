@@ -7,6 +7,9 @@ body {
   }
 }
 /*test comment*/
+#sampleIDNothing {
+  display: none;
+}
 
 /* Sidebar */
 .sidebar {
