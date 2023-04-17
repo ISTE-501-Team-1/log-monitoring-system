@@ -79,6 +79,12 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
     } // Ends switch
 
+    $searchUsersLink = "https://seniordevteam1.in/views/student_list_ui.php";
+
+    if ($currentUser[6] == "Professor") {
+        $searchUsersLink = "https://seniordevteam1.in/views/student_list_ui.php?group";
+    }
+
     echo('
         <!--Main Navigation-->
         <header>
@@ -99,7 +105,7 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
                             <span>Search Logs</span>
                         </a>
 
-                        <a href="https://seniordevteam1.in/views/student_list_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeStudents.'>
+                        <a href="'.$searchUsersLink.'" class="list-group-item list-group-item-action py-2 ripple'.$activeStudents.'>
                             <i class="fas fa-users fa-fw me-3"></i>
                             <span>Search Students</span>
                         </a>

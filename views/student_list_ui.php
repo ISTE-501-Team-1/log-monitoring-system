@@ -2,22 +2,17 @@
 
 require_once "../views/common_ui.php";
 require_once "../controllers/validation_controller.php";
-require_once "../controllers/filter_controller.php";
 view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Student", false, 2);
 
 if (isset($_GET['recent'])) {
     view_student_list_recent();
+} elseif (isset($_GET['group'])) {
+    view_student_list_by_class();
 } else {
     view_student_list_main();
 } // Ends if
-
-// elseif (isset($_GET['setFilters'])) {
-//     create_student_filter_cookies();
-// } elseif (isset($_GET['clearFilters'])) {
-//     destroy_student_filter_cookies();
-// } 
 
 view_common_footer();
 
@@ -39,32 +34,16 @@ function view_student_list_main() {
             $sortBy = $_GET["sortBy"];
         }
 
-        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        //     if ($_POST["studentSearchUsername"]) {
-        //         $filterByUsername = sanitize_string($_POST["studentSearchUsername"]);
-        //     }
-
-        //     if ($_POST["studentSearchLastName"]) {
-        //         $filterByLastName = sanitize_string($_POST["studentSearchLastName"]);
-        //     }
-
-        //     if ($_POST["studentSearchClass"]) {
-        //         $filterByClass = sanitize_string($_POST["studentSearchClass"]);
-        //     }
-            
-        // } // Ends if
-
-        if (isset($_COOKIE["studentSearchUsernameCookie"])) {
-            $filterByUsername = $_COOKIE["studentSearchUsernameCookie"];
+        if (isset($_SESSION["studentSearchUsernameSession"])) {
+            $filterByUsername = $_SESSION["studentSearchUsernameSession"];
         }
 
-        if (isset($COOKIE["studentSearchLastNameCookie"])) {
-            $filterByLastName = $_COOKIE["studentSearchLastNameCookie"];
+        if (isset($_SESSION["studentSearchLastNameSession"])) {
+            $filterByLastName = $_SESSION["studentSearchLastNameSession"];
         }
 
-        if (isset($_COOKIE["studentSearchClassCookie"])) {
-            $filterByClass = $_COOKIE["studentSearchClassCookie"];
+        if (isset($_SESSION["studentSearchClassSession"])) {
+            $filterByClass = $_SESSION["studentSearchClassSession"];
         }
 
         $studentObjects = $db->getStudentObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLastName);
@@ -194,33 +173,33 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
     ');
 
     // Displays chips for each filter that is added
-    if (isset($_COOKIE["studentSearchGeneralCookie"])) {
+    if (isset($_SESSION["studentSearchGeneralSession"])) {
 
-        if (isset($_COOKIE["studentSearchUsernameCookie"]) && !empty($_COOKIE["studentSearchUsernameCookie"])) {
+        if (isset($_SESSION["studentSearchUsernameSession"]) && !empty($_SESSION["studentSearchUsernameSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Username: '.$_COOKIE["studentSearchUsernameCookie"].'
+                    Username: '.$_SESSION["studentSearchUsernameSession"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_COOKIE["studentSearchLastNameCookie"]) && !empty($_COOKIE["studentSearchLastNameCookie"])) {
+        if (isset($_SESSION["studentSearchLastNameSession"]) && !empty($_SESSION["studentSearchLastNameSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Last Name: '.$_COOKIE["studentSearchLastNameCookie"].'
+                    Last Name: '.$_SESSION["studentSearchLastNameSession"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_COOKIE["studentSearchClassCookie"]) && !empty($_COOKIE["studentSearchClassCookie"])) {
+        if (isset($_SESSION["studentSearchClassSession"]) && !empty($_SESSION["studentSearchClassSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Class: '.$_COOKIE["studentSearchClassCookie"].'
+                    Class: '.$_SESSION["studentSearchClassSession"].'
                 </div>
             ');
 
@@ -314,8 +293,8 @@ function view_student_list_filter_modal($classArray) {
     foreach ($classArray as $class) {
         $classID = $class['classId'];
         $className = $class['className'];
-        $classDropdown .= '<option value="' . $classID . '">' . $className . '</option>';
-    }
+        $classDropdown .= '<option value="'.$classID.'">'.$className.'</option>';
+    } // Ends foreach
 
     echo $classDropdown;
                                 
@@ -339,5 +318,65 @@ function view_student_list_filter_modal($classArray) {
     ';
 
 } // Ends view_student_list_filter_modal
+
+function view_student_list_by_class() {
+
+    $db = new DB();
+
+    $currentUser = $db->getUserByID($_COOKIE["loggedInUserID"]);
+    $classArray = $db->getClassArray($currentUser[0], $currentUser[6]);
+
+    $classButtonOutput = "";
+    foreach ($classArray as $class) {
+        $classID = $class['classId'];
+        $className = $class['className'];
+        $classButtonOutput .= '
+            <form id="class-form" action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
+                <div class="card h-100" onclick="document.getElementById(\'class-form\').submit();">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <input type="hidden" name="studentSearchClass" value="'.$classID.'">
+                        <p class="my-auto fs-6">'.$className.'</p>
+                        <i class="fas fa-chevron-right fa-md"></i>
+                    </div>
+                </div>
+            </form>
+        ';
+    }
+
+    // <form action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
+    //     <div class="card h-100">
+    //         <div class="card-body d-flex justify-content-between align-items-center" type="submit" ">
+    //             <p class="my-auto fs-6">'.$className.'</p>
+    //             <i class="fas fa-chevron-right fa-md"></i>
+    //         </div>
+    //     </div>
+    // </form>
+
+    echo('
+        <!--Main layout-->
+        <main style="margin-top: 58px">
+            <div class="container pt-5">
+                <div id="classes" class="container d-flex flex-column gap-5">
+
+                    <div class="d-flex flex-column gap-2">
+                        <p class="h5">View Students by Class:</p>
+
+                        '.$classButtonOutput.'
+
+                    </div>
+
+                    <div class="card h-100">
+                        <div class="card-body d-flex justify-content-between align-items-center" type="button" onclick="window.location.href=\'https://seniordevteam1.in/views/student_list_ui.php\'">
+                            <h5 class="my-auto">View All</h5>
+                            <i class="fas fa-chevron-right fa-md"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    ');
+
+} // Ends view_student_list_by_class
 
 ?>

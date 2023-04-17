@@ -2,7 +2,6 @@
 
 require_once "../views/common_ui.php";
 require_once "../controllers/validation_controller.php";
-require_once "../controllers/filter_controller.php";
 view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Logs", false, 1);
@@ -14,12 +13,6 @@ if (isset($_GET['recent'])) {
 } else {
     view_log_list_main();
 } // Ends if
-
-// else if (isset($_GET['setFilters'])) {
-//     create_log_filter_cookies(); 
-// } else if (isset($_GET['clearFilters'])) {
-//     destroy_log_filter_cookies();
-// } 
 
 view_common_footer();
 
@@ -41,32 +34,16 @@ function view_log_list_main() {
             $sortBy = $_GET["sortBy"];
         }
 
-        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        //     if (isset($_POST["logSearchUsername"])) {
-        //         $filterByUsername = sanitize_string($_POST["logSearchUsername"]);
-        //     }
-
-        //     if (isset($_POST["logSearchType"])) {
-        //         $filterByType = $_POST["logSearchType"];
-        //     }
-
-        //     if (isset($_POST["logSearchTime"])) {
-        //         $filterByTime = $_POST["logSearchTime"];
-        //     }
-            
-        // } // Ends if
-
-        if (isset($_COOKIE["logSearchUsernameCookie"])) {
-            $filterByUsername = $_COOKIE["logSearchUsernameCookie"];
+        if (isset($_SESSION["logSearchUsernameSession"])) {
+            $filterByUsername = $_SESSION["logSearchUsernameSession"];
         }
 
-        if (isset($COOKIE["logSearchTypeCookie"])) {
-            $filterByType = $_COOKIE["logSearchTypeCookie"];
+        if (isset($_SESSION["logSearchTypeSession"])) {
+            $filterByType = $_SESSION["logSearchTypeSession"];
         }
 
-        if (isset($_COOKIE["logSearchTimeCookie"])) {
-            $filterByTime = $_COOKIE["logSearchTimeCookie"];
+        if (isset($_SESSION["logSearchTimeSession"])) {
+            $filterByTime = $_SESSION["logSearchTimeSession"];
         }
 
         $logObjects = $db->getLogObjectsByRoleFilteredAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage, $sortBy, $filterByUsername, $filterByTime, $filterByType);
@@ -204,33 +181,33 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
     ');
 
     // Displays chips for each filter that is added
-    if (isset($_COOKIE["logSearchGeneralCookie"])) {
+    if (isset($_SESSION["logSearchGeneralSession"])) {
 
-        if (isset($_COOKIE["logSearchTimeCookie"])) {
+        if (isset($_SESSION["logSearchTimeSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Time: '.$_COOKIE["logSearchTimeCookie"].'
+                    Time: '.$_SESSION["logSearchTimeSession"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_COOKIE["logSearchTypeCookie"])) {
+        if (isset($_SESSION["logSearchTypeSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Type: '.$_COOKIE["logSearchType"].'
+                    Type: '.$_SESSION["logSearchTypeSession"].'
                 </div>
             ');
 
         } // Ends if
 
-        if (isset($_COOKIE["logSearchUsernameCookie"]) && !empty($_COOKIE["logSearchUsernameCookie"])) {
+        if (isset($_SESSION["logSearchUsernameSession"]) && !empty($_SESSION["logSearchUsernameSession"])) {
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Username: '.$_COOKIE["logSearchUsernameCookie"].'
+                    Username: '.$_SESSION["logSearchUsernameSession"].'
                 </div>
             ');
 
