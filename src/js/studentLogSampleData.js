@@ -690,8 +690,14 @@ let sampleDataStringStudentFiles = "" +
 ;
 
 
-function getSampleData(){
-    return sampleDataString;
+// function getSampleData(){
+//     return sampleDataString;
+// }
+
+//dummy code for documentation
+function getSampleDataTwo(){
+    $("#studentsListTable").append( sampleDataStringRecentStudents );
+    return sampleDataStringStudentFiles;
 }
 
 
