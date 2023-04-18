@@ -21,7 +21,7 @@ if (isset($_GET["setLog"])) {
 } elseif (isset($_GET["setStudent"])) {
 
     create_student_filter_session();
-    header("Location: https://seniordevteam1.in/views/student_list_ui.php?log");
+    header("Location: https://seniordevteam1.in/views/student_list_ui.php?student");
     exit;
 
 } elseif (isset($_GET["clearStudent"])) {

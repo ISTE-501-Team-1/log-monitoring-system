@@ -90,6 +90,7 @@ function view_student_list_recent() {
 
 function view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage) {
 
+    $db = new DB();
     $checkedID = $checkedUsername = $checkedSchool = $checkedLastName = "\"";
 
     if (isset($_GET["sortBy"])) {
@@ -199,7 +200,7 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
 
             echo('
                 <div class="btn btn-rounded pe-none" type="button" style="background-color: lightblue;">
-                    Class: '.$_SESSION["studentSearchClassSession"].'
+                    Class: '.$db->getClassAbbreviationByID($_SESSION["studentSearchClassSession"]).'
                 </div>
             ');
 
@@ -331,8 +332,8 @@ function view_student_list_by_class() {
         $classID = $class['classId'];
         $className = $class['className'];
         $classButtonOutput .= '
-            <form id="class-form" action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
-                <div class="card h-100" onclick="document.getElementById(\'class-form\').submit();">
+            <form id="class-form'.$classID.'" action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
+                <div class="card h-100" onclick="document.getElementById(\'class-form'.$classID.'\').submit();">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <input type="hidden" name="studentSearchClass" value="'.$classID.'">
                         <p class="my-auto fs-6">'.$className.'</p>
@@ -342,15 +343,6 @@ function view_student_list_by_class() {
             </form>
         ';
     }
-
-    // <form action="https://seniordevteam1.in/controllers/filter_controller.php?setStudent" method="post">
-    //     <div class="card h-100">
-    //         <div class="card-body d-flex justify-content-between align-items-center" type="submit" ">
-    //             <p class="my-auto fs-6">'.$className.'</p>
-    //             <i class="fas fa-chevron-right fa-md"></i>
-    //         </div>
-    //     </div>
-    // </form>
 
     echo('
         <!--Main layout-->

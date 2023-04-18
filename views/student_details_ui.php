@@ -54,7 +54,7 @@ function view_log_details_main() {
                             <strong>Student ID: '.$currentStudent[0].'</strong>
                         </h5>
                     </div>
-                    <form action="https://seniordevteam1.in/views/log_list_ui.php?log" method="POST">
+                    <form action="https://seniordevteam1.in/controllers/filter_controller.php?setLog" method="POST">
                         <input type="hidden" name="logSearchUsername" value="'.$currentStudent[4].'">
                         <input type="hidden" name="logSearchTime" value="Any">
                         <input type="hidden" name="logSearchType" value="Any">

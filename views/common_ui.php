@@ -79,11 +79,16 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
     } // Ends switch
 
-    $searchUsersLink = "https://seniordevteam1.in/views/student_list_ui.php";
+    $alertsBadge = "";
+    $alertsCount = $db->getAlertsNotDismissedCount($currentUser[0], $currentUser[6]);
+    if ($alertsCount > 0) {
+        $alertsBadge = '<span class="badge badge-danger rounded-pill ms-3">'.$alertsCount.'</span>';
+    } // Ends if
 
+    $searchUsersLink = "https://seniordevteam1.in/views/student_list_ui.php";
     if ($currentUser[6] == "Professor") {
         $searchUsersLink = "https://seniordevteam1.in/views/student_list_ui.php?group";
-    }
+    } // Ends if
 
     echo('
         <!--Main Navigation-->
@@ -113,7 +118,7 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
                         <a href="https://seniordevteam1.in/views/alerts_ui.php" class="list-group-item list-group-item-action py-2 ripple'.$activeAlerts.'>
                             <i class="fas fa-exclamation-circle fa-fw me-3"></i>
                             <span>Alerts</span>
-                            <span class="badge badge-danger rounded-pill ms-3">3</span>
+                            '.$alertsBadge.'
                         </a>
 
                     </div>

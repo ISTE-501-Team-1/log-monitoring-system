@@ -1,7 +1,7 @@
 <?php
 
-function view_login_main() { 
-    
+function view_login_main($errorArray = []) { 
+
     echo('
 
     <!DOCTYPE html>
@@ -45,7 +45,26 @@ function view_login_main() {
                                 <div class="card-body p-5 text-center">
 
                                     <h3 class="mb-5">Sign in</h3>
+    ');
 
+    if (count($errorArray) == 0) {
+        
+        foreach ($errorArray as $error) {
+
+            echo '
+                                    <section class="mb-6">
+                                        <p class="note note-danger">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            <strong>'.$error.'</strong>
+                                        </p>
+                                    </section>
+            ';
+        
+        } // Ends foreach
+
+    } // Ends if
+
+    echo ('
                                     <form action="../controllers/login_controller.php?login" method="post">
 
                                         <!-- Username -->

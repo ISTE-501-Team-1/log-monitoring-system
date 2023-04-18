@@ -13,6 +13,64 @@ function view_dashboard_main() {
 
     $currentUser = $db->getUserByID($_COOKIE["loggedInUserID"]);
 
+    // $cardData = array(
+    //     "Today" => array(
+    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day"),
+    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "day"),
+    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "day")
+    //     ),
+    //     "This Week" => array(
+    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "week"),
+    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "week"),
+    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "week")
+    //     ),
+    //     "This Month" => array(
+    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "month"),
+    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "month"),
+    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "month")
+    //     )
+    // ); // Ends array
+
+    $logsCreatedCount = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day");
+    $successfulLoginsCount = $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "day");
+    $failedLoginsCount = $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "day");
+    $cardLabel = "Today";
+    $cardLink = "today";
+    $dropdownToday = $dropdownWeek = $dropdownMonth = "";
+
+    if (isset($_GET["timeframe"])) {
+
+        if ($_GET["timeframe"] == "day") {
+
+            $logsCreatedCount = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day");
+            $successfulLoginsCount = $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "day");
+            $failedLoginsCount = $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "day");
+            $cardLabel = "Today";
+            $cardLink = "today";
+            $dropdownToday = "selected";
+
+        } else if ($_GET["timeframe"] == "week") {
+            
+            $logsCreatedCount = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "week");
+            $successfulLoginsCount = $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "week");
+            $failedLoginsCount = $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "week");
+            $cardLabel = "This Week";
+            $cardLink = "week";
+            $dropdownWeek = "selected";
+
+        } else if ($_GET["timeframe"] == "month") {
+            
+            $logsCreatedCount = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "month");
+            $successfulLoginsCount = $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "month");
+            $failedLoginsCount = $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "month");
+            $cardLabel = "This Month";
+            $cardLink = "month";
+            $dropdownMonth;
+
+        } // Ends if
+
+    } // Ends if
+
     echo('
     <!--Main layout-->
     <main style="margin-top: 58px">
@@ -31,9 +89,9 @@ function view_dashboard_main() {
                 <div class="d-flex pt-xl-4 align-items-center gap-3 justify-content-end">
                     <p class="h4 fw-normal text-nowrap m-0">Server Overview</p>
                     <select class="form-select form-select-sm btn-outline btn-rounded fs-5" style="flex-basis: fit-content;">
-                        <option class="bg-white" value="today">Today</option>
-                        <option class="bg-white" value="week">This Week</option>
-                        <option class="bg-white" value="week">This Month</option>
+                        <option class="bg-white" value="today" '.$dropdownToday.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=day\'">Today</option>
+                        <option class="bg-white" value="week" '.$dropdownWeek.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=week\'">This Week</option>
+                        <option class="bg-white" value="week" '.$dropdownMonth.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=month\'">This Month</option>
                     </select>
                 </div>
             </div>
@@ -53,15 +111,15 @@ function view_dashboard_main() {
                                         <h4>Server Activity</h4>
                                         <div class="d-flex align-content-center gap-2 flex-wrap">
                                             <p class="mb-0">Logs Created </p>
-                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">'.$cardLabel.'</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getLogsCreatedTodayCount($currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$logsCreatedCount.'</h2>
                                 </div>
                             </div>
-                            <a href="https://seniordevteam1.in/views/log_list_ui.php?today" class="stretched-link"></a>
+                            <a href="https://seniordevteam1.in/views/log_list_ui.php?'.$cardLink.'" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -79,15 +137,15 @@ function view_dashboard_main() {
                                         <h4>Logins</h4>
                                         <div class="d-flex align-content-center gap-2 flex-wrap">
                                             <p class="mb-0">Successful Logins </p>
-                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">'.$cardLabel.'</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getLoginAttemptsTodayCount("success", $currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$successfulLoginsCount.'</h2>
                                 </div>
                             </div>
-                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?today=success" class="stretched-link"></a>
+                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?'.$cardLink.'=success" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>
@@ -105,15 +163,15 @@ function view_dashboard_main() {
                                         <h4>Failed Logins</h4>
                                         <div class="d-flex align-content-center gap-2 flex-wrap">
                                             <p class="mb-0">Failed Logins </p>
-                                            <span class="badge rounded-pill bg-light border text-black my-auto">Today</span>
+                                            <span class="badge rounded-pill bg-light border text-black my-auto">'.$cardLabel.'</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="align-self-center">
-                                    <h2 class="h1 mb-0">'.$db->getLoginAttemptsTodayCount("failure", $currentUser[0], $currentUser[6]).'</h2>
+                                    <h2 class="h1 mb-0">'.$failedLoginsCount.'</h2>
                                 </div>
                             </div>
-                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?today=failure" class="stretched-link"></a>
+                            <a href="https://seniordevteam1.in/views/login_attempt_list_ui.php?'.$cardLink.'=failure" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>

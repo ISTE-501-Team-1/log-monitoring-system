@@ -28,9 +28,9 @@ if (isset($_GET["login"])) {
 
         // TODO: The order of these function may change depending on how the frontend team wants to do error messages
         // Calls function to display error message
-        show_error_element($errorArray);
+        //show_error_element($errorArray);
         // Displays login page again
-        view_login_main();
+        view_login_main($errorArray);
     
     } // Ends outer if
 

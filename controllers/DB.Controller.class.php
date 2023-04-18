@@ -37,6 +37,38 @@ class Activity {
 
 } // Ends Activity class
 
+class Alert {
+
+    private $alertId;
+    private $alertDescription;
+    private $alertDismissed;
+    private $alertClass;
+
+    public function getTableData() {
+
+        return "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/alert_controller.php?type=dimiss&id={$this->alertId}'\">
+            <td>{$this->alertDescription}</td>
+            <td>
+                <button type='button' class='btn btn-rounded btn-danger' data-mdb-ripple-color='dark'>Dismiss</button>
+            </td>
+        </tr>\n";
+
+    } // Ends getTableData function
+
+    // Getters
+    public function getAlertID() { return $this->alertId; }
+    public function getAlertDescription() { return $this->alertDescription; }
+    public function getAlertDismissed() { return $this->alertDismissed; }
+    public function getAlertClass() { return $this->alertClass; }
+
+    // Setters
+    public function setAlertID($alertId) { $this->alertId = $alertId; }
+    public function setAlertDescription($alertDescription) { $this->alertDescription = $alertDescription; }
+    public function setAlertDismissed($alertDismissed) { $this->alertDismissed = $alertDismissed; }
+    public function setAlertClass($alertClass) { $this->alertClass = $alertClass; }
+
+} // Ends Alert class
+
 class ClassTable {
 
     private $classId;

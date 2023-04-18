@@ -7,6 +7,10 @@ view_common_navigation("Login Attempt List", true, 0);
 
 if (isset($_GET['today'])) {
     view_login_attempt_list_created_today($_GET['today']);
+} else if (isset($_GET['week'])) {
+    view_login_attempt_list_created_today($_GET['week']);
+} else if (isset($_GET['month'])) {
+    view_login_attempt_list_created_today($_GET['month']);
 } else {
     view_login_attempt_list_created_today("all");
 } // Ends if
@@ -19,15 +23,25 @@ function view_login_attempt_list_created_today($successType) {
 
     $currentUser = $db->getUserByID($_COOKIE["loggedInUserID"]);
 
+    $timeframe = "";
+
+    if (isset($_GET["today"]) == "day") {
+        $timeframe = "day";
+    } else if (isset($_GET["week"]) == "week") {
+        $timeframe = "week";
+    } else if (isset($_GET["month"]) == "month") {
+        $timeframe = "month";
+    } // Ends if
+
     // Get the current page number and number of records per page from the query string
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $recordsPerPage = 20;
 
-    $totalRows = $db->getLoginAttemptsTodayCount($successType, $currentUser[0], $currentUser[6]);
+    $totalRows = $db->getLoginAttemptsTimeframeCount($successType, $currentUser[0], $currentUser[6], $timeframe);
     $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
     
     // Get the login attempt objects for the current page
-    $loginAttemptObjects = $db->getLoginAttemptsTodayAsTable($successType, $currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
+    $loginAttemptObjects = $db->getLoginAttemptsTimeframeAsTable($successType, $currentUser[0], $currentUser[6], $timeframe, $currentPage, $recordsPerPage);
 
     view_login_attempt_list_table($loginAttemptObjects, $totalNumberOfPages, $currentPage);
 
