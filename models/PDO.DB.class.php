@@ -515,26 +515,55 @@ class DB {
 
     } // Ends getAlertsNotDismissedCount
 
+    public function getAlertById($alertID) {
+
+            $data = $this->getAllObjects("SELECT * FROM alert WHERE alertId = '$alertID'", "Alert");
+    
+            if (count($data) > 0) {
+    
+                $outputAlert[] = $data[0]->getAlertID();
+                $outputAlert[] = $data[0]->getAlertDescription();
+                $outputAlert[] = $data[0]->getAlertDismissed();
+                $outputAlert[] = $data[0]->getAlertStudent();
+        
+            } elseif (count($data) > 1) {
+    
+                $outputAlert = "ERROR500";
+    
+            } else {
+    
+                $outputAlert = "ERROR404";
+    
+            }// Ends if
+    
+            return $outputAlert;
+
+    } // Ends getAlertById
+
     public function updateAlertDismiss($alertID) {
 
         require_once("DB.Controller.class.php");
 
-        $Alert = new Alert;
-        $Alert->setAlertDismissed(1);
+        $currentAlert = $this->getAlertById($alertID);
 
-        $data = $this->getAllObjects("SELECT * FROM alert WHERE alertId = $alertID", "Alert");
+        $Alert = new Alert;
+        $Alert->setAlertID($alertID);
+        $Alert->setAlertDescription($currentAlert[1]);
+        $Alert->setAlertDismissed(1);
+        $Alert->setAlertStudent($currentAlert[3]);
 
         try {
 
             $stmt = $this->dbh->prepare("
                 UPDATE alert
-                SET alertDismissed = :alertDismissed
+                SET alertDescription = :alertDescription, alertDismissed = :alertDismissed, alertStudent = :alertStudent 
                 WHERE alertId = :alertId
             ");
 
             $stmt->execute(array(
+                "alertDescription"=>$Alert->getAlertDescription(),
                 "alertDismissed"=>$Alert->getAlertDismissed(),
-                "alertId"=>$Alert->getAlertID()
+                "alertStudent"=>$Alert->getAlertStudent()
             ));
 
         } catch (PDOException $pe) {
@@ -1564,11 +1593,11 @@ class DB {
         $queryTime = "";
 
         if ($timeframe == "day") {
-            $queryTime = "WHERE DATE(logTimeCreated) = CURDATE()";
+            $queryTime = "WHERE DATE(loginAttemptTimeEntered) = CURDATE()";
         } else if ($timeframe == "week") {
-            $queryTime = "WHERE logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+            $queryTime = "WHERE loginAttemptTimeEntered >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
         } else if ($timeframe == "month") {
-            $queryTime = "WHERE logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+            $queryTime = "WHERE loginAttemptTimeEntered >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
         } // Ends if
 
         switch ($successType) {
@@ -1657,11 +1686,11 @@ class DB {
         $queryTime = "";
 
         if ($timeframe == "day") {
-            $queryTime = "WHERE DATE(logTimeCreated) = CURDATE()";
+            $queryTime = "WHERE DATE(loginAttemptTimeEntered) = CURDATE()";
         } else if ($timeframe == "week") {
-            $queryTime = "WHERE logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+            $queryTime = "WHERE loginAttemptTimeEntered >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
         } else if ($timeframe == "month") {
-            $queryTime = "WHERE logTimeCreated >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+            $queryTime = "WHERE loginAttemptTimeEntered >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
         } // Ends if
 
         switch ($successType) {

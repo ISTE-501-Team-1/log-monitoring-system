@@ -42,14 +42,14 @@ class Alert {
     private $alertId;
     private $alertDescription;
     private $alertDismissed;
-    private $alertClass;
+    private $alertStudent;
 
     public function getTableData() {
 
-        return "<tr onclick=\"window.location='https://seniordevteam1.in/controllers/alert_controller.php?type=dimiss&id={$this->alertId}'\">
-            <td>{$this->alertDescription}</td>
-            <td>
-                <button type='button' class='btn btn-rounded btn-danger' data-mdb-ripple-color='dark'>Dismiss</button>
+        return "<tr>
+            <td style='vertical-align: middle;'>{$this->alertDescription}</td>
+            <td style='vertical-align: middle;'>
+                <button type='button' class='btn btn-rounded btn-danger' data-mdb-ripple-color='dark' onclick=\"window.location='https://seniordevteam1.in/controllers/alert_controller.php?type=dismiss&id={$this->alertId}'\">Dismiss</button>
             </td>
         </tr>\n";
 
@@ -59,13 +59,13 @@ class Alert {
     public function getAlertID() { return $this->alertId; }
     public function getAlertDescription() { return $this->alertDescription; }
     public function getAlertDismissed() { return $this->alertDismissed; }
-    public function getAlertClass() { return $this->alertClass; }
+    public function getAlertStudent() { return $this->alertStudent; }
 
     // Setters
     public function setAlertID($alertId) { $this->alertId = $alertId; }
     public function setAlertDescription($alertDescription) { $this->alertDescription = $alertDescription; }
     public function setAlertDismissed($alertDismissed) { $this->alertDismissed = $alertDismissed; }
-    public function setAlertClass($alertClass) { $this->alertClass = $alertClass; }
+    public function setAlertStudent($alertStudent) { $this->alertStudent = $alertStudent; }
 
 } // Ends Alert class
 

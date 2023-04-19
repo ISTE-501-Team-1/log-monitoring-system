@@ -8,7 +8,7 @@ view_common_navigation("Search Logs", false, 1);
 
 if (isset($_GET['recent'])) {
     view_log_list_recent();    
-} else if (isset($_GET['today'])) {
+} else if (isset($_GET['today']) OR isset($_GET['week']) OR isset($_GET['month'])) {
     view_log_list_created_today();
 } else {
     view_log_list_main();
@@ -98,7 +98,13 @@ function view_log_list_created_today() {
     $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
     
     // Get the log objects for the current page
-    $logObjects = $db->getLogsCreatedTodayAsTable($currentUser[0], $currentUser[6], $currentPage, $recordsPerPage);
+    if (isset($_GET['today'])) {
+        $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "day", $currentPage, $recordsPerPage);
+    } else if (isset($_GET['week'])) {
+        $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "week", $currentPage, $recordsPerPage);
+    } else if (isset($_GET['month'])) {
+        $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "month", $currentPage, $recordsPerPage);
+    } // Ends if
 
     view_log_list_table($logObjects, $totalNumberOfPages, $currentPage);
     view_log_list_filter_modal();

@@ -47,7 +47,7 @@ function view_login_main($errorArray = []) {
                                     <h3 class="mb-5">Sign in</h3>
     ');
 
-    if (count($errorArray) == 0) {
+    if (count($errorArray) != 0) {
         
         foreach ($errorArray as $error) {
 

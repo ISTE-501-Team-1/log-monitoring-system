@@ -65,7 +65,7 @@ function view_dashboard_main() {
             $failedLoginsCount = $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "month");
             $cardLabel = "This Month";
             $cardLink = "month";
-            $dropdownMonth;
+            $dropdownMonth = "selected";
 
         } // Ends if
 
@@ -88,13 +88,26 @@ function view_dashboard_main() {
 
                 <div class="d-flex pt-xl-4 align-items-center gap-3 justify-content-end">
                     <p class="h4 fw-normal text-nowrap m-0">Server Overview</p>
-                    <select class="form-select form-select-sm btn-outline btn-rounded fs-5" style="flex-basis: fit-content;">
-                        <option class="bg-white" value="today" '.$dropdownToday.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=day\'">Today</option>
-                        <option class="bg-white" value="week" '.$dropdownWeek.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=week\'">This Week</option>
-                        <option class="bg-white" value="week" '.$dropdownMonth.' onclick="window.location.href=\'https://seniordevteam1.in/views/dashboard.php?timeframe=month\'">This Month</option>
+                    <select class="form-select form-select-sm btn-outline btn-rounded fs-5" style="flex-basis: fit-content;" onchange="redirect(this)">
+                        <option class="bg-white" value="today" '.$dropdownToday.'>Today</option>
+                        <option class="bg-white" value="week" '.$dropdownWeek.'>This Week</option>
+                        <option class="bg-white" value="month" '.$dropdownMonth.'>This Month</option>
                     </select>
                 </div>
             </div>
+            
+            <script>
+            function redirect(selectElem) {
+                var value = selectElem.value;
+                if (value == \'today\') {
+                    window.location.href = \'https://seniordevteam1.in/views/dashboard_ui.php?timeframe=day\';
+                } else if (value == \'week\') {
+                    window.location.href = \'https://seniordevteam1.in/views/dashboard_ui.php?timeframe=week\';
+                } else if (value == \'month\') {
+                    window.location.href = \'https://seniordevteam1.in/views/dashboard_ui.php?timeframe=month\';
+                }
+            }
+            </script>
         
             <div id="dashboard-stats" class="row align-items-stretch pt-xl-4 pt-md-2">
                 
