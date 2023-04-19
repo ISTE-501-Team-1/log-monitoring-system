@@ -93,18 +93,20 @@ function view_log_list_created_today() {
     // Get the current page number and number of records per page from the query string
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $recordsPerPage = 20;
-
-    $totalRows = $db->getLogsCreatedTodayCount($currentUser[0], $currentUser[6]);
-    $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
     
     // Get the log objects for the current page
     if (isset($_GET['today'])) {
         $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "day", $currentPage, $recordsPerPage);
+        $totalRows = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day");
     } else if (isset($_GET['week'])) {
         $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "week", $currentPage, $recordsPerPage);
+        $totalRows = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "week");
     } else if (isset($_GET['month'])) {
         $logObjects = $db->getLogsCreatedTimeframeTable($currentUser[0], $currentUser[6], "month", $currentPage, $recordsPerPage);
+        $totalRows = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "month");
     } // Ends if
+
+    $totalNumberOfPages = ceil($totalRows / $recordsPerPage);
 
     view_log_list_table($logObjects, $totalNumberOfPages, $currentPage);
     view_log_list_filter_modal();

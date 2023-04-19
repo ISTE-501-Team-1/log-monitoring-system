@@ -563,7 +563,8 @@ class DB {
             $stmt->execute(array(
                 "alertDescription"=>$Alert->getAlertDescription(),
                 "alertDismissed"=>$Alert->getAlertDismissed(),
-                "alertStudent"=>$Alert->getAlertStudent()
+                "alertStudent"=>$Alert->getAlertStudent(),
+                "alertId"=>$Alert->getAlertID()
             ));
 
         } catch (PDOException $pe) {
