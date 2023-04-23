@@ -23,8 +23,8 @@ then
 fi
 
 # attributes to log in
-user="u107823177_Team1_SQL_User"
-pass="71H7KqGKH6"
+user="root"
+pass="Pwmf22guZwmn9yzn"
 db="u107823177_Team1_SQL_DB"
 
 # iterate through the following code for each record being added to the two tables
@@ -43,16 +43,6 @@ do
 	# make loginAttempt from said student (75% chance for a successful login)
 	# loginAttempt fields:
 	# loginAttemptUsername (already have it)
-	# loginAttemptPassword 
-	pw=""
-	pwLen=$(shuf -i 5-15 -n 1)
-	i=0
-	while [[ $i -lt $pwLen ]]
-	do
-		toAdd=$(source random_letter.sh)
-		pw="${pw}${toAdd}"
-		((i++))
-	done
 	# loginAttemptTimeEntered (today's date + random time)
 	timeEntered="$(date +%F) $(leadingZeros 1 24):$(leadingZeros 1 60):$(leadingZeros 1 60)"
 	# loginAttemptSuccess (just 75% chance to be 1, otherwise 0)
@@ -67,7 +57,7 @@ do
 	# studentId (we already have it)
 
 	# now write the query to a temp file and run it
-	echo "INSERT INTO loginAttempt (loginAttemptUsername, loginAttemptPassword, loginAttemptTimeEntered, loginAttemptSuccess, studentId) VALUES ($studentName, $pw, $timeEntered, $attemptSuccess, $id);" > temp.sql
+	echo "INSERT INTO loginAttempt (loginAttemptUsername, loginAttemptTimeEntered, loginAttemptSuccess, studentId) VALUES ('$studentName', '$timeEntered', $attemptSuccess, $id);" > temp.sql
 	mysql --user=$user --password=$pass $db < temp.sql > /dev/null
 
 	# grab the resulting loginAttemptId
@@ -75,7 +65,7 @@ do
 	attemptId=$(mysql --user=$user --password=$pass $db < temp.sql | tail -1)
 
 	# make log of loginAttempt, enter that query as well
-	echo "INSERT INTO log (logTimeCreated, loginAttemptId, studentId) values ($timeEntered, $attemptId, $id);" > temp.sql
+	echo "INSERT INTO log (logType, logTimeCreated, loginAttemptId, studentId) values (0, '$timeEntered', $attemptId, $id);" > temp.sql
 	mysql --user=$user --password=$pass $db < temp.sql > /dev/null
 
 	# now that your work is done, remove the temp file
