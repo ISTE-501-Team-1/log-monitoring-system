@@ -2,11 +2,11 @@
 
 # globals
 db='u107823177_Team1_SQL_DB'
-dbuser='root'
-dbpw='Pwmf22guZwmn9yzn'
+dbuser='u107823177_Team1_SQL_User'
+dbpw='71H7KqGKH6'
 singleStudentThreshold=10 # number of failed logins from one that triggers the alert for that student
 systemwideThreshold=20 # number of failed logins systemwide to trigger a global alert
-lastHour=$(date -d "1 hour ago" +%F' '%H) # the hour of login attempts we're looking through
+lastHour=$(date -d "5 hours ago" +%F' '%H) # the hour of login attempts we're looking through
 
 ######### per student check ###########
 

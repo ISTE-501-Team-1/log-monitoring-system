@@ -16,15 +16,21 @@ leadingZeros () {
 
 # number of records to write
 numRecords=10
+successChance=75
 
-if [[ $# -eq 1  ]]
+if [[ $# -gt 0  ]]
 then
 	numRecords=$1
 fi
 
+if [[ $# -gt 1 ]]
+then
+	successChance=$2
+fi
+
 # attributes to log in
-user="root"
-pass="Pwmf22guZwmn9yzn"
+user="u107823177_Team1_SQL_User"
+pass="71H7KqGKH6"
 db="u107823177_Team1_SQL_DB"
 
 # iterate through the following code for each record being added to the two tables
@@ -44,14 +50,14 @@ do
 	# loginAttempt fields:
 	# loginAttemptUsername (already have it)
 	# loginAttemptTimeEntered (today's date + random time)
-	timeEntered="$(date +%F) $(leadingZeros 1 24):$(leadingZeros 1 60):$(leadingZeros 1 60)"
-	# loginAttemptSuccess (just 75% chance to be 1, otherwise 0)
-	attemptSuccess=1
-	rndm=$(shuf -i 0-20 -n 1)
+	timeEntered="$(date -d "4 hours ago" +%F) $(leadingZeros 0 23):$(leadingZeros 0 59):$(leadingZeros 0 59)"
+	# loginAttemptSuccess (chance to be 1, otherwise 0, control with args. Default 75% chance)
+	attemptSuccess=0
+	rndm=$(shuf -i 1-100 -n 1)
 
-	if [[ $rndm -lt 5 ]]
+	if [[ $rndm -lt $successChance ]]
 	then
-		attemptSuccess=0
+		attemptSuccess=1
 	fi
 
 	# studentId (we already have it)
@@ -70,4 +76,5 @@ do
 
 	# now that your work is done, remove the temp file
 	rm temp.sql
+	((n++))
 done
