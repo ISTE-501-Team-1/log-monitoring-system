@@ -16,10 +16,16 @@ leadingZeros () {
 
 # number of records to write
 numRecords=10
+successChance=75
 
-if [[ $# -eq 1  ]]
+if [[ $# -gt 0  ]]
 then
 	numRecords=$1
+fi
+
+if [[ $# -gt 1 ]]
+then
+	successChance=$2
 fi
 
 # attributes to log in
@@ -43,31 +49,21 @@ do
 	# make loginAttempt from said student (75% chance for a successful login)
 	# loginAttempt fields:
 	# loginAttemptUsername (already have it)
-	# loginAttemptPassword 
-	pw=""
-	pwLen=$(shuf -i 5-15 -n 1)
-	i=0
-	while [[ $i -lt $pwLen ]]
-	do
-		toAdd=$(source random_letter.sh)
-		pw="${pw}${toAdd}"
-		((i++))
-	done
 	# loginAttemptTimeEntered (today's date + random time)
-	timeEntered="$(date +%F) $(leadingZeros 1 24):$(leadingZeros 1 60):$(leadingZeros 1 60)"
-	# loginAttemptSuccess (just 75% chance to be 1, otherwise 0)
-	attemptSuccess=1
-	rndm=$(shuf -i 0-20 -n 1)
+	timeEntered="$(date -d "4 hours ago" +%F) $(leadingZeros 0 23):$(leadingZeros 0 59):$(leadingZeros 0 59)"
+	# loginAttemptSuccess (chance to be 1, otherwise 0, control with args. Default 75% chance)
+	attemptSuccess=0
+	rndm=$(shuf -i 1-100 -n 1)
 
-	if [[ $rndm -lt 5 ]]
+	if [[ $rndm -lt $successChance ]]
 	then
-		attemptSuccess=0
+		attemptSuccess=1
 	fi
 
 	# studentId (we already have it)
 
 	# now write the query to a temp file and run it
-	echo "INSERT INTO loginAttempt (loginAttemptUsername, loginAttemptPassword, loginAttemptTimeEntered, loginAttemptSuccess, studentId) VALUES ($studentName, $pw, $timeEntered, $attemptSuccess, $id);" > temp.sql
+	echo "INSERT INTO loginAttempt (loginAttemptUsername, loginAttemptTimeEntered, loginAttemptSuccess, studentId) VALUES ('$studentName', '$timeEntered', $attemptSuccess, $id);" > temp.sql
 	mysql --user=$user --password=$pass $db < temp.sql > /dev/null
 
 	# grab the resulting loginAttemptId
@@ -75,9 +71,10 @@ do
 	attemptId=$(mysql --user=$user --password=$pass $db < temp.sql | tail -1)
 
 	# make log of loginAttempt, enter that query as well
-	echo "INSERT INTO log (logTimeCreated, loginAttemptId, studentId) values ($timeEntered, $attemptId, $id);" > temp.sql
+	echo "INSERT INTO log (logType, logTimeCreated, loginAttemptId, studentId) values (0, '$timeEntered', $attemptId, $id);" > temp.sql
 	mysql --user=$user --password=$pass $db < temp.sql > /dev/null
 
 	# now that your work is done, remove the temp file
 	rm temp.sql
+	((n++))
 done
