@@ -7,6 +7,7 @@ view_common_navigation("Log Details", false, 1);
 view_log_details_main();
 view_common_footer();
 
+// Function to display the log details UI with the appropriate logic
 function view_log_details_main() {
 
     $db = new DB();

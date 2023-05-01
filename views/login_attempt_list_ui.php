@@ -5,6 +5,7 @@ view_common_includes('../');
 view_common_header();
 view_common_navigation("Login Attempt List", true, 0);
 
+// If the user is trying to view login attempts from today, this week, this month, or all logs
 if (isset($_GET['today'])) {
     view_login_attempt_list_created_today($_GET['today']);
 } else if (isset($_GET['week'])) {
@@ -17,6 +18,7 @@ if (isset($_GET['today'])) {
 
 view_common_footer();
 
+// Function to create the list of login attempts created within the passed in timeframe
 function view_login_attempt_list_created_today($successType) {
     
     $db = new DB();
@@ -47,6 +49,7 @@ function view_login_attempt_list_created_today($successType) {
 
 } // Ends view_login_attempt_list_created_today
 
+// Function to create and display the table of login attempts
 function view_login_attempt_list_table($loginAttemptObjects, $totalNumberOfPages, $currentPage) {
 
     echo('

@@ -9,6 +9,7 @@ view_undismissed_alerts();
 
 view_common_footer();
 
+// Function to get the appropriate list of undismissed alerts for a user
 function view_undismissed_alerts() {
     
     $db = new DB();
@@ -29,6 +30,7 @@ function view_undismissed_alerts() {
 
 } // Ends view_undismissed_alerts
 
+// Function to create and return the table of alerts
 function view_undismissed_alerts_table($alertObjects, $totalNumberOfPages, $currentPage) {
 
     echo('

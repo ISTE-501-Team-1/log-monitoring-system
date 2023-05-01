@@ -1,13 +1,10 @@
 <?php
+// Handles validations for the various inputs
 
 require_once "../models/PDO.DB.class.php";
-//require_once "../views/common_ui.php";
-//view_common_includes();
-
 $db = new DB();
 
 // Function to display error message elements on the page
-// TODO: Function output may change depending on how the frontend team wants to do error messages
 function show_error_element($errorArray) {
     
     echo '<main style="margin-top: 56px">';
@@ -40,7 +37,6 @@ function validate_login() {
     $loginUsername = check_username($_POST["userUsername"]);
     $loginPassword = check_password($_POST["userPassword"]);
 
-    //echo $_POST["userUsername"];
     switch ($loginUsername) {
         case 1:
             $errorArray[] = "ERROR: Invalid input for username";
@@ -58,7 +54,6 @@ function validate_login() {
             break;
     } // Ends username switch
 
-    //echo $_POST["userPassword"];
     switch ($loginPassword) {
         case 1:
             $errorArray[] = "ERROR: Invalid input for password";

@@ -1,5 +1,6 @@
 <?php
 
+// Function to display the main login page and form
 function view_login_main($errorArray = []) { 
 
     echo('

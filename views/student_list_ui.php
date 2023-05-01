@@ -6,6 +6,7 @@ view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Student", false, 2);
 
+// If the user is trying to view recently viewed students, students categorized by class, or all students
 if (isset($_GET['recent'])) {
     view_student_list_recent();
 } elseif (isset($_GET['group'])) {
@@ -16,6 +17,7 @@ if (isset($_GET['recent'])) {
 
 view_common_footer();
 
+// Function to create the list of all students appropriate for the user
 function view_student_list_main() {
 
     $db = new DB();
@@ -65,6 +67,7 @@ function view_student_list_main() {
 
 } // Ends view_student_list_main()
 
+// Function to create the list of recently viewed students
 function view_student_list_recent() {
     
     $db = new DB();
@@ -88,6 +91,7 @@ function view_student_list_recent() {
 
 } // Ends view_student_list_recent
 
+// Function to create and display the table of students
 function view_student_list_table($studentObjects, $totalNumberOfPages, $currentPage) {
 
     $db = new DB();
@@ -259,6 +263,7 @@ function view_student_list_table($studentObjects, $totalNumberOfPages, $currentP
 
 } // Ends view_student_list_table
 
+// Function to display the filter modal
 function view_student_list_filter_modal($classArray) {
 
     echo '
@@ -320,6 +325,7 @@ function view_student_list_filter_modal($classArray) {
 
 } // Ends view_student_list_filter_modal
 
+// Function to display the UI for a professor to be able to select which of their classes they would like to view students by
 function view_student_list_by_class() {
 
     $db = new DB();

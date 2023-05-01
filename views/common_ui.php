@@ -1,11 +1,13 @@
 <?php
 
+// Function to include things every page needs
 function view_common_includes($pathToRoot) {
     session_start();
     require_once $pathToRoot . "models/PDO.DB.class.php";
     require_once $pathToRoot . "views/login_ui.php";
 } // Ends view_common_includes
 
+// Function to create the HTML header
 function view_common_header() {
 
     if (!isset($_SESSION['loggedIn']) OR !isset($_COOKIE['loggedInBool'])) {
@@ -37,6 +39,7 @@ function view_common_header() {
 
 } // Ends view_common_header
 
+// Function to create the HTML footer
 function view_common_footer() {
 
     echo('
@@ -54,6 +57,7 @@ function view_common_footer() {
 
 } // Ends view_common_footer
 
+// Function to display the application navigation
 function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
     $db = new DB();
@@ -202,6 +206,7 @@ function view_common_navigation($pageName, $showSearchBar, $activeIndex) {
 
 } // Ends view_common_navigation
 
+// Function to return the correct pagination elements
 function get_common_pagination($numPages, $currentPage) {
 
     $links = '';
