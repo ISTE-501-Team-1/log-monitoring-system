@@ -7,29 +7,12 @@ view_common_navigation("Dashboard", false, 0);
 view_dashboard_main();
 view_common_footer();
 
+// Function to display the dashboard UI using the necessary logic
 function view_dashboard_main() { 
     
     $db = new DB();
 
     $currentUser = $db->getUserByID($_COOKIE["loggedInUserID"]);
-
-    // $cardData = array(
-    //     "Today" => array(
-    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day"),
-    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "day"),
-    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "day")
-    //     ),
-    //     "This Week" => array(
-    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "week"),
-    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "week"),
-    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "week")
-    //     ),
-    //     "This Month" => array(
-    //         "logs_created_count" => $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "month"),
-    //         "successful_logins_count" => $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "month"),
-    //         "failed_logins_count" => $db->getLoginAttemptsTimeframeCount("failure", $currentUser[0], $currentUser[6], "month")
-    //     )
-    // ); // Ends array
 
     $logsCreatedCount = $db->getLogsCreatedTimeframeCount($currentUser[0], $currentUser[6], "day");
     $successfulLoginsCount = $db->getLoginAttemptsTimeframeCount("success", $currentUser[0], $currentUser[6], "day");
@@ -257,4 +240,3 @@ function view_dashboard_main() {
 } // Ends view_dashboard_main
 
 ?>
-

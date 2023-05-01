@@ -1,4 +1,5 @@
 <?php
+// Handles objects for all database items
 
 class Activity {
 

@@ -6,6 +6,7 @@ view_common_includes('../');
 view_common_header();
 view_common_navigation("Search Logs", false, 1);
 
+// If the user is trying to view recent logs, logs within a timeframe, or all logs
 if (isset($_GET['recent'])) {
     view_log_list_recent();    
 } else if (isset($_GET['today']) OR isset($_GET['week']) OR isset($_GET['month'])) {
@@ -16,6 +17,7 @@ if (isset($_GET['recent'])) {
 
 view_common_footer();
 
+// Function to create the list of all logs to be displayed, and applies filters if needed
 function view_log_list_main() {
 
     $db = new DB();
@@ -63,6 +65,7 @@ function view_log_list_main() {
 
 } // Ends view_log_list_main()
 
+// Function to create the list of recent logs
 function view_log_list_recent() {
     
     $db = new DB();
@@ -84,6 +87,7 @@ function view_log_list_recent() {
 
 } // Ends view_log_list_recent
 
+// Function to create the list of logs created within a specific timeframe
 function view_log_list_created_today() {
     
     $db = new DB();
@@ -113,6 +117,7 @@ function view_log_list_created_today() {
 
 } // Ends view_log_list_recent
 
+// Function to create and display the table of logs
 function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
     $checkedRecent = $checkedStudent = $checkedType = "\"";
@@ -274,6 +279,7 @@ function view_log_list_table($logObjects, $totalNumberOfPages, $currentPage) {
 
 } // Ends view_log_list_table
 
+// Function to display the filter modal
 function view_log_list_filter_modal() {
     
     echo '

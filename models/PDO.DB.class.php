@@ -27,6 +27,7 @@ class DB {
 
     } // Ends __construct
 
+    // Function to call databse with the provided query and provides results as objects
     function getAllObjects($stmtInput, $classInput) {
 
         $data = array();
@@ -54,6 +55,7 @@ class DB {
 
 /********************************ACTIVITY FUNCTIONS*************************************/
 
+    // Returns a table with all of the information from the activity table
     public function getAllActivityObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM activity", "Activity");
@@ -228,6 +230,7 @@ class DB {
 
     } // Ends getActivityLogObjectsAsTable
 
+    // Gets the count of all log activity records associated with a user
     public function getActivityLogObjectsCount($userID) {
 
         $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID 
@@ -290,6 +293,7 @@ class DB {
 
     } // Ends getActivityStudentObjectsAsTable
 
+    // Gets the count of all student activity records associated with a user
     public function getActivityStudentObjectsCount($userID) {
 
         $data = $this->getAllObjects("SELECT * FROM activity WHERE activityUserId = $userID AND activityLogId IS NULL", "Activity");
@@ -398,6 +402,7 @@ class DB {
 
 /********************************ALERT FUNCTIONS*************************************/    
 
+    // Returns a table with all of the information from the alert table
     public function getAllAlertObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM alert", "Alert");
@@ -423,6 +428,7 @@ class DB {
 
     } // Ends getAllAlertObjectsAsTable
 
+    // Gets all the relevant alerts for a user that have not been dismissed
     public function getAlertsNotDismissedAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
@@ -478,6 +484,7 @@ class DB {
 
     } // Ends getAlertsNotDismissedAsTable
 
+    // Gets the count of relevant alerts for a user that have not been dismissed
     public function getAlertsNotDismissedCount($userID, $userType) {
 
         if ($userType == "Admin") {
@@ -515,6 +522,7 @@ class DB {
 
     } // Ends getAlertsNotDismissedCount
 
+    // Gets the details for a single alert
     public function getAlertById($alertID) {
 
             $data = $this->getAllObjects("SELECT * FROM alert WHERE alertId = '$alertID'", "Alert");
@@ -540,6 +548,7 @@ class DB {
 
     } // Ends getAlertById
 
+    // Marks the alert as dismissed
     public function updateAlertDismiss($alertID) {
 
         require_once("DB.Controller.class.php");
@@ -577,6 +586,7 @@ class DB {
 /********************************CLASS FUNCTIONS*************************************/
     // NOTE: Since "class" is a reserved word, the PHP class to interact with the database table "class" is called "ClassTable"
 
+    // Returns a table with all of the information from the class table
     public function getAllClassObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM class", "ClassTable");
@@ -616,6 +626,7 @@ class DB {
 
     } // Ends getAllClassObjectsAsTable
 
+    // Gets an array of class data that is appropriate for a user
     public function getClassArray($userID, $userType) {
 
         if ($userType == "Admin") {
@@ -654,6 +665,7 @@ class DB {
 
     } // Ends getClassArray
 
+    // Gets the class abbreviation (ex. ISTE-501, SWEN-100) for a class
     public function getClassAbbreviationByID($classID) {
 
         $data = $this->getAllObjects("SELECT * FROM class WHERE classId = '$classID'", "ClassTable");
@@ -683,6 +695,7 @@ class DB {
 
 /********************************CLASSENTRY FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the classentry table
     public function getAllClassEntryObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM classEntry", "ClassEntry");
@@ -710,6 +723,7 @@ class DB {
 
 /********************************FILE FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the file table
     public function getAllFileObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM file", "File");
@@ -747,6 +761,7 @@ class DB {
 
     } // Ends getAllFileObjectsAsTable
 
+    // Gets all of the files that are associated with a student
     public function getFileObjectsByStudentAsTable($studentID, $currentPageNumber, $recordsPerPage) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
@@ -786,6 +801,7 @@ class DB {
 
     } // Ends getFileObjectsByStudentAsTable
 
+    // Gets the count of files associated with a student
     public function getFileObjectsByStudentCount($studentID) {
 
         $data = $this->getAllObjects("SELECT * FROM file WHERE studentId = $studentID", "File");
@@ -798,6 +814,7 @@ class DB {
 
     } // Ends getFileObjectsByStudentCount
 
+    // Gets details for a specific file
     public function getFileByID($fileID) {
 
         $data = $this->getAllObjects("SELECT * FROM file WHERE fileId = '$fileID'", "File");
@@ -827,6 +844,7 @@ class DB {
 
 /********************************LOG FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the log table
     public function getAllLogObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM log", "Log");
@@ -850,46 +868,6 @@ class DB {
                     $log->setLogStudentID($logStudentUsername);
 
                 } // Ends student foreach
-
-                $outputTable .= $log->getTableData();
-
-            } // Ends log foreach
-    
-        } else {
-            $outputTable = "<h2>No logs exist.</h2>";
-        }// Ends if
-
-        return $outputTable;
-
-    } // Ends getAllLogObjectsAsTable
-
-    public function getAllLogObjectsAfterDatetime($datetime) {
-
-        $data = array();
-
-        try {
-
-            require_once "../controllers/DB.Controller.class.php";
-            $stmt = $this->dbh->prepare("SELECT * FROM log WHERE logTimeCreated >= :timeCreated");
-            $stmt->execute(array(":timeCreated" => $dateTime));
-            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
-
-        } catch(PDOException $pe) {
-            echo $pe->getMessage();
-            return array();
-        } // Ends try catch
-
-        $outputTable = "<thead><tr>
-                        <th>Log ID</th>
-                        <th>Log Type</th>
-                        <th>Log Time Created</th>
-                        <th>Login Attempt ID</th>
-                        <th>Student ID</th>
-        </tr></thead>\n";
-            
-        if (count($data) > 0) {
-            
-            foreach ($data as $log) {
 
                 $outputTable .= $log->getTableData();
 
@@ -1091,7 +1069,7 @@ class DB {
 
     } // Ends getLogsCreatedTimeframeTable
 
-    // Returns the logs appropriate for the specific user. Used for pagination
+    // Returns the logs appropriate for the specific user.
     public function getLogObjectsByRoleAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
@@ -1154,6 +1132,7 @@ class DB {
 
     } // Ends getLogObjectsByRoleAsTable
 
+    // Returns the logs appropriate for the specific user, and filters it based on what is passed in.
     public function getLogObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
@@ -1305,6 +1284,7 @@ class DB {
 
     } // Ends getLogObjectsByRoleCount
 
+    // Returns the count of logs appropriate for the specific user, and filters it based on what is passed in.
     public function getLogObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByTime, $filterByType) {
 
         if ($sortBy === "type") {
@@ -1423,6 +1403,7 @@ class DB {
 
     } // Ends getLogByID
 
+    // Gets data on one log using the login attempt associated with the log
     public function getLogByLoginAttemptID($loginAttemptID) {
 
         $data = $this->getAllObjects("SELECT * FROM log WHERE loginAttemptId = '$loginAttemptID'", "Log");
@@ -1449,6 +1430,7 @@ class DB {
 
     } // Ends getLogByLoginAttemptID
 
+    // Gets the details on the most recent log associated with a student
     public function getLogLatestByStudentID($studentID) {
 
         $data = $this->getAllObjects("SELECT * FROM log
@@ -1480,6 +1462,7 @@ class DB {
 
 /********************************LOGINATTEMPT FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the loginattempt table
     public function getAllLoginAttemptObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM loginAttempt", "LoginAttempt");
@@ -1506,87 +1489,6 @@ class DB {
         return $outputTable;
 
     } // Ends getAllLoginAttemptObjectsAsTable
-
-    // get all login attempts, successful or failed, from a single student
-    public function getAllLoginAttemptObjectsFromStudent($studentID, $failed) {
-        $data = array();
-
-        try {
-
-            require_once "../controllers/DB.Controller.class.php";
-
-            $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE studentID = :id");
-            if ($failed) {
-                $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE studentID = :id AND loginAttemptSuccess = 0");
-            }
-            $stmt->execute(array(":id" => $studentID));
-            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
-
-        } catch(PDOException $pe) {
-            echo $pe->getMessage();
-            return array();
-        } // Ends try catch
-
-        $outputTable = "<thead><tr>
-                        <th>Login Attempt Username</th>
-                        <th>Login Attempt Time Entered</th>
-                        <th>Login Attempt Success</th>
-                        <th>Student ID</th>
-        </tr></thead>\n";
-
-        if(count($data) > 0) {
-            foreach ($data as $loginAttempt) {
-
-                $outputTable .= $loginAttempt->getTableData();
-
-            } // Ends loginAttempt foreach
-        } else {
-            $outputTable = "<h2>No login attempt records exist.</h2>";
-        }// Ends if
-
-        return $outputTable;
-
-    } // Ends getAllLoginAttemptObjectsFromStudent
-
-    // get all login attempts, successful or failed, after a datetime
-    public function getAllLoginAttemptObjectsAfterDatetime($datetime, $failed) {
-        $data = array();
-
-        try {
-
-            require_once "../controllers/DB.Controller.class.php";
-            $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE loginAttemptTimeEntered >= :timeEntered");
-            if ($failed) {
-                $stmt = $this->dbh->prepare("SELECT * FROM loginAttempt WHERE loginAttemptTimeEntered >= :timeEntered AND loginAttemptSuccess = 0");
-            }
-            $stmt->execute(array(":timeEntered" => $dateTime));
-            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
-
-        } catch(PDOException $pe) {
-            echo $pe->getMessage();
-            return array();
-        } // Ends try catch
-
-        $outputTable = "<thead><tr>
-                        <th>Login Attempt Username</th>
-                        <th>Login Attempt Time Entered</th>
-                        <th>Login Attempt Success</th>
-                        <th>Student ID</th>
-        </tr></thead>\n";
-
-        if(count($data) > 0) {
-            foreach ($data as $loginAttempt) {
-
-                $outputTable .= $loginAttempt->getTableData();
-
-            } // Ends loginAttempt foreach
-        } else {
-            $outputTable = "<h2>No login attempt records exist.</h2>";
-        }// Ends if
-
-        return $outputTable;
-
-    } // Ends getAllLoginAttemptObjectsAfterDateTime
     
     // Returns the number of login attempts from today
     public function getLoginAttemptsTimeframeCount($successType, $userID, $userType, $timeframe) {
@@ -1822,6 +1724,7 @@ class DB {
 
 /********************************SCHOOL FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the school table
     public function getAllSchoolObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM school", "School");
@@ -1847,6 +1750,7 @@ class DB {
 
     } // Ends getAllSchoolObjectsAsTable
 
+    // Gets the data for a specific school
     public function getSchoolByID($schoolID) {
 
         $data = $this->getAllObjects("SELECT * FROM school WHERE schoolId = '$schoolID'", "School");
@@ -1872,6 +1776,7 @@ class DB {
 
 /********************************STUDENT FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the student table
     public function getAllStudentObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM student", "Student");
@@ -1909,44 +1814,6 @@ class DB {
         return $outputTable;
 
     } // Ends getAllStudentObjectsAsTable
-
-    // get all students from a specific school
-    public function getAllStudentObjectsFromSchool($datetime) {
-        $data = array();
-
-        try {
-
-            require_once "../controllers/DB.Controller.class.php";
-            $stmt = $this->dbh->prepare("SELECT * FROM student WHERE schoolID = :school");
-            $stmt->execute(array(":timeEntered" => $dateTime));
-            $data = $stmt->fetchAll(PDO::FETCH_CLASS, "loginAttempt");
-
-        } catch(PDOException $pe) {
-            echo $pe->getMessage();
-            return array();
-        } // Ends try catch
-
-        $outputTable = "<thead><tr>
-                            <th>Student First Name</th>
-                            <th>Student Middle Initial</th>
-                            <th>Student Last Name</th>
-                            <th>Student Username</th>
-                            <th>Student School</th>
-            </tr></thead>\n";
-
-        if(count($data) > 0) {
-            foreach ($data as $loginAttempt) {
-
-                $outputTable .= $loginAttempt->getTableData();
-
-            } // Ends loginAttempt foreach
-        } else {
-            $outputTable = "<h2>No login attempt records exist.</h2>";
-        }// Ends if
-
-        return $outputTable;
-
-    } // Ends getAllStudentsFromSchool
 
     // Gets all students for the passed in user
     public function getStudentObjectsByRoleAsTable($userID, $userType, $currentPageNumber, $recordsPerPage) {
@@ -2007,6 +1874,7 @@ class DB {
 
     } // Ends getStudentObjectsByRoleAsTable
 
+    // Gets all students for the passed in user, and filters it based on other passed in arguments
     public function getStudentObjectsByRoleFilteredAsTable($userID, $userType, $currentPageNumber, $recordsPerPage, $sortBy, $filterByUsername, $filterByClass, $filterByLastName) {
 
         $offset = ($currentPageNumber - 1) * $recordsPerPage;
@@ -2027,7 +1895,7 @@ class DB {
         }
         
         if (!empty($filterByLastName)) {
-            $filterConditions[] = "student.studentLastName = $filterByLastName";
+            $filterConditions[] = "student.studentLastName = \"$filterByLastName\"";
         }
 
         if (!empty($filterByClass)) {
@@ -2102,6 +1970,7 @@ class DB {
 
     } // Ends getStudentObjectsByRoleFilteredAsTable
 
+    // Gets the count of students for a passed in user
     public function getStudentObjectsByRoleCount($userID, $userType) {
 
         if ($userType == "Admin") {
@@ -2132,6 +2001,7 @@ class DB {
 
     } // Ends getStudentObjectsByRoleCount
 
+    // Gets the count of filtered students for a passed in user 
     public function getStudentObjectsByRoleFilteredCount($userID, $userType, $sortBy, $filterByUsername, $filterByClass, $filterByLog) {
 
         $sortQuery = "";
@@ -2145,6 +2015,10 @@ class DB {
 
         if (!empty($filterByUsername)) {
             $filterConditions[] = "student.studentUsername = \"$filterByUsername\"";
+        }
+
+        if (!empty($filterByLastName)) {
+            $filterConditions[] = "student.studentLastName = \"$filterByLastName\"";
         }
         
         if (!empty($filterByClass)) {
@@ -2193,6 +2067,7 @@ class DB {
 
     } // Ends getStudentObjectsByRoleFilteredAsTable
 
+    // Gets details for a specific student using the provided student ID
     public function getStudentByID($studentID) {
 
         $data = $this->getAllObjects("SELECT * FROM student WHERE studentId = '$studentID'", "Student");
@@ -2220,6 +2095,7 @@ class DB {
 
     } // Ends getStudentByID
 
+    // Gets the details for a specific student using the provided student username
     public function getStudentByUsername($studentUsername) {
 
         $data = $this->getAllObjects("SELECT * FROM student WHERE studentUsername = '$studentUsername'", "Student");
@@ -2249,6 +2125,7 @@ class DB {
 
 /********************************USER FUNCTIONS*************************************/
     
+    // Returns a table with all of the information from the user table
     public function getAllUserObjectsAsTable() {
 
         $data = $this->getAllObjects("SELECT * FROM user", "User");

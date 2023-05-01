@@ -7,6 +7,7 @@ view_common_navigation("Student Details", false, 2);
 view_log_details_main();
 view_common_footer();
 
+// Function to display the log details UI with the necessary logic
 function view_log_details_main() {
 
     $db = new DB();

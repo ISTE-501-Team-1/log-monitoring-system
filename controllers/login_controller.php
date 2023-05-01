@@ -1,4 +1,5 @@
 <?php
+// Handles login information to authorize the user or log the user out
 
 require_once("validation_controller.php");
 require_once("authentication_controller.php");
@@ -6,6 +7,8 @@ require_once ("../views/common_ui.php");
 view_common_includes("../");
 $db = new DB();
 
+// If user is trying to login, validates and authorizes their login info
+// Else if they are trying to logout, destroy the session and cookie variables
 if (isset($_GET["login"])) {
 
     // Calls function to validate login information. Returns empty array if valid, or an array with error messages if invalid
@@ -26,10 +29,7 @@ if (isset($_GET["login"])) {
 
     } else {
 
-        // TODO: The order of these function may change depending on how the frontend team wants to do error messages
-        // Calls function to display error message
-        //show_error_element($errorArray);
-        // Displays login page again
+        // Displays login page again and passes the error array in
         view_login_main($errorArray);
     
     } // Ends outer if

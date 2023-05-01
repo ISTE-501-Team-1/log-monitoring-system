@@ -1,4 +1,5 @@
 <?php
+// Handles creating and destroying filter sessions and variables
 
 require_once("validation_controller.php");
 require_once("authentication_controller.php");
@@ -6,6 +7,7 @@ require_once ("../views/common_ui.php");
 view_common_includes("../");
 $db = new DB();
 
+// If user is trying to create a filter or clear a filter
 if (isset($_GET["setLog"])) {
 
     create_log_filter_session();
@@ -32,6 +34,7 @@ if (isset($_GET["setLog"])) {
 
 } // Ends if
 
+// Function to create session variables for a log filter
 function create_log_filter_session() {
 
     $_SESSION["logSearchGeneralSession"] = true;
@@ -50,6 +53,7 @@ function create_log_filter_session() {
 
 } // Ends create_log_filter_session
 
+// Function to destroy session variables for a log filter
 function destroy_log_filter_session() {
 
     unset($_SESSION["logSearchGeneralSession"]);
@@ -60,6 +64,7 @@ function destroy_log_filter_session() {
 
 } // Ends destroy_log_filter_session
 
+// Function to create session variables for a student filter
 function create_student_filter_session() {
 
     $_SESSION["studentSearchGeneralSession"] = true;
@@ -78,6 +83,7 @@ function create_student_filter_session() {
 
 } // Ends create_student_filter_session
 
+// Function to destroy session variables for a student filter
 function destroy_student_filter_session() {
 
     unset($_SESSION["studentSearchGeneralSession"]);
